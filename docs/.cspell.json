@@ -1,0 +1,22 @@
+{
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "import": [
+    "https://cdn.jsdelivr.net/npm/@cspell/dict-es-es/cspell-ext.json"
+  ],
+  "version": "0.2",
+  "language": "en,es-es",
+  "dictionaryDefinitions": [
+    {
+      "name": "project-words",
+      "path": "./project-words.txt",
+      "addWords": true
+    }
+  ],
+  "dictionaries": [
+    "project-words"
+  ],
+  "ignorePaths": [
+    "/project-words.txt",
+    "/sections/ejemplos_bórrame.typ"
+  ]
+}

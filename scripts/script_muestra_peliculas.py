@@ -13,7 +13,7 @@ class Pelicula:
 def cargar_peliculas(n):
     peliculas = []
 
-    with open("scripts\movies.csv", newline='', encoding='latin-1') as archivo:
+    with open("scripts\movies.csv", newline='', encoding='utf-8') as archivo:
         lector = csv.DictReader(archivo, delimiter=';')
 
         for i, fila in enumerate(lector):

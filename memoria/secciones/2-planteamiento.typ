@@ -46,7 +46,7 @@ GPU, lo que resulta en más velocidad. Esto se denomina entrenamiento por mini-l
 El entrenamiento no tiene una longitud definida, aunque generalmente el error deja de disminuir después de cierto
 tiempo. Una vez la red ha sido entrenada, se pueden guardar sus pesos para volver a usarla sabiendo su estructura,
 aunque hay formatos de archivos que codifican la estructura como metadatos y son más simples de cargar.
-/* TODO: ¿Cuales? */ La red se usa de pasando la entrada para la que se quiere predecir una salida y leyendo la salida
+/* TODO: ¿Cuales? PROPUESTA AGE:|Estos archivos pueden ser .h5, .onnx, o existe el modelo guardado de TensorFlow, que es una carpeta|*/ La red se usa de pasando la entrada para la que se quiere predecir una salida y leyendo la salida
 después del _forward pass_. Esto se denomina inferencia.
 
 
@@ -145,15 +145,15 @@ resolución) de la capa. Se insertan en la red convolucional con el objetivo de 
 
 Una de las más comunes es la del promedio. Los hiperparámetros son el paso $S$ y el tamaño de la ventana $T$, aunque
 generalmente coinciden. Cada $S$ pixeles, toma el promedio de la ventana de $T times T$ pixeles alrededor del
-seleccionado y calculan el promedio, añadiendo un pixel a la salida. Otra muy común es la de máximo, que funciona de la
+seleccionado y calculan el promedio/*PROPUESTA AGE: Toma el promedio y calculan el promedio? no sé si está bien redactado eso o es intencional*/, añadiendo un pixel a la salida. Otra muy común es la de máximo, que funciona de la
 misma forma pero con el máximo de la ventana en lugar del promedio. Hacer pooling por máximo o promedio con $S = T = 2$
 reduce a la mitad la resolución de la imagen.
 
 Otro tipo es el _global average pooling_ o GAP. Este toma el promedio de todos los valores de la imagen por cada canal,
 reduciendo un tensor de $H times W times C$ a un vector unidimensional de tamaño $C$. Elimina completamente la dimensión
-espacial. Generalmente se usa como alternativa a aplanar la última capa.
+espacial. Generalmente se usa como alternativa a aplanar la última capa. @aiman2021amended
 
-// TODO! Cita
+// TODO! Cita PROPUESTA AGE: la he puesto ahi, es lo de aiman2021amended
 
 === Técnicas de regularización y normalización
 

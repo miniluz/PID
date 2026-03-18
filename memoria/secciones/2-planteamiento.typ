@@ -251,6 +251,10 @@ Luego, en el entrenamiento
 En la inferencia, se aplica un umbral $tau$ (ej. $tau = 0.5$), y se considera que la red tiene la etiqueta si la salida
 del nodo correspondiente lo supera.
 
+== Búsqueda de rejilla
+
+La búsqueda de rejilla o grid search es una técnica usada en el entrenamiento de redes neuronales para explorar los resultados con diferentes combinaciones de hiperparámetros. El usuario selecciona una cantidad de hiperparámetros que probar de diferentes tipos, y a continuación el algoritmo entrena y prueba un modelo por cada una de las combinaciones posibles. El experimento que tras probarlo proporcione los mejores resultados es el que se considerará que tiene los mejores hiperparámetros.
+
 == Validación
 
 El entrenamiento únicamente intenta reducir el error con los datos de entrenamiento. Pero una red con bajo error para

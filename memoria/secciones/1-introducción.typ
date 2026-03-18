@@ -22,20 +22,25 @@ modelo propuesto, desde los perceptrones multicapa hasta las técnicas de regula
 Posteriormente, las secciones 3 y 4 abordan la implementación y la experimentación respectivamente, y la sección 5
 cierra con las conclusiones derivadas del trabajo.
 
+//  TODO! aumentar las descripciones de la 3, la 4 y la 5 al hacerlas.
+
 == Objetivos
 
-Los objetivos del proyecto son:
+Los objetivos del proyecto son, en orden de prioridad descendiente:
 
 + Implementar un modelo base para la clasificación multi-etiqueta de los pósters mediante una red neuronal convolucional
-  (CNN) que siga los diseños tempranos, en base a:
-  - Insertar referencia /* TODO */
+  (CNN) que siga los diseños tempranos, en base a #cite(<book_deep_learning_goodfellow>).
++ Explicar las bases teóricas de las redes neuronales convolucionales y las técnicas usadas de forma accesible para un
 + Entrenar la red neuronal con datos de entrenamiento obtenidos de _The Movie Database_, una base de datos pública de
   películas; en concreto, las que incluyen información tanto del póster como de los géneros (415.967 películas).
 + Evaluar experimentalmente las técnicas posteriores para ver si tienen un impacto positivo o negativo sobre las
   métricas elegidas. En concreto:
-  - Insertar técnica con referencia /* TODO */.
+  - Capa de normalización por lotes (_batch normalization_)
+  - _Dropout_
+  - Decaimiento de pesos
+  - Aumentación de datos
+/* - GAP si lo usamos */
 + Diseñar y entrenar una red que combine las técnicas que han tenido un impacto positivo, y compararla con la original.
-+ Explicar las bases teóricas de las redes neuronales convolucionales y las técnicas usadas de forma accesible para un
   público técnico que únicamente conoce los perceptrones multicapa.
++ Crear una interfaz de usuario interactiva para el uso de los modelos.
 
-//  TODO! aumentar las descripciones de la 3, la 4 y la 5 al hacerlas.

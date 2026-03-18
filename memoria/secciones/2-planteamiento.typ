@@ -2,7 +2,6 @@
 
 #show: style-tables
 
-
 = Planteamiento teórico
 
 == Redes neuronales artificiales
@@ -14,7 +13,7 @@ mediante pesos aprendibles.
 La pre-activación de un nodo es el producto escalar de sus entradas $x_1, x_2, dots, x_n$ con sus pesos
 $w_1, w_2, dots, w_n$ más un sesgo $b$, y su activación (su salida) es el resultado de aplicar una función de activación
 $sigma$ a la pre-activación: $sigma\(z\)$. Los pesos $w_i$ y el sesgo $b$ son los parámetros del nodo, y son lo que se
-afina durante el entrenamiento.
+afina durante el entrenamiento @book_deep_learning_goodfellow.
 
 $
   a = sigma\(w dot x + b\)
@@ -37,7 +36,7 @@ Cada caso de entrenamiento tiene la entrada y la salida esperada. Para cada caso
 + Se calcula el error $cal(L)$ con la salida esperada (la función de error es un hiperparámetro).
 + Se calcula el gradiente (la derivada N-dimensional) del error respecto a los parámetros.
 + Se ajustan todos los pesos de todos los nodos en la dirección que minimiza el error según el gradiente, escalado por
-  una tasa de aprendizaje $eta$ @rumelhart1986backprop. Esto se denomina retropropagación.
+  una tasa de aprendizaje $eta$. Esto se denomina retropropagación.
 
 La actualización de un parámetro $theta$ es:
 $
@@ -85,7 +84,7 @@ multi-etiqueta.
 En este, se usa un nodo de salida por etiqueta posible, en este caso por género posible. Cada salida usa la función
 sigmoide, igual que en la clasificación binaria, para tener un rango de $0$ a $1$. La proximidad a $0$ indica que la
 entrada no posee esa etiqueta, y la proximidad a $1$ que sí. Como función de pérdida se usa la media de las entropías
-cruzadas individuales @zhang2014multilabel:
+cruzadas individuales @book_multilabel_zhang:
 
 $
   cal(L) = - 1 / C sum_(c=1)^C [y_c log hat(y)_c + (1 - y_c) log(1 - hat(y)_c)]
@@ -153,9 +152,13 @@ el promedio, añadiendo un pixel a la salida. Otra muy común es la de máximo, 
 máximo de la ventana en lugar del promedio. Hacer pooling por máximo o promedio con $S = T = 2$ reduce a la mitad la
 resolución de la imagen.
 
+/*
 Otro tipo es el _global average pooling_ o GAP. Este toma el promedio de todos los valores de la imagen por cada canal,
 reduciendo un tensor de $H times W times C$ a un vector unidimensional de tamaño $C$. Elimina completamente la dimensión
-espacial. Generalmente se usa como alternativa a aplanar la última capa @aiman2021amended.
+espacial. Generalmente se usa como alternativa a aplanar la última capa.
+
+TODO: si se añade hay que añadir una cita. No lo añado porque no hace nada
+*/
 
 === Técnicas de regularización y normalización
 
@@ -164,10 +167,10 @@ espacial. Generalmente se usa como alternativa a aplanar la última capa @aiman2
 La normalización por lotes busca reducir la variabilidad de la pre-activación de los kernels. Reducir la variabilidad
 acelera la convergencia y reduce la sensibilidad a la iniciación de pesos. Para hacerlo, se calculan la media
 $mu_cal(B)$ y la varianza $sigma_cal(B)^2$ de la salida del kernel, y se usa para transformar la pre-activación antes de
-aplicar la función de activación. Primero, aplican una transformación afín a los valores de forma que la media acabe en
-0 y la varianza en 1. Posteriormente, para evitar las restricciones que tiene que la imagen siempre esté normalizada a
-ese rango, aplica otra transformación afín simple con los parámetros aprendibles $gamma$ y $beta$. Este valor se pasa a
-la función de activación.
+aplicar la función de activación @book_deep_learning_goodfellow. Primero, aplican una transformación afín a los valores
+de forma que la media acabe en 0 y la varianza en 1. Posteriormente, para evitar las restricciones que tiene que la
+imagen siempre esté normalizada a ese rango, aplica otra transformación afín simple con los parámetros aprendibles
+$gamma$ y $beta$. Este valor se pasa a la función de activación.
 
 $
   hat(z) = (z - mu_cal(B)) / sqrt(sigma_cal(B)^2 + epsilon)
@@ -175,13 +178,11 @@ $
   y = gamma hat(z) + beta
 $
 
-// TODO! Cita
-
 ==== Dropout
 
 Consiste en que durante el entrenamiento, en cada caso de entrenamiento o mini-lote, se desactiva aleatoriamente una
-fracción $p$ de nodos de una capa convolucional. Esto fuerza a la red a aprender representaciones redundantes y
-robustas.
+fracción $p$ de nodos de una capa convolucional. Esto fuerza a la red a aprender representaciones redundantes y robustas
+@book_deep_learning_goodfellow.
 
 Ya que únicamente quedan $(1 - p)$ nodos en el entrenamiento, sus activaciones tienden a crecer por un factor de
 $1 / (1-p)$. Para compensar esto, hay dos opciones:
@@ -201,13 +202,13 @@ algunos $k$ del banco de filtros $K$). Esto se denomina dropout espacial. La com
 ==== Decaimiento de pesos
 
 Consiste en añadir la suma de los cuadrados de los pesos ($lambda sum_i w_i^2$) a la pérdida para desincentivar los
-pesos grandes, tanto en las capas convolucionales como en las densas.
+pesos grandes, tanto en las capas convolucionales como en las densas @book_deep_learning_goodfellow.
 
 ==== Aumentación de los datos
 
 Consiste en aplicar transformaciones aleatorias (rotación, recorte, espejo, cambio de brillo, cambio de saturación,
 etc.) a las imágenes durante el entrenamiento, aumentando artificialmente la diversidad del conjunto de datos y haciendo
-a la red resistente a estas transformaciones.
+a la red resistente a estas transformaciones @book_deep_learning_goodfellow.
 
 /*
 * No vale la pena mencionar esto si no lo usamos.
@@ -258,11 +259,11 @@ cantidad de datos de entrenamiento, es posible que se sobreajuste a los datos de
 generalizable a entradas fuera de éstos. Por esto se suele reservar parte de los datos para la validación de la red,
 datos que nunca se muestran en el entrenamiento. Para evaluar la efectividad de la red, se calculan métricas con estos
 datos a la red en modo de inferencia, sin realizar retropropagación y aplicando el umbral $tau$, para medir su
-efectividad. // TODO: falta cita
+efectividad @book_deep_learning_goodfellow.
 
 Las métricas que se usarán en este proyecto son:
 - Exactitud binaria (binary accuracy): fracción de las etiquetas clasificadas correctamente, sobre todas las muestras y
-  etiquetas (las que tiene y las que no).
+  etiquetas (las que tiene y las que no) @book_multilabel_zhang.
 - Coincidencia exacta (exact match ratio): fracción de muestras cuyas etiquetas han sido clasificadas correctamente en
   su totalidad.
 - Precisión (precision): de todas las etiquetas que la red predijo como positivas, fracción que realmente lo eran.

@@ -4,6 +4,7 @@
 )
 
 #set text(lang: "es", size: 11pt)
+#set par(justify: true)
 #set heading(numbering: "1.1")
 #set math.equation(numbering: "1.")
 

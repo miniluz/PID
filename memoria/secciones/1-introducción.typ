@@ -26,16 +26,16 @@ cierra con las conclusiones derivadas del trabajo.
 
 Los objetivos del proyecto son:
 
-- Implementar un modelo base para la clasificación multi-etiqueta de los pósters, mediante una red neuronal
-  convolucional (CNN) usando las técnicas que usaban los diseños tempranos, en base a:
++ Implementar un modelo base para la clasificación multi-etiqueta de los pósters mediante una red neuronal convolucional
+  (CNN) que siga los diseños tempranos, en base a:
   - Insertar referencia /* TODO */
-- Entrenar la red neuronal con datos de entrenamiento obtenidos de _The Movie Database_, una base de datos pública de
++ Entrenar la red neuronal con datos de entrenamiento obtenidos de _The Movie Database_, una base de datos pública de
   películas; en concreto, las que incluyen información tanto del póster como de los géneros (415.967 películas).
-- Evaluar experimentalmente las técnicas posteriores de la literatura para ver si tienen un impacto positivo o negativo
-  sobre los resultados en base a las métricas elegidas. En concreto:
++ Evaluar experimentalmente las técnicas posteriores para ver si tienen un impacto positivo o negativo sobre las
+  métricas elegidas. En concreto:
   - Insertar técnica con referencia /* TODO */.
-- Diseñar y entrenar una red que combine las técnicas que han dado buenos resultados, y compararla con la original.
-- Explicar las bases teóricas de las redes neuronales convolucionales y las técnicas usadas de forma accesible para un
++ Diseñar y entrenar una red que combine las técnicas que han tenido un impacto positivo, y compararla con la original.
++ Explicar las bases teóricas de las redes neuronales convolucionales y las técnicas usadas de forma accesible para un
   público técnico que únicamente conoce los perceptrones multicapa.
 
 //  TODO! aumentar las descripciones de la 3, la 4 y la 5 al hacerlas.

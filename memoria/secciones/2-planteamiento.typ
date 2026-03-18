@@ -1,3 +1,8 @@
+#import "/utils/tables.typ": style-tables
+
+#show: style-tables
+
+
 = Planteamiento teórico
 
 == Redes neuronales artificiales
@@ -56,8 +61,8 @@ acuerdo al tipo de problema que se busca solucionar. Algunos tipos de tareas y s
 #figure(
   table(
     columns: (auto, auto, auto),
-    align: (left, center, left),
-    [*Tarea*], [*Función de activación de salida*], [*Función de pérdida*],
+    align: (left, left, left),
+    table.header[Tarea][Activación $sigma$ (salida)][Pérdida $cal(L)$],
     [Regresión], [Lineal], [Error cuadrático medio (MSE)],
     [Clasificación binaria], [Sigmoide], [Entropía cruzada binaria],
     [Clasificación multi-clase], [Softmax], [Entropía cruzada categórica],

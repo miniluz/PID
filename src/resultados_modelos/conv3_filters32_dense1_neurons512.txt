@@ -1,0 +1,14 @@
+=== HIPERPARÁMETROS ===
+  convLayers: 3
+  firstConvFilterCount: 32
+  denseLayers: 1
+  firstDenseNeuronCount: 512
+
+=== MÉTRICAS ===
+  exact_match: 0.1436
+  precision_micro: 0.6155
+  recall_micro: 0.1837
+  f1_micro: 0.2829
+  precision_macro: 0.5140
+  recall_macro: 0.0953
+  f1_macro: 0.1392

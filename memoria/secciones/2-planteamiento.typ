@@ -232,7 +232,7 @@ entrenamiento y capacidad:
 
 === Optimizador Adam
 
-Un problema importante a la hora de entrenar un modelo de IA es el hiperparámetro de la tasa de aprendizaje. Este hiperparámetro suele afectar mucho a la efectividad del modelo, por lo que es buena idea usar algoritmos como momentum o delta-bar-delta, que ayudan a ir ajustando la tasa de aprendizaje durante el entrenamiento. Estos se llaman algoritmos con tasas de aprendizaje adaptativas (adaptative learning rate algorithms) y se basan en medidas como la sensibilidad de los parámetros o la derivada parcial de la pérdida.
+Un problema importante a la hora de entrenar un modelo de IA es el hiperparámetro de la tasa de aprendizaje. Este hiperparámetro suele afectar mucho a la efectividad del modelo, por lo que es buena idea usar algoritmos como momentum o delta-bar-delta, que ayudan a ir ajustando la tasa de aprendizaje durante el entrenamiento. Estos se llaman algoritmos con tasas de aprendizaje adaptativas (adaptative learning rate algorithms) y se basan en medidas como la sensibilidad de los parámetros o la derivada parcial de la pérdida. 
 
 Adam o Adaptative Momentum Estimation es un optimizador robusto muy usado en la práctica. Este consiste en una combinación de otros algoritmos con tasas de aprendizaje adaptativas, concretamente RMSProp y momentum. Adam calcula el primer momento, que es la media del gradiente, y el segundo momento, el gradiente al cuadrado para actualizar pesos. Una particularidad de este algoritmo es que también se encarga de corregir sesgos de los momentos que pueden aparecer al inicio.
 

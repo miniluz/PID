@@ -222,10 +222,6 @@ def evaluate_model(model):
 GUARDADO DEL MODELO
 
 """
-
-RESULTS_DIR = "resultados_modelos"
-os.makedirs(RESULTS_DIR, exist_ok=True)
-
 def save_result(path, text, model):
     with open(path + ".txt", "w") as f:
         f.write(text)

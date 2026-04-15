@@ -8,16 +8,16 @@ librerías se han usado (ej. OpenCV)*.
 
 == Selección de hiperparámetros 
 
-La manera en la que vamos a seleccionar los diferentes hiperparámetros será usando grid search. Como vamos a entrenar diferentes modelos, cada uno necesitará unos hiperparámetros distintos.
+La manera en la que vamos a seleccionar los diferentes hiperparámetros será usando grid search. Esto servirá para refinar el modelo base sobre el que iremos aplicando las diferentes técnicas. Al ser la búsqueda de rejilla muy computacionalmente pesado, la aplicaremos exclusivamente al modelo base en vez de también a cada modelo con sus técnicas.
 
 Los hiperparámetros que vamos a variar son los siguientes: 
--Número de capas de convolución. Usaremos 2, 3 y 4.
--Número de filtros de la primera capa de convolución. Usaremos 32 y 64.
--Número de capas densas. Usaremos 1 y 2.
--Número de nodos de la primera capa densa. Usaremos 256 y 512.
+- Número de capas de convolución. Usaremos 2 y 3.
+- Número de filtros de la primera capa de convolución. Usaremos 32 y 64.
+- Número de capas densas. Usaremos 1 y 2.
+- Número de nodos de la primera capa densa. Usaremos 256 y 512.
 
 El número de filtros de las siguientes capas tras la primera se irá doblando, y los nodos de la segunda capa densa será la mitad que la de la primera.
 
-Según las métricas que devuelva el modelo entrenado con cada una de las combinaciones de hiperparámetros usados, nos quedaremos con el mejor.
+Según las métricas que devuelva el modelo entrenado con cada una de las combinaciones de hiperparámetros usados, nos quedaremos con el que tenga mejores resultados.
 
 

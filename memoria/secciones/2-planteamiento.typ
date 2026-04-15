@@ -178,6 +178,8 @@ $
   y = gamma hat(z) + beta
 $
 
+// TODO: añadir cita article_batch_normalization_ioffe
+
 ==== Dropout
 
 Consiste en que durante el entrenamiento, en cada caso de entrenamiento o mini-lote, se desactiva aleatoriamente una
@@ -197,7 +199,7 @@ El dropout también se puede aplicar a las capas convolucionales, desactivando c
 algunos $k$ del banco de filtros $K$). Esto se denomina dropout espacial. La compensación se realiza de la misma manera.
 
 // TODO! Cita
-
+// TODO! Citar por qué hacemos 0.1 para convolucionales y 0.4 para densas
 
 ==== Decaimiento de pesos
 

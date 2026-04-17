@@ -231,7 +231,7 @@ entrenamiento y capacidad:
 */
 
 === Optimizador Adam
-
+<sec:adam>
 Un problema importante a la hora de entrenar un modelo de IA es el hiperparámetro de la tasa de aprendizaje. Este hiperparámetro suele afectar mucho a la efectividad del modelo, por lo que es buena idea usar algoritmos como momentum o delta-bar-delta, que ayudan a ir ajustando la tasa de aprendizaje durante el entrenamiento. Estos se llaman algoritmos con tasas de aprendizaje adaptativas (adaptative learning rate algorithms) y se basan en medidas como la sensibilidad de los parámetros o la derivada parcial de la pérdida. 
 
 Adam o Adaptative Momentum Estimation es un optimizador robusto muy usado en la práctica. Este consiste en una combinación de otros algoritmos con tasas de aprendizaje adaptativas, concretamente RMSProp y momentum. Adam calcula el primer momento, que es la media del gradiente, y el segundo momento, el gradiente al cuadrado para actualizar pesos. Una particularidad de este algoritmo es que también se encarga de corregir sesgos de los momentos que pueden aparecer al inicio.
@@ -265,12 +265,12 @@ Luego, en el entrenamiento
 En la inferencia, se aplica un umbral $tau$ (ej. $tau = 0.5$), y se considera que la red tiene la etiqueta si la salida
 del nodo correspondiente lo supera.
 
-== Búsqueda de rejilla
+== Búsqueda de cuadrícula o rejilla
 
-La búsqueda de rejilla o grid search es una técnica usada en el entrenamiento de redes neuronales para explorar los resultados con diferentes combinaciones de hiperparámetros. El usuario selecciona una cantidad de hiperparámetros que probar de diferentes tipos, y a continuación el algoritmo entrena y prueba un modelo por cada una de las combinaciones posibles. El experimento que tras probarlo proporcione los mejores resultados es el que se considerará que tiene los mejores hiperparámetros.
+La búsqueda de cuadrícula o grid search es una técnica usada en el entrenamiento de redes neuronales para explorar los resultados con diferentes combinaciones de hiperparámetros. El usuario selecciona una cantidad de hiperparámetros que probar de diferentes tipos, y a continuación el algoritmo entrena y prueba un modelo por cada una de las combinaciones posibles. El experimento que tras probarlo proporcione los mejores resultados es el que se considerará que tiene los mejores hiperparámetros.
 
 == Parada temprana
-
+<sec:earlystopping>
 A la hora de entrenar modelos muy grandes, hay ocasiones en las que vemos que el error en el entrenamiento va bajando, sin embargo a la hora de validar el modelo, el error es más alto de lo que se esperaba. A este comportamiento se le llama *sobreajuste* (_overfitting_). A lo largo del entrenamiento, puede que el error del entrenamiento vaya bajando poco a poco, pero al haber un sobreajuste, el modelo pierde capacidad de generalización y entonces el error de validación cada vez empeora más.
 
 La *parada temprana* (_early stopping_) se tata de una estrategia de entrenamiento en la que cada vez que mejora cierta cantidad el error de validación de cada batch, se guardan los parámetros del modelo. Estos parámetros se mantienen hasta que el error de validación del batch empieza a empeorar durante ciertas épocas. En caso de que mejore antes de que pasen las épocas definidas (parámetro _paciencia_), se sobreescriben los parámetros del modelo. En caso contrario, si tras varias épocas no ha habido una mejoría, se para el entrenamiento antes de acabarlo y se devuelven los parámetros del modelo que ha logrado obtener el menor error de validación. De esta forma, lo que se logra es que mejore la capacidad de generalización del modelo porque se minimiza el error de validación a la par de que se omite el entrenamiento que probablemente no vaya a afectar de forma positiva al modelo, haciendo así mucho más rápido el proceso de entrenamiento.
@@ -278,7 +278,7 @@ La *parada temprana* (_early stopping_) se tata de una estrategia de entrenamien
 Esta estrategia es popular por su simplicidad y su efectividad, así que se va a aplicar a la hora de entrenar modelos en este proyecto.
 
 == Validación
-
+<sec:metricasvalidacion>
 El entrenamiento únicamente intenta reducir el error con los datos de entrenamiento. Pero una red con bajo error para
 los datos de entrenamiento no tiene por qué ser efectiva en general. Por ejemplo, si la red es demasiado grande para la
 cantidad de datos de entrenamiento, es posible que se sobreajuste a los datos de entrenamiento y su salida no sea

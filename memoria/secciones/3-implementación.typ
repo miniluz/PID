@@ -23,8 +23,8 @@ Estas son las principales librerías y herramientas que se han usado en la imple
 - *IpyKernel*: es un kernel de Jupyter que permite ejecutar código Python en el entorno de Jupyter.
 
 == Selección de hiperparámetros 
-
-La manera en la que vamos a seleccionar los diferentes hiperparámetros será usando grid search. Esto servirá para refinar el modelo base sobre el que iremos aplicando las diferentes técnicas. Al ser la búsqueda de rejilla muy computacionalmente pesado, la aplicaremos exclusivamente al modelo base en vez de también a cada modelo con sus técnicas.
+<sec:busquedacuadricula>
+La manera en la que se va a seleccionar los diferentes hiperparámetros será usando grid search. Esto servirá para refinar el modelo base sobre el que se irá aplicando las diferentes técnicas. Al ser la búsqueda en cuadrícula muy computacionalmente pesada, se aplicará exclusivamente al modelo base en vez de también a cada modelo con sus técnicas.
 
 Los hiperparámetros que vamos a variar son los siguientes: 
 - Número de capas de convolución. Usaremos 2 y 3.
@@ -35,5 +35,41 @@ Los hiperparámetros que vamos a variar son los siguientes:
 El número de filtros de las siguientes capas tras la primera se irá doblando, y los nodos de la segunda capa densa será la mitad que la de la primera.
 
 Según las métricas que devuelva el modelo entrenado con cada una de las combinaciones de hiperparámetros usados, nos quedaremos con el que tenga mejores resultados.
+
+== Pasos del proyecto
+
+En esta sección se describirán cada uno de los pasos llevados para la implementación a alto nivel.
+
+=== Carga de datos
+
+Primero de todo se preparan los datos. Se lee el CSV con todos los nombres de las películas (que no se usarán a la hora del entrenamiento, pero se ha decidido mantenerlos por conveniencia y comodidad), los enlaces a las portadas y una serie de valores binarios que representan si la película es o no del género en cuestión. Se definen también ciertos parámetros como el tamaño de las imágenes, el _batch size_, el número máximo de épocas, y una semilla para asegurar reproducibilidad. Por último se dividen los datos en un conjunto de entrenamiento y otro de validación.
+
+=== Definición del modelo
+
+Lo siguiente es definir el modelo. Para ello se implementa una función que facilita la creación del modelo, y que crea uno con las siguientes partes:
+
+- Capa de entrada
+- Capas convolucionales. Tienen función de activación _ReLU_. Cada capa convolucional tiene el doble de filtros de la anterior, y entre cada una hay una capa de _MaxPooling_.
+- Capa con GAP (_Global Average Pooling_). Esto sirve para reducir la dimensionalidad.
+- Capas densas. Tienen función de activación _ReLU_. Cada capa densa tiene la mitad de filtros de la anterior.
+- Capa de salida. Al final se incluye una capa de salida con función de activación sigmoide.
+
+Por último se compila el modelo con el optimizador _Adam_ (@sec:adam), pérdida de entropía cruzada binaria, y siguiendo la métrica de precisión (_accuracy_).
+
+=== Entrenamiento del modelo
+
+A la hora de entrenar el modelo se ha definido un _callback_, que es el _Early Stopping_ (@sec:earlystopping). Se implementa una función que facilita el entrenamiento del modelo ajustando automáticamente todo lo necesario, además de mostrando información relevante como las épocas entrenadas y el valor final de la pérdida. 
+
+=== Representación del modelo
+
+En esta parte de la implementación se define una función que permite observar una gráfica que muestra la diferencia de la precisión entre el conjunto de entrenamiento y el de validación, y una segunda gráfica que muestra la diferencia de la pérdida entre esos mismos conjuntos. 
+
+=== Métricas de evaluación
+
+Para ver cómo se efectivo podemos considerar un modelo, necesitamos más información que la precisión y la pérdida. Para ello se implementa una función que, dado un modelo, imprime las métricas de validación definidas en la @sec:metricasvalidacion.
+
+=== Búsqueda en cuadrícula o rejilla
+
+Para maximizar la efectividad del modelo base sobre el que partiremos para aplicar las distintas técnicas, se ha hecho una búsqueda en cuadrícula. Esta sigue lo definido en la @sec:busquedacuadricula. La funcionalidad de la búsqueda en cuadrícula se ha implementado manualmente para poderla entender y controlar de mejor manera. Esto nos ha permitido guardar los resultados (las métricas de validación) de cada uno de los modelos probados con diferentes combinaciones de hiperparámetros en ficheros de texto.
 
 

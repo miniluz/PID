@@ -8,34 +8,86 @@
       name="description"
       content="Una demo simple de los modelos de Juzgando por la Portada"
     />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
     <style>
+      :root {
+        --bg-primary: #0a0a0a;
+        --bg-secondary: #1a1a1a;
+        --bg-tertiary: #2a2a2a;
+        --text-primary: #ffffff;
+        --text-secondary: #b0b0b0;
+        --accent-primary: #3b82f6;
+        --accent-secondary: #10b981;
+        --border-color: #404040;
+        --grid-gap: 12px;
+        --transition-speed: 0.3s;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        min-height: 100vh;
+        line-height: 1.5;
+      }
+
       .app-container {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 20px;
-        padding: 20px;
-        max-width: 1200px;
+        gap: 40px;
+        padding: 40px 20px;
+        max-width: 1400px;
         margin: 0 auto;
+        min-height: 100vh;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-align: center;
+        margin-bottom: 20px;
       }
 
       .rectangles-container {
         display: flex;
-        gap: 40px;
-        align-items: center;
-        margin-bottom: 20px;
+        gap: 60px;
+        align-items: stretch;
+        width: 100%;
+        margin-bottom: 40px;
       }
 
       .rectangle {
-        width: 400px;
-        min-height: 400px;
-        border: 2px solid #333;
-        border-radius: 8px;
-        padding: 16px;
+        flex: 1;
+        min-width: 600px;
+        min-height: 600px;
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 24px;
         display: flex;
         flex-direction: column;
-        background-color: #f9f9f9;
+        background-color: var(--bg-secondary);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+      }
+
+      .rectangle:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
       }
 
       .image-upload-box {
@@ -43,113 +95,318 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 16px;
+        gap: 24px;
+        height: 100%;
       }
 
       .upload-button {
-        padding: 10px 20px;
-        background-color: #4caf50;
+        padding: 14px 28px;
+        background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
         color: white;
         border: none;
-        border-radius: 4px;
+        border-radius: 8px;
         cursor: pointer;
         font-size: 16px;
-        transition: background-color 0.3s ease;
+        font-weight: 600;
+        transition: all var(--transition-speed) ease;
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
       }
 
       .upload-button:hover {
-        background-color: #45a049;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+      }
+
+      .upload-button:active {
+        transform: translateY(0);
       }
 
       .upload-button:disabled {
-        background-color: #cccccc;
+        background: var(--bg-tertiary);
+        color: var(--text-secondary);
         cursor: not-allowed;
+        box-shadow: none;
+        transform: none;
       }
 
       .image-preview {
         max-width: 100%;
-        max-height: 300px;
+        max-height: 400px;
         object-fit: contain;
-        border-radius: 4px;
+        border-radius: 12px;
+        border: 2px solid var(--border-color);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
       }
 
       .tag-display-box {
-        overflow-y: auto;
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 6px;
+        padding: 12px 16px;
+        overflow-y: auto;
         flex: 1;
+        min-height: 0;
+      }
+
+      .tag-display-box::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .tag-display-box::-webkit-scrollbar-track {
+        background: var(--bg-tertiary);
+        border-radius: 4px;
+      }
+
+      .tag-display-box::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 4px;
+      }
+
+      .tag-display-box::-webkit-scrollbar-thumb:hover {
+        background: var(--text-secondary);
+      }
+
+      .tag-header {
+        display: grid;
+        grid-template-columns: 120px 1fr 60px;
+        align-items: center;
+        gap: 16px;
+        padding: 8px 16px;
+        margin-bottom: 4px;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .header-label {
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--text-secondary);
       }
 
       .tag-item {
-        display: flex;
+        display: grid;
+        grid-template-columns: 120px 1fr 60px;
         align-items: center;
-        gap: 10px;
-        margin-bottom: 8px;
+        gap: 16px;
+        padding: 10px 16px;
+        background-color: var(--bg-tertiary);
+        border-radius: 6px;
+        border: 1px solid transparent;
+        transition: all var(--transition-speed) ease;
+        animation: fadeInUp 0.5s ease forwards;
+        opacity: 0;
       }
 
-      .tag-name-box {
-        padding: 6px 12px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        background-color: #f0f0f0;
-        font-weight: bold;
-        min-width: 80px;
-        text-align: center;
+      .tag-item:hover {
+        background-color: rgba(42, 42, 42, 0.8);
+        border-color: var(--accent-primary);
+      }
+
+      .tag-name {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text-primary);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        transition: color var(--transition-speed) ease;
+      }
+
+      .tag-name.included {
+        color: var(--accent-secondary);
       }
 
       .percentage-bar-container {
-        flex: 1;
-        height: 24px;
-        background-color: #eee;
-        border-radius: 4px;
+        width: 100%;
+        height: 12px;
+        background-color: var(--bg-secondary);
+        border-radius: 6px;
         overflow: hidden;
+        border: 1px solid var(--border-color);
       }
 
       .percentage-bar {
         height: 100%;
-        transition: width 0.3s ease;
+        background-color: var(--text-primary);
+        border-radius: 6px;
+        transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1), background-color var(--transition-speed) ease;
       }
 
-      .percentage-bar.green {
-        background-color: #4caf50;
-      }
-
-      .percentage-bar.grey {
-        background-color: #9e9e9e;
+      .percentage-bar.included {
+        background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
       }
 
       .percentage-text {
-        margin-left: 8px;
-        font-size: 14px;
-        font-weight: bold;
+        font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--text-primary);
+        font-variant-numeric: tabular-nums;
+        text-align: right;
+        min-width: 60px;
+      }
+
+      .percentage-text.included {
+        color: var(--accent-secondary);
       }
 
       .arrow-container {
         display: flex;
+        align-items: center;
         justify-content: center;
-        margin-top: -20px;
-        font-size: 32px;
+        font-size: 48px;
+        color: var(--accent-primary);
+        font-weight: bold;
+        padding: 0 20px;
       }
 
       .dropdown-container {
         display: flex;
         flex-direction: column;
-        gap: 10px;
-        width: 400px;
+        gap: 16px;
+        width: 100%;
+        max-width: 500px;
+      }
+
+      .dropdown-label {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--text-primary);
       }
 
       .dropdown {
-        padding: 10px;
-        border: 2px solid #333;
-        border-radius: 4px;
+        padding: 14px 20px;
+        border: 2px solid var(--border-color);
+        border-radius: 10px;
         font-size: 16px;
-        background-color: white;
+        background-color: var(--bg-tertiary);
+        color: var(--text-primary);
+        cursor: pointer;
+        transition: border-color var(--transition-speed) ease;
+        font-family: 'Inter', sans-serif;
+      }
+
+      .dropdown:focus {
+        outline: none;
+        border-color: var(--accent-primary);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
       }
 
       .status-text {
-        font-size: 14px;
-        color: #666;
+        font-size: 15px;
+        color: var(--text-secondary);
+        text-align: center;
+        padding: 12px;
+        background-color: var(--bg-tertiary);
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        transition: all var(--transition-speed) ease;
+      }
+
+      .status-text.loading {
+        color: var(--accent-primary);
+        border-color: var(--accent-primary);
+        animation: pulse 2s infinite;
+      }
+
+      .status-text.ready {
+        color: var(--accent-secondary);
+        border-color: var(--accent-secondary);
+      }
+
+      .loading-spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid var(--border-color);
+        border-top-color: var(--accent-primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-right: 10px;
+        vertical-align: middle;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes pulse {
+        0%, 100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+      }
+
+      @media (max-width: 1200px) {
+        .rectangles-container {
+          flex-direction: column;
+          gap: 40px;
+        }
+        
+        .rectangle {
+          min-width: 100%;
+          min-height: 400px;
+        }
+        
+        .arrow-container {
+          transform: rotate(90deg);
+          padding: 20px 0;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .app-container {
+          padding: 20px 16px;
+          gap: 30px;
+        }
+        
+        h1 {
+          font-size: 2rem;
+        }
+        
+        .rectangle {
+          padding: 24px;
+          min-height: 350px;
+        }
+        
+        .tag-display-box {
+          grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+          padding: 12px;
+        }
+        
+        .tag-item {
+          padding: 16px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .tag-display-box {
+          grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        }
+        
+        .tag-name {
+          font-size: 14px;
+        }
+        
+        .percentage-text {
+          font-size: 16px;
+        }
       }
     </style>
 
@@ -184,40 +441,103 @@
         model3: { url: "models/model3.onnx", inputSize: 299 },
       };
 
-      async function runInference(imageUrl, model) {
-        await new Promise((r) => setTimeout(r, 5000));
+      // Utility functions for reactivity
+      function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+          const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+          };
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+        };
+      }
 
+      async function runInference(imageUrl, model) {
+        // Simulate different inference times based on model
+        const modelDelays = {
+          model1: 2000,
+          model2: 3000,
+          model3: 4000
+        };
+        
+        await new Promise((r) => setTimeout(r, modelDelays[model] || 3000));
+
+        // Generate more realistic probabilities with some high and some low
         const exampleTags = Object.keys(nodeToTagMap)
-          .map((nodeId) => ({
-            name: nodeToTagMap[nodeId],
-            portion: Math.random(), // Random portion for demo
-          }))
+          .map((nodeId) => {
+            // Create more realistic distribution: some tags are likely, others unlikely
+            const baseRandom = Math.random();
+            const adjustedPortion = baseRandom > 0.7 ? 
+              baseRandom * 0.7 + 0.3 : // Make some tags more likely (>30%)
+              baseRandom * 0.3; // Make others less likely (<30%)
+            
+            return {
+              name: nodeToTagMap[nodeId],
+              portion: Math.min(0.99, Math.max(0.01, adjustedPortion)), // Clamp between 1% and 99%
+            };
+          })
           .sort((a, b) => b.portion - a.portion); // Sort descending
 
         return exampleTags;
       }
 
-      // Tag component
-      function TagDisplay({ name, portion }) {
-        const percentage = Math.round(portion * 100);
-        const barColor = portion > 0.5 ? "green" : "grey";
-
+      // Tag component with animation and inclusion logic
+      function TagDisplay({ name, portion, index, animationKey }) {
+        const [animatedPercentage, setAnimatedPercentage] = useState(0);
+        const isIncluded = portion > 0.5; // Example threshold for inclusion
+        
+        useEffect(() => {
+          // Reset animation when animationKey changes
+          setAnimatedPercentage(0);
+          
+          const targetPercentage = Math.round(portion * 100);
+          const duration = 800;
+          const startTime = Date.now();
+          
+          const animate = () => {
+            const elapsed = Date.now() - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const easeProgress = 1 - Math.pow(1 - progress, 3); // Cubic ease-out
+            
+            setAnimatedPercentage(Math.round(easeProgress * targetPercentage));
+            
+            if (progress < 1) {
+              requestAnimationFrame(animate);
+            }
+          };
+          
+          const animationDelay = index * 30;
+          setTimeout(() => {
+            requestAnimationFrame(animate);
+          }, animationDelay);
+          
+          return () => {
+            // Cleanup if component unmounts
+          };
+        }, [portion, index, animationKey]);
+        
         return html`
-          <div class="tag-item">
-            <div class="tag-name-box">${name}</div>
+          <div class="tag-item" style="animation-delay: ${index * 30}ms">
+            <div class="tag-name ${isIncluded ? 'included' : ''}">
+              ${name}
+            </div>
             <div class="percentage-bar-container">
-              <div
-                class="percentage-bar ${barColor}"
-                style="width: ${percentage}%"
+              <div 
+                class="percentage-bar ${isIncluded ? 'included' : ''}"
+                style="width: ${animatedPercentage}%"
               ></div>
             </div>
-            <div class="percentage-text">${percentage}%</div>
+            <div class="percentage-text ${isIncluded ? 'included' : ''}">
+              ${animatedPercentage}%
+            </div>
           </div>
         `;
       }
 
       // Image upload box component
-      function ImageUploadBox({ imageUrl, onImageUpload }) {
+      function ImageUploadBox({ imageUrl, onImageUpload, isLoading }) {
         return html`
           <div class="image-upload-box">
             ${imageUrl
@@ -228,9 +548,14 @@
                     alt="Uploaded image"
                   />
                 `
-              : html` <p>Upload an image to analyze</p> `}
-            <button class="upload-button" onClick=${onImageUpload}>
-              Upload Image
+              : html` 
+                  <div style="text-align: center; color: var(--text-secondary);">
+                    <p style="font-size: 18px; margin-bottom: 8px;">📷</p>
+                    <p>Upload an image to analyze</p>
+                  </div>
+                `}
+            <button class="upload-button" onClick=${onImageUpload} disabled=${isLoading}>
+              ${isLoading ? 'Uploading...' : 'Upload Image'}
             </button>
           </div>
         `;
@@ -241,10 +566,12 @@
         const [imageUrl, setImageUrl] = useState(null);
         const [selectedModel, setSelectedModel] = useState("model1");
         const [tags, setTags] = useState([]);
-        const [calculating, setCalculating] = useState(false);
-        const [lastRequestId, setLastRequestId] = useState(0);
+        const [isLoading, setIsLoading] = useState(false);
+        const [isUploading, setIsUploading] = useState(false);
+        const [modelChanged, setModelChanged] = useState(false);
+        const [animationKey, setAnimationKey] = useState(0);
 
-        // Handle image upload
+        // Handle image upload with loading state
         const handleImageUpload = () => {
           const input = document.createElement("input");
           input.type = "file";
@@ -254,14 +581,17 @@
           input.onchange = (e) => {
             const file = e.target.files[0];
             if (file) {
+              setIsUploading(true);
               const reader = new FileReader();
               reader.onload = (event) => {
                 setImageUrl(event.target.result);
+                setIsUploading(false);
                 // Remove input after use
                 document.body.removeChild(input);
               };
               reader.onerror = () => {
                 console.error("Error reading file");
+                setIsUploading(false);
                 document.body.removeChild(input);
               };
               reader.readAsDataURL(file);
@@ -275,22 +605,53 @@
           input.click();
         };
 
-        // Simulated async calculation with deduplication
+        // Enhanced model change handler with animation
+        const handleModelChange = (e) => {
+          const newModel = e.target.value;
+          setSelectedModel(newModel);
+          setModelChanged(true);
+          
+          // Force re-animation of bars
+          setAnimationKey(prev => prev + 1);
+          
+          // Show loading state briefly
+          setIsLoading(true);
+          setTimeout(() => setIsLoading(false), 300);
+        };
+
+        // Enhanced async calculation with debouncing and better state management
         useEffect(() => {
           if (!imageUrl) return;
-
-          let stale = false;
-          setCalculating(true);
-
-          runInference(imageUrl, selectedModel).then((result) => {
-            if (!stale) {
-              setTags(result);
-              setCalculating(false);
+          
+          let mounted = true;
+          let timeoutId;
+          
+          const runInferenceDebounced = debounce(async () => {
+            if (!mounted) return;
+            
+            setIsLoading(true);
+            setModelChanged(false);
+            
+            try {
+              const result = await runInference(imageUrl, selectedModel);
+              if (mounted) {
+                setTags(result);
+                setAnimationKey(prev => prev + 1); // Trigger new animations
+              }
+            } catch (error) {
+              console.error('Inference error:', error);
+            } finally {
+              if (mounted) {
+                setIsLoading(false);
+              }
             }
-          });
-
+          }, 500);
+          
+          runInferenceDebounced();
+          
           return () => {
-            stale = true;
+            mounted = false;
+            if (timeoutId) clearTimeout(timeoutId);
           };
         }, [imageUrl, selectedModel]);
 
@@ -303,6 +664,7 @@
                 <${ImageUploadBox}
                   imageUrl=${imageUrl}
                   onImageUpload=${handleImageUpload}
+                  isLoading=${isUploading}
                 />
               </div>
 
@@ -310,48 +672,98 @@
 
               <div class="rectangle">
                 <div class="tag-display-box">
-                  ${calculating
-                    ? html` <p>Calculating...</p> `
+                  ${isLoading
+                    ? html`
+                        <div style="
+                          display: flex;
+                          flex-direction: column;
+                          align-items: center;
+                          justify-content: center;
+                          height: 100%;
+                          gap: 20px;
+                          color: var(--text-secondary);
+                        ">
+                          <div class="loading-spinner"></div>
+                          <p>Analyzing with ${selectedModel}...</p>
+                        </div>
+                      `
                     : tags.length > 0
                       ? html`
+                          <div class="tag-header">
+                            <div class="header-label">Genre</div>
+                            <div class="header-label">Confidence</div>
+                            <div class="header-label">Score</div>
+                          </div>
                           ${tags.map(
-                            (tag) => html`
+                            (tag, index) => html`
                               <${TagDisplay}
+                                key=${tag.name + index}
                                 name=${tag.name}
                                 portion=${tag.portion}
+                                index=${index}
+                                animationKey=${animationKey}
                               />
                             `,
                           )}
                         `
-                      : html` <p>No results yet</p> `}
+                      : html`
+                          <div style="
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: center;
+                            height: 100%;
+                            color: var(--text-secondary);
+                            text-align: center;
+                            gap: 12px;
+                          ">
+                            <p style="font-size: 24px;">📊</p>
+                            <p>Upload an image to see analysis results</p>
+                            <p style="font-size: 14px; opacity: 0.8;">
+                              Results will appear in a table layout below
+                            </p>
+                          </div>
+                        `}
                 </div>
               </div>
             </div>
 
             <div class="dropdown-container">
-              <label for="model-select">Select Model:</label>
+              <label class="dropdown-label" for="model-select">Select Model:</label>
               <select
                 id="model-select"
                 class="dropdown"
                 value=${selectedModel}
-                onChange=${(e) => setSelectedModel(e.target.value)}
+                onChange=${handleModelChange}
+                disabled=${isLoading || !imageUrl}
               >
                 ${Object.keys(onnxModels).map(
-                  (model) => html` <option value=${model}>${model}</option> `,
+                  (model) => html` 
+                    <option value=${model}>
+                      ${model} (${onnxModels[model].inputSize}px)
+                    </option> 
+                  `,
                 )}
               </select>
-              ${calculating
+              
+              ${isLoading
                 ? html`
-                    <p class="status-text">
+                    <p class="status-text loading">
+                      <span class="loading-spinner"></span>
                       Calculating with ${selectedModel}...
                     </p>
                   `
                 : imageUrl && selectedModel
                   ? html`
-                      <p class="status-text">Ready with ${selectedModel}</p>
+                      <p class="status-text ready">
+                        ✓ Ready with ${selectedModel}
+                        ${modelChanged ? ' (model changed)' : ''}
+                      </p>
                     `
                   : html`
-                      <p class="status-text">Select model and upload image</p>
+                      <p class="status-text">
+                        Select a model and upload an image to begin analysis
+                      </p>
                     `}
             </div>
           </div>

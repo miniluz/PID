@@ -8,10 +8,13 @@
       name="description"
       content="Una demo simple de los modelos de Juzgando por la Portada"
     />
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
 
     <style>
       :root {
@@ -36,7 +39,12 @@
       body {
         background-color: var(--bg-primary);
         color: var(--text-primary);
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-family:
+          "Inter",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
         min-height: 100vh;
         line-height: 1.5;
       }
@@ -55,7 +63,11 @@
       h1 {
         font-size: 2.5rem;
         font-weight: 700;
-        background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+        background: linear-gradient(
+          135deg,
+          var(--accent-primary),
+          var(--accent-secondary)
+        );
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -82,7 +94,9 @@
         flex-direction: column;
         background-color: var(--bg-secondary);
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+        transition:
+          transform var(--transition-speed) ease,
+          box-shadow var(--transition-speed) ease;
       }
 
       .rectangle:hover {
@@ -101,7 +115,11 @@
 
       .upload-button {
         padding: 14px 28px;
-        background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+        background: linear-gradient(
+          135deg,
+          var(--accent-primary),
+          var(--accent-secondary)
+        );
         color: white;
         border: none;
         border-radius: 8px;
@@ -230,15 +248,21 @@
         height: 100%;
         background-color: var(--text-primary);
         border-radius: 6px;
-        transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1), background-color var(--transition-speed) ease;
+        transition:
+          width 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+          background-color var(--transition-speed) ease;
       }
 
       .percentage-bar.included {
-        background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+        background: linear-gradient(
+          90deg,
+          var(--accent-primary),
+          var(--accent-secondary)
+        );
       }
 
       .percentage-text {
-        font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+        font-family: "JetBrains Mono", "Fira Code", "Consolas", monospace;
         font-size: 16px;
         font-weight: 600;
         color: var(--text-primary);
@@ -284,7 +308,7 @@
         color: var(--text-primary);
         cursor: pointer;
         transition: border-color var(--transition-speed) ease;
-        font-family: 'Inter', sans-serif;
+        font-family: "Inter", sans-serif;
       }
 
       .dropdown:focus {
@@ -345,7 +369,8 @@
       }
 
       @keyframes pulse {
-        0%, 100% {
+        0%,
+        100% {
           opacity: 1;
         }
         50% {
@@ -358,12 +383,12 @@
           flex-direction: column;
           gap: 40px;
         }
-        
+
         .rectangle {
           min-width: 100%;
           min-height: 400px;
         }
-        
+
         .arrow-container {
           transform: rotate(90deg);
           padding: 20px 0;
@@ -375,21 +400,21 @@
           padding: 20px 16px;
           gap: 30px;
         }
-        
+
         h1 {
           font-size: 2rem;
         }
-        
+
         .rectangle {
           padding: 24px;
           min-height: 350px;
         }
-        
+
         .tag-display-box {
           grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
           padding: 12px;
         }
-        
+
         .tag-item {
           padding: 16px;
         }
@@ -399,20 +424,26 @@
         .tag-display-box {
           grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
         }
-        
+
         .tag-name {
           font-size: 14px;
         }
-        
+
         .percentage-text {
           font-size: 16px;
         }
       }
     </style>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/onnxruntime-web/1.23.0/ort.wasm.min.js?module"></script>
+    <script>
+      const onnxModelNames = {
+        "Modelo base": /* conv3_filters64_dense2_neurons256.onnx */ null,
+      };
+    </script>
 
     <script type="module">
+      import * as ort from "https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.mjs";
+
       import { h, render } from "https://esm.sh/preact";
       import { useState, useEffect } from "https://esm.sh/preact/hooks";
       import htm from "https://esm.sh/htm";
@@ -421,122 +452,195 @@
 
       // CONFIGURABLE MAPPINGS
       // Example node number to tag name mapping
-      const nodeToTagMap = {
-        0: "Comedy",
-        1: "Action",
-        2: "Drama",
-        3: "Romance",
-        4: "Horror",
-        5: "Sci-Fi",
-        6: "Fantasy",
-        7: "Thriller",
-        8: "Documentary",
-        9: "Animation",
-      };
+      const outputToGenreMap = [
+        "Action",
+        "Science Fiction",
+        "Horror",
+        "Mystery",
+        "Thriller",
+        "Comedy",
+        "Adventure",
+        "Drama",
+        "Animation",
+        "Family",
+        "Fantasy",
+        "History",
+        "War",
+        "Crime",
+        "Romance",
+        "Documentary",
+        "Music",
+        "TV Movie",
+        "Western",
+      ];
 
-      // Example ONNX model definitions
-      const onnxModels = {
-        model1: { url: "models/model1.onnx", inputSize: 224 },
-        model2: { url: "models/model2.onnx", inputSize: 256 },
-        model3: { url: "models/model3.onnx", inputSize: 299 },
-      };
+      async function loadModel(buffer) {
+        if (!buffer) throw new Error("Model buffer empty");
 
-      // Utility functions for reactivity
-      function debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-          const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-          };
-          clearTimeout(timeout);
-          timeout = setTimeout(later, wait);
-        };
+        const model = await ort.InferenceSession.create(buffer, {
+          executionProviders: ["cpu"],
+        });
+
+        return model;
       }
 
-      async function runInference(imageUrl, model) {
-        // Simulate different inference times based on model
-        const modelDelays = {
-          model1: 2000,
-          model2: 3000,
-          model3: 4000
-        };
-        
-        await new Promise((r) => setTimeout(r, modelDelays[model] || 3000));
+      const modelCache = new Map();
 
-        // Generate more realistic probabilities with some high and some low
-        const exampleTags = Object.keys(nodeToTagMap)
-          .map((nodeId) => {
-            // Create more realistic distribution: some tags are likely, others unlikely
-            const baseRandom = Math.random();
-            const adjustedPortion = baseRandom > 0.7 ? 
-              baseRandom * 0.7 + 0.3 : // Make some tags more likely (>30%)
-              baseRandom * 0.3; // Make others less likely (<30%)
-            
-            return {
-              name: nodeToTagMap[nodeId],
-              portion: Math.min(0.99, Math.max(0.01, adjustedPortion)), // Clamp between 1% and 99%
-            };
-          })
-          .sort((a, b) => b.portion - a.portion); // Sort descending
+      async function getModel(name) {
+        if (modelCache.has(name)) return modelCache.get(name);
 
-        return exampleTags;
+        const buffer = onnxModelNames[name];
+        const promise = loadModel(buffer).catch((err) => {
+          modelCache.delete(name); // Allow retry on failure
+          throw err;
+        });
+
+        modelCache.set(name, promise);
+        return promise;
       }
 
-      // Tag component with animation and inclusion logic
-      function TagDisplay({ name, portion, index, animationKey }) {
+      function nchwToNhwc(input, [N, C, H, W], keepChannels = [0, 1, 2]) {
+        const outC = keepChannels.length;
+        const output = new Float32Array(N * H * W * outC);
+
+        for (let n = 0; n < N; n++) {
+          for (let h = 0; h < H; h++) {
+            for (let w = 0; w < W; w++) {
+              for (let c = 0; c < outC; c++) {
+                const inC = keepChannels[c];
+
+                const inputIndex = n * C * H * W + inC * H * W + h * W + w;
+
+                const outputIndex =
+                  n * H * W * outC + h * W * outC + w * outC + c;
+
+                output[outputIndex] = input[inputIndex];
+              }
+            }
+          }
+        }
+
+        return output;
+      }
+
+      async function runInference(imageUrl, modelName) {
+        const model = await getModel(modelName);
+
+        const inputName = model.inputNames[0];
+        const [, height, width, channels] = model.inputMetadata[0].shape;
+
+        // Load image
+        const img = new Image();
+        img.src = imageUrl;
+
+        await new Promise((resolve, reject) => {
+          img.onload = resolve;
+          img.onerror = reject;
+        });
+
+        // Image → tensor (NHWC, resized)
+        const tensor = await ort.Tensor.fromImage(img, {
+          resizedWidth: width,
+          resizedHeight: height,
+        });
+
+        console.log(tensor);
+
+        const data = tensor.data;
+
+        console.log(data);
+
+        const normalized = new Float32Array(height * width * 3);
+
+        for (let h = 0; h < height; h++) {
+          for (let w = 0; w < width; w++) {
+            for (let c = 0; c < 3; c++) {
+              const inputIndex = c * height * width + h * width + w;
+
+              const outputIndex = h * width * 3 + w * 3 + c;
+
+              normalized[outputIndex] = data[inputIndex];
+            }
+          }
+        }
+
+        const normalized_tensor = new ort.Tensor("float32", normalized, [
+          1,
+          height,
+          width,
+          3,
+        ]);
+
+        debugger;
+
+        const results = await model.run({
+          [inputName]: normalized_tensor,
+        });
+
+        debugger;
+
+        const outputName = model.outputNames[0];
+        const output = results[outputName].data; // length = 19
+
+        const tags = Array.from(output)
+          .map((p, i) => ({
+            name: outputToGenreMap[i] || `Class ${i}`,
+            portion: p,
+          }))
+          .sort((a, b) => b.portion - a.portion);
+
+        return tags;
+      }
+
+      function GenreDisplay({ name, portion, index, animationKey }) {
         const [animatedPercentage, setAnimatedPercentage] = useState(0);
         const isIncluded = portion > 0.5; // Example threshold for inclusion
-        
+
         useEffect(() => {
-          // Reset animation when animationKey changes
           setAnimatedPercentage(0);
-          
+
           const targetPercentage = Math.round(portion * 100);
           const duration = 800;
           const startTime = Date.now();
-          
+
           const animate = () => {
             const elapsed = Date.now() - startTime;
             const progress = Math.min(elapsed / duration, 1);
             const easeProgress = 1 - Math.pow(1 - progress, 3); // Cubic ease-out
-            
+
             setAnimatedPercentage(Math.round(easeProgress * targetPercentage));
-            
+
             if (progress < 1) {
               requestAnimationFrame(animate);
             }
           };
-          
+
           const animationDelay = index * 30;
           setTimeout(() => {
             requestAnimationFrame(animate);
           }, animationDelay);
-          
+
           return () => {
             // Cleanup if component unmounts
           };
         }, [portion, index, animationKey]);
-        
+
         return html`
           <div class="tag-item" style="animation-delay: ${index * 30}ms">
-            <div class="tag-name ${isIncluded ? 'included' : ''}">
-              ${name}
-            </div>
+            <div class="tag-name ${isIncluded ? "included" : ""}">${name}</div>
             <div class="percentage-bar-container">
-              <div 
-                class="percentage-bar ${isIncluded ? 'included' : ''}"
+              <div
+                class="percentage-bar ${isIncluded ? "included" : ""}"
                 style="width: ${animatedPercentage}%"
               ></div>
             </div>
-            <div class="percentage-text ${isIncluded ? 'included' : ''}">
+            <div class="percentage-text ${isIncluded ? "included" : ""}">
               ${animatedPercentage}%
             </div>
           </div>
         `;
       }
 
-      // Image upload box component
       function ImageUploadBox({ imageUrl, onImageUpload, isLoading }) {
         return html`
           <div class="image-upload-box">
@@ -548,30 +652,34 @@
                     alt="Uploaded image"
                   />
                 `
-              : html` 
-                  <div style="text-align: center; color: var(--text-secondary);">
+              : html`
+                  <div
+                    style="text-align: center; color: var(--text-secondary);"
+                  >
                     <p style="font-size: 18px; margin-bottom: 8px;">📷</p>
                     <p>Upload an image to analyze</p>
                   </div>
                 `}
-            <button class="upload-button" onClick=${onImageUpload} disabled=${isLoading}>
-              ${isLoading ? 'Uploading...' : 'Upload Image'}
+            <button
+              class="upload-button"
+              onClick=${onImageUpload}
+              disabled=${isLoading}
+            >
+              ${isLoading ? "Uploading..." : "Upload Image"}
             </button>
           </div>
         `;
       }
 
-      // Main App component
       function App() {
         const [imageUrl, setImageUrl] = useState(null);
-        const [selectedModel, setSelectedModel] = useState("model1");
+        const [selectedModel, setSelectedModel] = useState("Modelo base");
         const [tags, setTags] = useState([]);
         const [isLoading, setIsLoading] = useState(false);
         const [isUploading, setIsUploading] = useState(false);
         const [modelChanged, setModelChanged] = useState(false);
         const [animationKey, setAnimationKey] = useState(0);
 
-        // Handle image upload with loading state
         const handleImageUpload = () => {
           const input = document.createElement("input");
           input.type = "file";
@@ -600,7 +708,6 @@
             }
           };
 
-          // Add to DOM before clicking
           document.body.appendChild(input);
           input.click();
         };
@@ -610,48 +717,42 @@
           const newModel = e.target.value;
           setSelectedModel(newModel);
           setModelChanged(true);
-          
-          // Force re-animation of bars
-          setAnimationKey(prev => prev + 1);
-          
-          // Show loading state briefly
+
+          setAnimationKey((prev) => prev + 1);
+
           setIsLoading(true);
           setTimeout(() => setIsLoading(false), 300);
         };
 
-        // Enhanced async calculation with debouncing and better state management
         useEffect(() => {
           if (!imageUrl) return;
-          
+
           let mounted = true;
           let timeoutId;
-          
-          const runInferenceDebounced = debounce(async () => {
-            if (!mounted) return;
-            
-            setIsLoading(true);
-            setModelChanged(false);
-            
-            try {
-              const result = await runInference(imageUrl, selectedModel);
+
+          if (!mounted) return;
+
+          setIsLoading(true);
+          setModelChanged(false);
+
+          runInference(imageUrl, selectedModel)
+            .then((result) => {
               if (mounted) {
                 setTags(result);
-                setAnimationKey(prev => prev + 1); // Trigger new animations
+                setAnimationKey((prev) => prev + 1); // Trigger new animations
               }
-            } catch (error) {
-              console.error('Inference error:', error);
-            } finally {
+            })
+            .catch((error) => {
+              console.error("Inference error:", error);
+            })
+            .finally(() => {
               if (mounted) {
                 setIsLoading(false);
               }
-            }
-          }, 500);
-          
-          runInferenceDebounced();
-          
+            });
+
           return () => {
             mounted = false;
-            if (timeoutId) clearTimeout(timeoutId);
           };
         }, [imageUrl, selectedModel]);
 
@@ -674,7 +775,8 @@
                 <div class="tag-display-box">
                   ${isLoading
                     ? html`
-                        <div style="
+                        <div
+                          style="
                           display: flex;
                           flex-direction: column;
                           align-items: center;
@@ -682,7 +784,8 @@
                           height: 100%;
                           gap: 20px;
                           color: var(--text-secondary);
-                        ">
+                        "
+                        >
                           <div class="loading-spinner"></div>
                           <p>Analyzing with ${selectedModel}...</p>
                         </div>
@@ -696,7 +799,7 @@
                           </div>
                           ${tags.map(
                             (tag, index) => html`
-                              <${TagDisplay}
+                              <${GenreDisplay}
                                 key=${tag.name + index}
                                 name=${tag.name}
                                 portion=${tag.portion}
@@ -707,7 +810,8 @@
                           )}
                         `
                       : html`
-                          <div style="
+                          <div
+                            style="
                             display: flex;
                             flex-direction: column;
                             align-items: center;
@@ -716,7 +820,8 @@
                             color: var(--text-secondary);
                             text-align: center;
                             gap: 12px;
-                          ">
+                          "
+                          >
                             <p style="font-size: 24px;">📊</p>
                             <p>Upload an image to see analysis results</p>
                             <p style="font-size: 14px; opacity: 0.8;">
@@ -729,7 +834,9 @@
             </div>
 
             <div class="dropdown-container">
-              <label class="dropdown-label" for="model-select">Select Model:</label>
+              <label class="dropdown-label" for="model-select"
+                >Select Model:</label
+              >
               <select
                 id="model-select"
                 class="dropdown"
@@ -737,15 +844,11 @@
                 onChange=${handleModelChange}
                 disabled=${isLoading || !imageUrl}
               >
-                ${Object.keys(onnxModels).map(
-                  (model) => html` 
-                    <option value=${model}>
-                      ${model} (${onnxModels[model].inputSize}px)
-                    </option> 
-                  `,
+                ${Object.keys(onnxModelNames).map(
+                  (model) => html` <option value=${model}>${model}</option> `,
                 )}
               </select>
-              
+
               ${isLoading
                 ? html`
                     <p class="status-text loading">
@@ -757,7 +860,7 @@
                   ? html`
                       <p class="status-text ready">
                         ✓ Ready with ${selectedModel}
-                        ${modelChanged ? ' (model changed)' : ''}
+                        ${modelChanged ? " (model changed)" : ""}
                       </p>
                     `
                   : html`

@@ -48,7 +48,7 @@
 
       .upload-button {
         padding: 10px 20px;
-        background-color: #4CAF50;
+        background-color: #4caf50;
         color: white;
         border: none;
         border-radius: 4px;
@@ -112,7 +112,7 @@
       }
 
       .percentage-bar.green {
-        background-color: #4CAF50;
+        background-color: #4caf50;
       }
 
       .percentage-bar.grey {
@@ -174,26 +174,39 @@
         6: "Fantasy",
         7: "Thriller",
         8: "Documentary",
-        9: "Animation"
+        9: "Animation",
       };
 
       // Example ONNX model definitions
       const onnxModels = {
-        "model1": { url: "models/model1.onnx", inputSize: 224 },
-        "model2": { url: "models/model2.onnx", inputSize: 256 },
-        "model3": { url: "models/model3.onnx", inputSize: 299 }
+        model1: { url: "models/model1.onnx", inputSize: 224 },
+        model2: { url: "models/model2.onnx", inputSize: 256 },
+        model3: { url: "models/model3.onnx", inputSize: 299 },
       };
+
+      async function runInference(imageUrl, model) {
+        await new Promise((r) => setTimeout(r, 5000));
+
+        const exampleTags = Object.keys(nodeToTagMap)
+          .map((nodeId) => ({
+            name: nodeToTagMap[nodeId],
+            portion: Math.random(), // Random portion for demo
+          }))
+          .sort((a, b) => b.portion - a.portion); // Sort descending
+
+        return exampleTags;
+      }
 
       // Tag component
       function TagDisplay({ name, portion }) {
         const percentage = Math.round(portion * 100);
         const barColor = portion > 0.5 ? "green" : "grey";
-        
+
         return html`
           <div class="tag-item">
             <div class="tag-name-box">${name}</div>
             <div class="percentage-bar-container">
-              <div 
+              <div
                 class="percentage-bar ${barColor}"
                 style="width: ${percentage}%"
               ></div>
@@ -207,11 +220,15 @@
       function ImageUploadBox({ imageUrl, onImageUpload }) {
         return html`
           <div class="image-upload-box">
-            ${imageUrl ? html`
-              <img src="${imageUrl}" class="image-preview" alt="Uploaded image" />
-            ` : html`
-              <p>Upload an image to analyze</p>
-            `}
+            ${imageUrl
+              ? html`
+                  <img
+                    src="${imageUrl}"
+                    class="image-preview"
+                    alt="Uploaded image"
+                  />
+                `
+              : html` <p>Upload an image to analyze</p> `}
             <button class="upload-button" onClick=${onImageUpload}>
               Upload Image
             </button>
@@ -229,11 +246,11 @@
 
         // Handle image upload
         const handleImageUpload = () => {
-          const input = document.createElement('input');
-          input.type = 'file';
-          input.accept = 'image/*';
-          input.style.display = 'none';
-          
+          const input = document.createElement("input");
+          input.type = "file";
+          input.accept = "image/*";
+          input.style.display = "none";
+
           input.onchange = (e) => {
             const file = e.target.files[0];
             if (file) {
@@ -244,7 +261,7 @@
                 document.body.removeChild(input);
               };
               reader.onerror = () => {
-                console.error('Error reading file');
+                console.error("Error reading file");
                 document.body.removeChild(input);
               };
               reader.readAsDataURL(file);
@@ -252,7 +269,7 @@
               document.body.removeChild(input);
             }
           };
-          
+
           // Add to DOM before clicking
           document.body.appendChild(input);
           input.click();
@@ -260,88 +277,82 @@
 
         // Simulated async calculation with deduplication
         useEffect(() => {
-          if (imageUrl && selectedModel) {
-            const requestId = Date.now();
-            setLastRequestId(requestId);
-            setCalculating(true);
+          if (!imageUrl) return;
 
-            // Simulate async calculation
-            const calculationTimeout = setTimeout(() => {
-              // Only process if this is still the latest request
-              if (requestId === lastRequestId) {
-                // Example result generation - replace with actual ONNX inference:
-              // const session = await ort.InferenceSession.create(onnxModels[selectedModel].url);
-              // const results = await session.run({ input: processedImage });
-              // const probabilities = results.output.data;
-              // const tags = probabilities.map((p, idx) => ({
-              //   name: nodeToTagMap[idx] || `Tag ${idx}`,
-              //   portion: p
-              // })).sort((a, b) => b.portion - a.portion);
-                const exampleTags = Object.keys(nodeToTagMap).map(nodeId => ({
-                  name: nodeToTagMap[nodeId],
-                  portion: Math.random() // Random portion for demo
-                })).sort((a, b) => b.portion - a.portion); // Sort descending
+          let stale = false;
+          setCalculating(true);
 
-                setTags(exampleTags);
-                setCalculating(false);
-              }
-            }, 500);
-            
-            return () => clearTimeout(calculationTimeout);
-          }
+          runInference(imageUrl, selectedModel).then((result) => {
+            if (!stale) {
+              setTags(result);
+              setCalculating(false);
+            }
+          });
+
+          return () => {
+            stale = true;
+          };
         }, [imageUrl, selectedModel]);
 
         return html`
           <div class="app-container">
             <h1>Juzgando por la Portada</h1>
-            
+
             <div class="rectangles-container">
               <div class="rectangle">
-                <${ImageUploadBox} 
+                <${ImageUploadBox}
                   imageUrl=${imageUrl}
                   onImageUpload=${handleImageUpload}
                 />
               </div>
-              
+
               <div class="arrow-container">→</div>
-              
+
               <div class="rectangle">
                 <div class="tag-display-box">
-                  ${calculating ? html`
-                    <p>Calculating...</p>
-                  ` : tags.length > 0 ? html`
-                    ${tags.map(tag => html`
-                      <${TagDisplay} 
-                        name=${tag.name}
-                        portion=${tag.portion}
-                      />
-                    `)}
-                  ` : html`
-                    <p>No results yet</p>
-                  `}
+                  ${calculating
+                    ? html` <p>Calculating...</p> `
+                    : tags.length > 0
+                      ? html`
+                          ${tags.map(
+                            (tag) => html`
+                              <${TagDisplay}
+                                name=${tag.name}
+                                portion=${tag.portion}
+                              />
+                            `,
+                          )}
+                        `
+                      : html` <p>No results yet</p> `}
                 </div>
               </div>
             </div>
-            
+
             <div class="dropdown-container">
               <label for="model-select">Select Model:</label>
-              <select 
+              <select
                 id="model-select"
                 class="dropdown"
                 value=${selectedModel}
                 onChange=${(e) => setSelectedModel(e.target.value)}
               >
-                ${Object.keys(onnxModels).map(model => html`
-                  <option value=${model}>${model}</option>
-                `)}
+                ${Object.keys(onnxModels).map(
+                  (model) => html` <option value=${model}>${model}</option> `,
+                )}
               </select>
-              ${calculating ? html`
-                <p class="status-text">Calculating with ${selectedModel}...</p>
-              ` : imageUrl && selectedModel ? html`
-                <p class="status-text">Ready with ${selectedModel}</p>
-              ` : html`
-                <p class="status-text">Select model and upload image</p>
-              `}
+              ${calculating
+                ? html`
+                    <p class="status-text">
+                      Calculating with ${selectedModel}...
+                    </p>
+                  `
+                : imageUrl && selectedModel
+                  ? html`
+                      <p class="status-text">Ready with ${selectedModel}</p>
+                    `
+                  : html`
+                      <p class="status-text">Select model and upload image</p>
+                    `}
             </div>
           </div>
         `;

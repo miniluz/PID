@@ -15,493 +15,61 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-    <style>
-      :root {
-        --bg-primary: #0a0a0a;
-        --bg-secondary: #1a1a1a;
-        --bg-tertiary: #2a2a2a;
-        --text-primary: #ffffff;
-        --text-secondary: #b0b0b0;
-        --accent-primary: #3b82f6;
-        --accent-secondary: #10b981;
-        --border-color: #404040;
-        --grid-gap: 12px;
-        --transition-speed: 0.3s;
-      }
+    <style type="text/tailwindcss">
+      @theme {
+        --color-primary: #1a0033;
+        --color-secondary: #2a0055;
+        --color-tertiary: #3a0077;
+        --color-text-primary: #ffffff;
+        --color-text-secondary: #cccccc;
+        --color-accent-primary: #8b5cf6;
+        --color-accent-secondary: #10b981;
+        --color-border: #555555;
 
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
+        --font-inter:
+          Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        --font-mono: "JetBrains Mono", "Fira Code", Consolas, monospace;
 
-      body {
-        background-color: var(--bg-primary);
-        color: var(--text-primary);
-        font-family:
-          "Inter",
-          -apple-system,
-          BlinkMacSystemFont,
-          "Segoe UI",
-          sans-serif;
-        min-height: 100vh;
-        line-height: 1.5;
-      }
+        --animate-fade-in-up: fadeInUp 0.5s ease forwards;
+        --animate-spin: spin 1s linear infinite;
+        --animate-pulse: pulse 2s infinite;
 
-      .app-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 40px;
-        padding: 40px 20px;
-        max-width: 1400px;
-        margin: 0 auto;
-        min-height: 100vh;
-      }
-
-      h1 {
-        font-size: 2.5rem;
-        font-weight: 700;
-        background: linear-gradient(
-          135deg,
-          var(--accent-primary),
-          var(--accent-secondary)
-        );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        text-align: center;
-        margin-bottom: 20px;
-      }
-
-      .rectangles-container {
-        display: flex;
-        gap: 60px;
-        align-items: stretch;
-        width: 100%;
-        margin-bottom: 40px;
-      }
-
-      .rectangle {
-        flex: 1;
-        min-width: 600px;
-        min-height: 600px;
-        border: 1px solid var(--border-color);
-        border-radius: 16px;
-        padding: 24px;
-        display: flex;
-        flex-direction: column;
-        background-color: var(--bg-secondary);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        transition:
-          transform var(--transition-speed) ease,
-          box-shadow var(--transition-speed) ease;
-      }
-
-      .rectangle:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
-      }
-
-      .image-upload-box {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 24px;
-        height: 100%;
-      }
-
-      .upload-button {
-        padding: 14px 28px;
-        background: linear-gradient(
-          135deg,
-          var(--accent-primary),
-          var(--accent-secondary)
-        );
-        color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 16px;
-        font-weight: 600;
-        transition: all var(--transition-speed) ease;
-        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-      }
-
-      .upload-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
-      }
-
-      .upload-button:active {
-        transform: translateY(0);
-      }
-
-      .upload-button:disabled {
-        background: var(--bg-tertiary);
-        color: var(--text-secondary);
-        cursor: not-allowed;
-        box-shadow: none;
-        transform: none;
-      }
-
-      .image-preview {
-        max-width: 100%;
-        max-height: 400px;
-        object-fit: contain;
-        border-radius: 12px;
-        border: 2px solid var(--border-color);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-      }
-
-      .tag-display-box {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        padding: 12px 16px;
-        overflow-y: auto;
-        flex: 1;
-        min-height: 0;
-        max-height: 60vp;
-      }
-
-      .tag-display-box::-webkit-scrollbar {
-        width: 8px;
-      }
-
-      .tag-display-box::-webkit-scrollbar-track {
-        background: var(--bg-tertiary);
-        border-radius: 4px;
-      }
-
-      .tag-display-box::-webkit-scrollbar-thumb {
-        background: var(--border-color);
-        border-radius: 4px;
-      }
-
-      .tag-display-box::-webkit-scrollbar-thumb:hover {
-        background: var(--text-secondary);
-      }
-
-      .tag-header {
-        display: grid;
-        grid-template-columns: 120px 1fr 60px;
-        align-items: center;
-        gap: 16px;
-        padding: 8px 16px;
-        margin-bottom: 4px;
-        border-bottom: 1px solid var(--border-color);
-      }
-
-      .header-label {
-        font-size: 13px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        color: var(--text-secondary);
-      }
-
-      .tag-item {
-        display: grid;
-        grid-template-columns: 120px 1fr 60px;
-        align-items: center;
-        gap: 16px;
-        padding: 10px 16px;
-        background-color: var(--bg-tertiary);
-        border-radius: 6px;
-        border: 1px solid transparent;
-        transition: all var(--transition-speed) ease;
-        animation: fadeInUp 0.5s ease forwards;
-        opacity: 0;
-      }
-
-      .tag-item:hover {
-        background-color: rgba(42, 42, 42, 0.8);
-        border-color: var(--accent-primary);
-      }
-
-      .tag-name {
-        font-size: 15px;
-        font-weight: 600;
-        color: var(--text-primary);
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        transition: color var(--transition-speed) ease;
-      }
-
-      .tag-name.included {
-        color: var(--accent-secondary);
-      }
-
-      .percentage-bar-container {
-        width: 100%;
-        height: 12px;
-        background-color: var(--bg-secondary);
-        border-radius: 6px;
-        overflow: hidden;
-        border: 1px solid var(--border-color);
-      }
-
-      .percentage-bar {
-        height: 100%;
-        background-color: var(--text-primary);
-        border-radius: 6px;
-        transition:
-          width 0.8s cubic-bezier(0.4, 0, 0.2, 1),
-          background-color var(--transition-speed) ease;
-      }
-
-      .percentage-bar.included {
-        background: linear-gradient(
-          90deg,
-          var(--accent-primary),
-          var(--accent-secondary)
-        );
-      }
-
-      .percentage-text {
-        font-family: "JetBrains Mono", "Fira Code", "Consolas", monospace;
-        font-size: 16px;
-        font-weight: 600;
-        color: var(--text-primary);
-        font-variant-numeric: tabular-nums;
-        text-align: right;
-        min-width: 60px;
-      }
-
-      .percentage-text.included {
-        color: var(--accent-secondary);
-      }
-
-      .arrow-container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 48px;
-        color: var(--accent-primary);
-        font-weight: bold;
-        padding: 0 20px;
-      }
-
-       .dropdown-container {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        width: 100%;
-        max-width: 500px;
-      }
-
-      .search-container {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        width: 100%;
-        max-width: 500px;
-      }
-
-      .dropdown-label {
-        font-size: 16px;
-        font-weight: 600;
-        color: var(--text-primary);
-      }
-
-      .dropdown {
-        padding: 14px 20px;
-        border: 2px solid var(--border-color);
-        border-radius: 10px;
-        font-size: 16px;
-        background-color: var(--bg-tertiary);
-        color: var(--text-primary);
-        cursor: pointer;
-        transition: border-color var(--transition-speed) ease;
-        font-family: "Inter", sans-serif;
-      }
-
-      .dropdown:focus {
-        outline: none;
-        border-color: var(--accent-primary);
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-      }
-
-      .search-input {
-        padding: 14px 20px;
-        border: 2px solid var(--border-color);
-        border-radius: 10px;
-        font-size: 16px;
-        background-color: var(--bg-tertiary);
-        color: var(--text-primary);
-        transition: border-color var(--transition-speed) ease;
-        font-family: "Inter", sans-serif;
-      }
-
-      .search-input:focus {
-        outline: none;
-        border-color: var(--accent-primary);
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-      }
-
-      .search-results {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background-color: var(--bg-secondary);
-        border: 2px solid var(--border-color);
-        border-radius: 10px;
-        margin-top: 4px;
-        max-height: 300px;
-        overflow-y: auto;
-        z-index: 100;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      }
-
-      .search-result-item {
-        padding: 12px 16px;
-        cursor: pointer;
-        transition: background-color var(--transition-speed) ease;
-        border-bottom: 1px solid var(--border-color);
-      }
-
-      .search-result-item:hover {
-        background-color: var(--bg-tertiary);
-      }
-
-      .search-result-item:last-child {
-        border-bottom: none;
-      }
-
-      .movie-poster {
-        max-width: 300px;
-        max-height: 450px;
-        object-fit: contain;
-        border-radius: 12px;
-        border: 2px solid var(--border-color);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-      }
-
-      .status-text {
-        font-size: 15px;
-        color: var(--text-secondary);
-        text-align: center;
-        padding: 12px;
-        background-color: var(--bg-tertiary);
-        border-radius: 8px;
-        border: 1px solid var(--border-color);
-        transition: all var(--transition-speed) ease;
-      }
-
-      .status-text.loading {
-        color: var(--accent-primary);
-        border-color: var(--accent-primary);
-        animation: pulse 2s infinite;
-      }
-
-      .status-text.ready {
-        color: var(--accent-secondary);
-        border-color: var(--accent-secondary);
-      }
-
-      .loading-spinner {
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        border: 3px solid var(--border-color);
-        border-top-color: var(--accent-primary);
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        margin-right: 10px;
-        vertical-align: middle;
-      }
-
-      @keyframes fadeInUp {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
-        to {
-          opacity: 1;
-          transform: translateY(0);
+        @keyframes spin {
+          to {
+            transform: rotate(360deg);
+          }
         }
-      }
-
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
-      @keyframes pulse {
-        0%,
-        100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0.7;
-        }
-      }
-
-      @media (max-width: 1200px) {
-        .rectangles-container {
-          flex-direction: column;
-          gap: 40px;
-        }
-
-        .rectangle {
-          min-width: 100%;
-          min-height: 400px;
-        }
-
-        .arrow-container {
-          transform: rotate(90deg);
-          padding: 20px 0;
-        }
-      }
-
-      @media (max-width: 768px) {
-        .app-container {
-          padding: 20px 16px;
-          gap: 30px;
-        }
-
-        h1 {
-          font-size: 2rem;
-        }
-
-        .rectangle {
-          padding: 24px;
-          min-height: 350px;
-        }
-
-        .tag-display-box {
-          grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-          padding: 12px;
-        }
-
-        .tag-item {
-          padding: 16px;
-        }
-      }
-
-      @media (max-width: 480px) {
-        .tag-display-box {
-          grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-        }
-
-        .tag-name {
-          font-size: 14px;
-        }
-
-        .percentage-text {
-          font-size: 16px;
+        @keyframes pulse {
+          0%,
+          100% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0.7;
+          }
         }
       }
     </style>
 
-    <script type = "module">
-      import * as pako from 'https://esm.sh/pako'
+    <script type="module">
+      import * as pako from "https://esm.sh/pako";
 
       window.movieDatabase = /* movie_database */ null;
     </script>
@@ -509,8 +77,9 @@
     <script>
       const onnxModelNames = {
         "Modelo base": /* conv3_filters64_dense1_neurons512.onnx */ null,
-        "Dropout": /* conv3_filters64_dense1_neurons512_dropout.onnx */ null,
-        "Deciamiento de pesos": /* conv3_filters64_dense1_neurons512_weight_decay.onnx */ null,
+        Dropout: /* conv3_filters64_dense1_neurons512_dropout.onnx */ null,
+        "Deciamiento de pesos":
+          /* conv3_filters64_dense1_neurons512_weight_decay.onnx */ null,
       };
     </script>
 
@@ -549,13 +118,14 @@
       ];
 
       // Create Fuse instance for movie search
-      const fuseInstance = window.movieDatabase && Array.isArray(window.movieDatabase) 
-        ? new Fuse(window.movieDatabase, {
-          keys: ['title'],
-          threshold: 0.4,
-          includeScore: true
-        })
-        : null;
+      const fuseInstance =
+        window.movieDatabase && Array.isArray(window.movieDatabase)
+          ? new Fuse(window.movieDatabase, {
+              keys: ["title"],
+              threshold: 0.4,
+              includeScore: true,
+            })
+          : null;
 
       async function loadModel(buffer) {
         if (!buffer) throw new Error("Model buffer empty");
@@ -627,11 +197,7 @@
           resizedHeight: height,
         });
 
-        console.log(tensor);
-
         const data = tensor.data;
-
-        console.log(data);
 
         const normalized = new Float32Array(height * width * 3);
 
@@ -661,97 +227,12 @@
         const outputName = model.outputNames[0];
         const output = results[outputName].data; // length = 19
 
-        const tags = Array.from(output)
-          .map((p, i) => ({
-            name: outputToGenreMap[i] || `Class ${i}`,
-            portion: p,
-          }))
+        const tags = Array.from(output).map((p, i) => ({
+          name: outputToGenreMap[i] || `Class ${i}`,
+          portion: p,
+        }));
 
         return tags;
-      }
-
-      function GenreDisplay({ name, portion, index, animationKey, isInMovie }) {
-        const [animatedPercentage, setAnimatedPercentage] = useState(0);
-        const isIncluded = portion > 0.25;
-
-        useEffect(() => {
-          setAnimatedPercentage(0);
-
-          const targetPercentage = Math.round(portion * 100);
-          const duration = 800;
-          const startTime = Date.now();
-
-          const animate = () => {
-            const elapsed = Date.now() - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            const easeProgress = 1 - Math.pow(1 - progress, 3); // Cubic ease-out
-
-            setAnimatedPercentage(Math.round(easeProgress * targetPercentage));
-
-            if (progress < 1) {
-              requestAnimationFrame(animate);
-            }
-          };
-
-          const animationDelay = index * 30;
-          setTimeout(() => {
-            requestAnimationFrame(animate);
-          }, animationDelay);
-
-          return () => {
-            // Cleanup if component unmounts
-          };
-        }, [portion, index, animationKey]);
-
-        return html`
-          <div class="tag-item" style="animation-delay: ${index * 30}ms">
-            <div class="tag-name ${isIncluded ? "included" : ""}">
-              ${isInMovie ? html` ✓` : ""}
-            </div>
-            <div class="tag-name ${isIncluded ? "included" : ""}">
-              ${name}
-            </div>
-            <div class="percentage-bar-container">
-              <div
-                class="percentage-bar ${isIncluded ? "included" : ""}"
-                style="width: ${animatedPercentage}%"
-              ></div>
-            </div>
-            <div class="percentage-text ${isIncluded ? "included" : ""}">
-              ${animatedPercentage}%
-            </div>
-          </div>
-        `;
-      }
-
-      function ImageUploadBox({ imageUrl, onImageUpload, isLoading }) {
-        return html`
-          <div class="image-upload-box">
-            ${imageUrl
-              ? html`
-                  <img
-                    src="${imageUrl}"
-                    class="image-preview"
-                    alt="Uploaded image"
-                  />
-                `
-              : html`
-                  <div
-                    style="text-align: center; color: var(--text-secondary);"
-                  >
-                    <p style="font-size: 18px; margin-bottom: 8px;">📷</p>
-                    <p>Upload an image to analyze</p>
-                  </div>
-                `}
-            <button
-              class="upload-button"
-              onClick=${onImageUpload}
-              disabled=${isLoading}
-            >
-              ${isLoading ? "Uploading..." : "Upload Image"}
-            </button>
-          </div>
-        `;
       }
 
       function MovieSearchBox({ onMovieSelect, isLoading }) {
@@ -769,45 +250,149 @@
           }
 
           const results = fuseInstance.search(searchQuery);
-          setSearchResults(results.slice(0, 10).map(result => result.item));
+          setSearchResults(results.slice(0, 10).map((result) => result.item));
         }, [searchQuery]);
 
         return html`
-          <div class="image-upload-box">
+          <div
+            class="flex flex-col items-center justify-center gap-6 h-full relative"
+          >
             <input
               type="text"
-              class="search-input"
+              class="input input-bordered w-full text-base"
               placeholder="Search movies..."
               value=${searchQuery}
               onInput=${(e) => setSearchQuery(e.target.value)}
               disabled=${isLoading}
             />
-            ${searchResults.length > 0 && html`
-              <div class="search-results">
-                ${searchResults.map(movie => html`
-                  <div
-                    class="search-result-item"
-                    onClick=${() => { setSearchQuery(""); setSearchResults([]); onMovieSelect(movie); } }
-                  >
-                    ${movie.title}
-                  </div>
-                `)}
-              </div>
+            ${searchResults.length > 0 &&
+            html`
+              <ul
+                class="dropdown-content menu p-2 bg-base-100 border border-base-content/20 rounded-box shadow-xl absolute top-full left-0 right-0 mt-1 max-h-72 overflow-y-auto z-50"
+              >
+                ${searchResults.map(
+                  (movie) => html`
+                    <li>
+                      <a
+                        class="cursor-pointer"
+                        onClick=${() => {
+                          setSearchQuery("");
+                          setSearchResults([]);
+                          onMovieSelect(movie);
+                        }}
+                      >
+                        ${movie.title}
+                      </a>
+                    </li>
+                  `,
+                )}
+              </ul>
             `}
           </div>
         `;
       }
 
+      function RadialProgress({ portion, index }) {
+        return html`
+          <div class="radial-progress ${portion > 0.25 ? 'text-accent-primary' : ''}" style="--value:${portion * 100};">
+            ${(portion * 100).toFixed(2)}%
+          </div>
+        `;
+      }
+
+      function GenreTable({ modelResults, hasExpected }) {
+        const modelNames = Object.keys(modelResults);
+
+        const genreMap = {};
+
+        // Calculate average for each genre
+        for (const modelName of modelNames) {
+          const results = modelResults[modelName];
+          for (const { name, portion, included } of results) {
+            if (!genreMap[name]) {
+              genreMap[name] = {
+                name,
+                average: 0,
+                included,
+                modelPortions: {},
+              };
+            }
+            genreMap[name].modelPortions[modelName] = portion;
+            genreMap[name].average += portion;
+          }
+        }
+
+        // Sort first by expected (included), then by average
+        const sortedGenres = Object.values(genreMap).sort(
+          (a, b) => b.included - a.included || b.average - a.average,
+        );
+
+        return html`<table class="table">
+          <thead>
+            <tr>
+              <th>Genre</th>
+              ${hasExpected && html`<th>Expected</th>`}
+              ${Object.keys(modelResults).map(
+                (modelName) => html` <th>${modelName}</th> `,
+              )}
+            </tr>
+          </thead>
+          <tbody>
+            ${sortedGenres.map(
+              (genre, i) => html`
+                <tr
+                  class="animate-fade-in-up hover:bg-base-200"
+                  style="animation-delay: ${i * 30}ms; opacity: 0"
+                >
+                   <td class="${genre.included ? "font-bold text-success" : ""}">
+                     ${genre.name}
+                   </td>
+                   ${hasExpected && html`<td class="text-left">
+                     ${genre.included
+                       ? html`<span class="text-success">✓</span>`
+                       : ""}
+                   </td>`}
+                  ${modelNames.map(
+                    (modelName) => html`
+                      <td>
+                        <${RadialProgress}
+                          portion=${genre.modelPortions[modelName]}
+                          index=${i}
+                        />
+                      </td>
+                    `,
+                  )}
+                </tr>
+              `,
+            )}
+          </tbody>
+        </table>`;
+      }
+
+      function Genres({ modelResults, isLoading, hasExpected }) {
+        return modelResults
+          ? html`<${GenreTable} modelResults=${modelResults} hasExpected=${hasExpected}/>`
+          : isLoading
+            ? html`
+                <div class="flex items-center justify-center">
+                  <span class="loading loading-spinner"></span>
+                </div>
+              `
+            : html`
+                <div class="text-center opacity-70">
+                  Upload or select a movie to analyze
+                </div>
+              `;
+      }
+
       function App() {
-        const [imageUrl, setImageUrl] = useState(null);
-        const [selectedMovie, setSelectedMovie] = useState(null);
-        const [selectedModel, setSelectedModel] = useState("Modelo base");
-        const [tags, setTags] = useState([]);
+        const [imageData, setImageData] = useState(undefined);
+
+        const [modelResults, setModelResults] = useState(undefined);
         const [isLoading, setIsLoading] = useState(false);
-        const [isUploading, setIsUploading] = useState(false);
-        const [modelChanged, setModelChanged] = useState(false);
         const [animationKey, setAnimationKey] = useState(0);
 
+        // ---- IMAGE UPLOAD ----
         const handleImageUpload = () => {
           const input = document.createElement("input");
           input.type = "file";
@@ -815,212 +400,137 @@
           input.style.display = "none";
 
           input.onchange = (e) => {
-            const file = e.target.files[0];
-            if (file) {
-              setIsUploading(true);
-              const reader = new FileReader();
-              reader.onload = (event) => {
-                setImageUrl(event.target.result);
-                setSelectedMovie(null); // Clear movie selection when uploading image
-                setIsUploading(false);
-                // Remove input after use
-                document.body.removeChild(input);
-              };
-              reader.onerror = () => {
-                console.error("Error reading file");
-                setIsUploading(false);
-                document.body.removeChild(input);
-              };
-              reader.readAsDataURL(file);
-            } else {
+            const file = e.target.files?.[0];
+            if (!file) return document.body.removeChild(input);
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              setImageData({ imageUrl: event.target.result });
               document.body.removeChild(input);
-            }
+            };
+
+            reader.onerror = () => {
+              console.error("Error reading file");
+              document.body.removeChild(input);
+            };
+
+            reader.readAsDataURL(file);
           };
 
           document.body.appendChild(input);
           input.click();
         };
 
+        // ---- MOVIE SELECT ----
         const handleMovieSelect = (movie) => {
-          setSelectedMovie(movie);
-          const posterUrl = `https://image.tmdb.org/t/p/w300_and_h450_face${movie.poster_path}`;
-          setImageUrl(posterUrl);
+          const imageUrl = `https://image.tmdb.org/t/p/w300_and_h450_face${movie.poster_path}`;
+          setImageData({ imageUrl, movie });
         };
 
-        // Enhanced model change handler with animation
-        const handleModelChange = (e) => {
-          const newModel = e.target.value;
-          setSelectedModel(newModel);
-          setModelChanged(true);
-
-          setAnimationKey((prev) => prev + 1);
-
-          setIsLoading(true);
-          setTimeout(() => setIsLoading(false), 300);
-        };
-
+        // ---- INFERENCE ----
         useEffect(() => {
-          if (!imageUrl) return;
+          if (!imageData) return;
 
-          let mounted = true;
-          let timeoutId;
+          let cancelled = false;
 
-          if (!mounted) return;
+          const run = async () => {
+            setIsLoading(true);
+            setModelResults(undefined);
 
-          setIsLoading(true);
-          setModelChanged(false);
+            try {
+              const results = {};
+              const modelNames = Object.keys(onnxModelNames);
 
-          runInference(imageUrl, selectedModel)
-            .then((result) => {
-              if (mounted) {
-                setTags(result
-                  .map(({ name, portion }) => ({ name, portion, included: selectedMovie[name] === "1" }))
-                  .sort((a, b) => b.included - a.included || b.portion - a.portion)
+              // Run inference for all models
+              for (const modelName of modelNames) {
+                const result = await runInference(
+                  imageData.imageUrl,
+                  modelName,
                 );
-                setAnimationKey((prev) => prev + 1); // Trigger new animations
+                if (cancelled) return;
+
+                results[modelName] = result.map(({ name, portion }) => ({
+                  name,
+                  portion,
+                  included: imageData.movie
+                    ? imageData.movie[name] === "1"
+                    : false,
+                }));
               }
-            })
-            .catch((error) => {
-              console.error("Inference error:", error);
-            })
-            .finally(() => {
-              if (mounted) {
-                setIsLoading(false);
-              }
-            });
+
+              if (cancelled) return;
+              setModelResults(results);
+              setAnimationKey((k) => k + 1);
+            } catch (err) {
+              console.error("Inference error:", err);
+            } finally {
+              if (!cancelled) setIsLoading(false);
+            }
+          };
+
+          run();
 
           return () => {
-            mounted = false;
+            cancelled = true;
           };
-        }, [imageUrl, selectedModel, selectedMovie]);
+        }, [imageData]);
 
-
+        // ---- RENDER ----
         return html`
-          <div class="app-container">
-            <h1>Juzgando por la Portada</h1>
+          <div
+            class="flex flex-col items-center gap-10 p-10 max-w-7xl mx-auto min-h-screen"
+          >
+            <h1 class="text-4xl md:text-5xl font-bold text-center">
+              Juzgando por la Portada
+            </h1>
 
-            <div class="rectangles-container">
-              <div class="rectangle">
-                <${MovieSearchBox}
-                  onMovieSelect=${handleMovieSelect}
-                  isLoading=${isUploading}
-                />
-                <${ImageUploadBox}
-                  imageUrl=${imageUrl}
-                  onImageUpload=${handleImageUpload}
-                  isLoading=${isUploading}
-                />
-              </div>
-
-              <div class="arrow-container">→</div>
-
-              <div class="rectangle">
-                <div class="tag-display-box">
-                  ${isLoading
-                    ? html`
-                        <div
-                          style="
-                          display: flex;
-                          flex-direction: column;
-                          align-items: center;
-                          justify-content: center;
-                          height: 100%;
-                          gap: 20px;
-                          color: var(--text-secondary);
-                        "
-                        >
-                          <div class="loading-spinner"></div>
-                          <p>Analyzing with ${selectedModel}...</p>
-                        </div>
-                      `
-                    : tags.length > 0
-                      ? html`
-                          <div class="tag-header">
-                            <div class="header-label">Expected</div>
-                            <div class="header-label">Genre</div>
-                            <div class="header-label">Confidence</div>
-                            <div class="header-label">Score</div>
-                          </div>
-                          ${tags.map(
-                            (tag, index) => html`
-                              <${GenreDisplay}
-                                key=${tag.name + index}
-                                name=${tag.name}
-                                portion=${tag.portion}
-                                index=${index}
-                                animationKey=${animationKey}
-                                isInMovie=${tag.included}
-                              />
-                            `,
-                          )}
-                        `
-                      : html`
-                          <div
-                            style="
-                            display: flex;
-                            flex-direction: column;
-                            align-items: center;
-                            justify-content: center;
-                            height: 100%;
-                            color: var(--text-secondary);
-                            text-align: center;
-                            gap: 12px;
-                          "
-                          >
-                            <p style="font-size: 24px;">📊</p>
-                            <p>Upload an image to see analysis results</p>
-                            <p style="font-size: 14px; opacity: 0.8;">
-                              Results will appear in a table layout below
-                            </p>
-                          </div>
-                        `}
-                </div>
-              </div>
+            <!-- Movie Search -->
+            <div class="w-full max-w-md">
+              <${MovieSearchBox}
+                onMovieSelect=${handleMovieSelect}
+                isLoading=${isLoading}
+              />
             </div>
 
-            <div class="dropdown-container">
-              <label class="dropdown-label" for="model-select"
-                >Select Model:</label
-              >
-              <select
-                id="model-select"
-                class="dropdown"
-                value=${selectedModel}
-                onChange=${handleModelChange}
-                disabled=${isLoading || !imageUrl}
-              >
-                ${Object.keys(onnxModelNames).map(
-                  (model) => html` <option value=${model}>${model}</option> `,
-                )}
-              </select>
+            <!-- Image Upload Button -->
+            <button
+              class="btn btn-primary btn-lg"
+              onClick=${handleImageUpload}
+              disabled=${isLoading}
+            >
+              Upload Image
+            </button>
 
-              ${isLoading
-                ? html`
-                    <p class="status-text loading">
-                      <span class="loading-spinner"></span>
-                      Calculating with ${selectedModel}...
-                    </p>
-                  `
-                : imageUrl && selectedModel
-                  ? html`
-                      <p class="status-text ready">
-                        ✓ Ready with ${selectedModel}
-                        ${modelChanged ? " (model changed)" : ""}
-                      </p>
-                    `
-                  : html`
-                      <p class="status-text">
-                        Select a model and upload an image to begin analysis
-                      </p>
-                    `}
+            <!-- Image Display -->
+            ${imageData?.imageUrl &&
+            html`
+              <img
+                src="${imageData.imageUrl}"
+                class="max-w-md object-contain rounded-xl shadow-lg"
+                alt="Uploaded image"
+              />
+            `}
+
+            <!-- Results Table -->
+            <div class="w-full">
+              <${Genres}
+                modelResults=${modelResults}
+                isLoading=${isLoading}
+                hasExpected=${imageData?.movie !== undefined}
+              />
             </div>
           </div>
         `;
       }
 
-      render(html`<${App} />`, document.body);
+      render(html`<${App} />`, document.getElementById("app"));
     </script>
   </head>
 
-  <body></body>
+  <body
+    class="bg-slate-950 text-text-primary font-inter min-h-screen leading-relaxed m-0 p-0 box-border"
+    data-theme="dark"
+  >
+    <div id="app"></div>
+  </body>
 </html>

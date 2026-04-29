@@ -25,12 +25,8 @@
     <style type="text/tailwindcss">
       @theme {
         --color-primary: #1a0033;
-        --color-secondary: #2a0055;
-        --color-tertiary: #3a0077;
         --color-text-primary: #ffffff;
-        --color-text-secondary: #cccccc;
         --color-accent-primary: #8b5cf6;
-        --color-accent-secondary: #10b981;
         --color-border: #555555;
 
         --font-inter:
@@ -38,8 +34,6 @@
         --font-mono: "JetBrains Mono", "Fira Code", Consolas, monospace;
 
         --animate-fade-in-up: fadeInUp 0.5s ease forwards;
-        --animate-spin: spin 1s linear infinite;
-        --animate-pulse: pulse 2s infinite;
 
         @keyframes fadeInUp {
           from {
@@ -49,20 +43,6 @@
           to {
             opacity: 1;
             transform: translateY(0);
-          }
-        }
-        @keyframes spin {
-          to {
-            transform: rotate(360deg);
-          }
-        }
-        @keyframes pulse {
-          0%,
-          100% {
-            opacity: 1;
-          }
-          50% {
-            opacity: 0.7;
           }
         }
       }
@@ -108,8 +88,6 @@
 
       const html = htm.bind(h);
 
-      // CONFIGURABLE MAPPINGS
-      // Example node number to tag name mapping
       const outputToGenreMap =
       ['Action', 'Adventure', 'Animation', 'Comedy', 'Crime', 'Documentary',
        'Drama', 'Family', 'Fantasy', 'History', 'Horror', 'Music', 'Mystery',
@@ -132,7 +110,7 @@
 
         const buffer = window.onnxModuleNames[name];
         const promise = loadModel(buffer).catch((err) => {
-          modelCache.delete(name); // Allow retry on failure
+          modelCache.delete(name);
           throw err;
         });
 
@@ -170,7 +148,6 @@
         const inputName = model.inputNames[0];
         const [, height, width, channels] = model.inputMetadata[0].shape;
 
-        // Load image
         const img = new Image();
         img.src = imageUrl;
 
@@ -179,7 +156,6 @@
           img.onerror = reject;
         });
 
-        // Image → tensor (NHWC, resized)
         const tensor = await ort.Tensor.fromImage(img, {
           resizedWidth: width,
           resizedHeight: height,
@@ -189,6 +165,7 @@
 
         const normalized = new Float32Array(height * width * 3);
 
+        // Convert NCHW to NHWC
         for (let h = 0; h < height; h++) {
           for (let w = 0; w < width; w++) {
             for (let c = 0; c < 3; c++) {
@@ -215,12 +192,12 @@
         const outputName = model.outputNames[0];
         const output = results[outputName].data; // length = 19
 
-        const tags = Array.from(output).map((p, i) => ({
+        const genres = Array.from(output).map((p, i) => ({
           name: outputToGenreMap[i] || `Class ${i}`,
           portion: p,
         }));
 
-        return tags;
+        return genres;
       }
 
       function MovieSearchBox({ onMovieSelect, isLoading }) {
@@ -259,7 +236,7 @@
             ${searchResults.length > 0 &&
             html`
               <ul
-                class="dropdown-content menu p-2 bg-base-100 border border-base-content/20 rounded-box shadow-xl absolute top-full left-0 right-0 mt-1 max-h-72 overflow-y-auto z-50 flex-nowrap"
+                class="dropdown-content menu p-2 bg-base-100 border border-base-content/20 rounded-box shadow-xl absolute top-full left-0 right-0 mt-1 max-h-72 z-50 flex-nowrap"
               >
                 ${searchResults.map(
                   (movie) => html`
@@ -299,12 +276,12 @@
         // Calculate average for each genre
         for (const modelName of modelNames) {
           const results = modelResults[modelName];
-          for (const { name, portion, included } of results) {
+          for (const { name, portion, inDatabase } of results) {
             if (!genreMap[name]) {
               genreMap[name] = {
                 name,
                 average: 0,
-                included,
+                inDatabase,
                 modelPortions: {},
               };
             }
@@ -313,9 +290,8 @@
           }
         }
 
-        // Sort first by expected (included), then by average
         const sortedGenres = Object.values(genreMap).sort(
-          (a, b) => b.included - a.included || b.average - a.average,
+          (a, b) => b.inDatabase - a.included || b.average - a.average,
         );
 
         return html`<table class="table">
@@ -335,11 +311,11 @@
                   class="animate-fade-in-up hover:bg-base-200 text-center"
                   style="animation-delay: ${i * 30}ms; opacity: 0"
                 >
-                   <td class="${genre.included ? "font-bold text-success" : ""} text-xl">
+                   <td class="${genre.inDatabase ? "font-bold text-success" : ""} text-xl">
                      ${genre.name}
                    </td>
                    ${hasExpected && html`<td>
-                     ${genre.included
+                     ${genre.inDatabase
                        ? html`<span class="text-success text-2xl">✅</span>`
                        : ""}
                    </td>`}
@@ -443,7 +419,7 @@
                 results[modelName] = result.map(({ name, portion }) => ({
                   name,
                   portion,
-                  included: imageData.movie
+                  inDatabase: imageData.movie
                     ? imageData.movie[name] === 1
                     : false,
                 }));
@@ -469,7 +445,7 @@
         // ---- RENDER ----
         return html`
           <div
-            class="flex flex-col justify-center items-center gap-10 p-10 max-w-7xl mx-auto min-h-screen"
+            class="flex flex-col justify-center items-center gap-10 px-10 py-20 max-w-7xl mx-auto w-full min-h-screen"
           >
             <h1 class="text-4xl md:text-5xl font-bold text-center text-primary">
               Juzgando por la portada
@@ -497,13 +473,13 @@
             html`
               <img
                 src="${imageData.imageUrl}"
-                class="max-w-md object-contain rounded-xl shadow-lg"
+                class="w-md max-h-96 object-contain rounded-xl shadow-lg"
                 alt="Imagen subida"
               />
             `}
 
             <!-- Results Table -->
-            <div class="w-full">
+            <div class="w-full overflow-x-auto flex flex-col">
               <${Genres}
                 modelResults=${modelResults}
                 isLoading=${isLoading}

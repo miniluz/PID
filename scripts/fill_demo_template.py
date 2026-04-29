@@ -12,7 +12,6 @@ CACHE_DIR.mkdir(exist_ok=True)
 
 
 def file_hash(path: Path) -> str:
-    """Compute a stable hash of a file."""
     h = hashlib.sha256()
     with open(path, "rb") as f:
         while chunk := f.read(8192):

@@ -215,8 +215,6 @@
             return;
           }
 
-          console.log(movieDatabase)
-
           const results = movieDatabase.filter(({ title }) => String(title).toLowerCase().includes(searchQuery.toLowerCase())).slice(0,10)
           setSearchResults(results);
         }, [searchQuery, movieDatabase]);

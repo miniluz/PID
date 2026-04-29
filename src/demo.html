@@ -78,7 +78,7 @@
       const onnxModelNames = {
         "Modelo base": /* conv3_filters64_dense1_neurons512.onnx */ null,
         Dropout: /* conv3_filters64_dense1_neurons512_dropout.onnx */ null,
-        "Deciamiento de pesos":
+        "Decaiminto de pesos":
           /* conv3_filters64_dense1_neurons512_weight_decay.onnx */ null,
       };
     </script>
@@ -89,43 +89,15 @@
       import { h, render } from "https://esm.sh/preact";
       import { useState, useEffect } from "https://esm.sh/preact/hooks";
       import htm from "https://esm.sh/htm";
-      import Fuse from "https://esm.sh/fuse.js";
 
       const html = htm.bind(h);
 
       // CONFIGURABLE MAPPINGS
       // Example node number to tag name mapping
-      const outputToGenreMap = [
-        "Action",
-        "Science Fiction",
-        "Horror",
-        "Mystery",
-        "Thriller",
-        "Comedy",
-        "Adventure",
-        "Drama",
-        "Animation",
-        "Family",
-        "Fantasy",
-        "History",
-        "War",
-        "Crime",
-        "Romance",
-        "Documentary",
-        "Music",
-        "TV Movie",
-        "Western",
-      ];
-
-      // Create Fuse instance for movie search
-      const fuseInstance =
-        window.movieDatabase && Array.isArray(window.movieDatabase)
-          ? new Fuse(window.movieDatabase, {
-              keys: ["title"],
-              threshold: 0.4,
-              includeScore: true,
-            })
-          : null;
+      const outputToGenreMap =
+      ['Action', 'Adventure', 'Animation', 'Comedy', 'Crime', 'Documentary',
+       'Drama', 'Family', 'Fantasy', 'History', 'Horror', 'Music', 'Mystery',
+       'Romance', 'Science Fiction', 'TV Movie', 'Thriller', 'War', 'Western'];
 
       async function loadModel(buffer) {
         if (!buffer) throw new Error("Model buffer empty");
@@ -245,12 +217,9 @@
             return;
           }
 
-          if (!fuseInstance) {
-            return;
-          }
 
-          const results = fuseInstance.search(searchQuery);
-          setSearchResults(results.slice(0, 10).map((result) => result.item));
+          const results = movieDatabase.filter(({ title }) => title.toLowerCase().includes(searchQuery.toLowerCase())).slice(0,10)
+          setSearchResults(results);
         }, [searchQuery]);
 
         return html`
@@ -260,7 +229,7 @@
             <input
               type="text"
               class="input input-bordered w-full text-base"
-              placeholder="Search movies..."
+              placeholder="🔍 Busque una película (en inglés)"
               value=${searchQuery}
               onInput=${(e) => setSearchQuery(e.target.value)}
               disabled=${isLoading}
@@ -268,7 +237,7 @@
             ${searchResults.length > 0 &&
             html`
               <ul
-                class="dropdown-content menu p-2 bg-base-100 border border-base-content/20 rounded-box shadow-xl absolute top-full left-0 right-0 mt-1 max-h-72 overflow-y-auto z-50"
+                class="dropdown-content menu p-2 bg-base-100 border border-base-content/20 rounded-box shadow-xl absolute top-full left-0 right-0 mt-1 max-h-72 overflow-y-auto z-50 flex-nowrap"
               >
                 ${searchResults.map(
                   (movie) => html`
@@ -294,7 +263,7 @@
 
       function RadialProgress({ portion, index }) {
         return html`
-          <div class="radial-progress ${portion > 0.25 ? 'text-accent-primary' : ''}" style="--value:${portion * 100};">
+          <div class="radial-progress ${portion > 0.25 ? 'text-accent-primary' : ''} font-semibold" style="--value:${portion * 100};">
             ${(portion * 100).toFixed(2)}%
           </div>
         `;
@@ -330,8 +299,8 @@
         return html`<table class="table">
           <thead>
             <tr>
-              <th>Genre</th>
-              ${hasExpected && html`<th>Expected</th>`}
+              <th>Género</th>
+              ${hasExpected && html`<th>Base de datos</th>`}
               ${Object.keys(modelResults).map(
                 (modelName) => html` <th>${modelName}</th> `,
               )}
@@ -344,12 +313,12 @@
                   class="animate-fade-in-up hover:bg-base-200"
                   style="animation-delay: ${i * 30}ms; opacity: 0"
                 >
-                   <td class="${genre.included ? "font-bold text-success" : ""}">
+                   <td class="${genre.included ? "font-bold text-success" : ""} text-xl">
                      ${genre.name}
                    </td>
                    ${hasExpected && html`<td class="text-left">
                      ${genre.included
-                       ? html`<span class="text-success">✓</span>`
+                       ? html`<span class="text-success text-2xl">✅</span>`
                        : ""}
                    </td>`}
                   ${modelNames.map(
@@ -380,7 +349,7 @@
               `
             : html`
                 <div class="text-center opacity-70">
-                  Upload or select a movie to analyze
+                  Seleccione una película o suba una imagen para analizarla
                 </div>
               `;
       }
@@ -478,10 +447,10 @@
         // ---- RENDER ----
         return html`
           <div
-            class="flex flex-col items-center gap-10 p-10 max-w-7xl mx-auto min-h-screen"
+            class="flex flex-col justify-center items-center gap-10 p-10 max-w-7xl mx-auto min-h-screen"
           >
-            <h1 class="text-4xl md:text-5xl font-bold text-center">
-              Juzgando por la Portada
+            <h1 class="text-4xl md:text-5xl font-bold text-center text-primary">
+              Juzgando por la portada
             </h1>
 
             <!-- Movie Search -->
@@ -498,7 +467,7 @@
               onClick=${handleImageUpload}
               disabled=${isLoading}
             >
-              Upload Image
+              Subir imagen
             </button>
 
             <!-- Image Display -->
@@ -507,7 +476,7 @@
               <img
                 src="${imageData.imageUrl}"
                 class="max-w-md object-contain rounded-xl shadow-lg"
-                alt="Uploaded image"
+                alt="Imagen subida"
               />
             `}
 
@@ -528,7 +497,7 @@
   </head>
 
   <body
-    class="bg-slate-950 text-text-primary font-inter min-h-screen leading-relaxed m-0 p-0 box-border"
+    class="bg-slate-950 font-inter min-h-screen leading-relaxed m-0 p-0 box-border"
     data-theme="dark"
   >
     <div id="app"></div>

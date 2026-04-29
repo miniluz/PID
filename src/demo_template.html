@@ -263,7 +263,7 @@
       function RadialProgress({ portion, index }) {
         return html`
           <div class="radial-progress ${portion > 0.25 ? 'text-accent-primary' : ''} font-semibold" style="--value:${portion * 100};">
-            ${(portion * 100).toFixed(2)}%
+            ${(portion * 100).toFixed(1)}%
           </div>
         `;
       }
@@ -291,7 +291,7 @@
         }
 
         const sortedGenres = Object.values(genreMap).sort(
-          (a, b) => b.inDatabase - a.included || b.average - a.average,
+          (a, b) => b.inDatabase - a.inDatabase || b.average - a.average,
         );
 
         return html`<table class="table">

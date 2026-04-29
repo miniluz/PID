@@ -1,0 +1,18 @@
+
+WEIGHT DECAY
+
+=== HIPERPARÁMETROS ===
+  convLayers: 3
+  firstConvFilterCount: 64
+  denseLayers: 1
+  firstDenseNeuronCount: 512
+
+
+=== MÉTRICAS ===
+  exact_match: 0.1539
+  precision_micro: 0.6142
+  recall_micro: 0.1869
+  f1_micro: 0.2866
+  precision_macro: 0.5187
+  recall_macro: 0.0953
+  f1_macro: 0.1411

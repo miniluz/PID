@@ -225,14 +225,8 @@ GUARDADO DEL MODELO
 def save_result(path, text, model):
     with open(path + ".txt", "w") as f:
         f.write(text)
-        f.write("=== HIPERPARÁMETROS ===\n")
-        for k, v in hyperparams.items():
-            f.write(f"  {k}: {v}\n")
-        f.write("\n=== MÉTRICAS ===\n")
-        for k, v in metrics.items():
-            f.write(f"  {k}: {v:.4f}\n")
 
-    model.save(keras_path + ".keras")
+    model.save(path + ".keras")
 
 
 """
@@ -244,7 +238,7 @@ junto a las etiquetas predichas y la etiqueta real. Se muestra
 también las mejores 5 predicciones. 
 """
 # Umbral para convertir probabilidad a etiqueta positiva
-treshold = 0.5
+threshold = 0.5
 
 def predict_single_image(model):
     # Selecciona una imagen aleatoria del conjunto de validación

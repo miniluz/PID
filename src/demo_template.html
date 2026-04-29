@@ -69,13 +69,28 @@
     </style>
 
     <script type="module">
-      import * as pako from "https://esm.sh/pako";
+      window.decodeBrotliBase64 = async (b64) => {
+        const binary = atob(b64);
 
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) {
+          bytes[i] = binary.charCodeAt(i);
+        }
+
+        const ds = new DecompressionStream("brotli");
+        const decompressedStream = new Blob([bytes]).stream().pipeThrough(ds);
+        const arrayBuffer = await new Response(decompressedStream).arrayBuffer();
+
+        return new Uint8Array(arrayBuffer);
+      }
+    </script>
+
+    <script type="module">
       window.movieDatabase = /* movie_database */ null;
     </script>
 
-    <script>
-      const onnxModelNames = {
+    <script type="module">
+      window.onnxModuleNames = {
         "Modelo base": /* conv3_filters64_dense1_neurons512.onnx */ null,
         "Dropout": /* conv3_filters64_dense1_neurons512_dropout.onnx */ null,
         "Decaimiento de pesos": /* conv3_filters64_dense1_neurons512_weight_decay.onnx */ null,
@@ -103,7 +118,7 @@
       async function loadModel(buffer) {
         if (!buffer) throw new Error("Model buffer empty");
 
-        const model = await ort.InferenceSession.create(buffer, {
+        const model = await ort.InferenceSession.create(await buffer, {
           executionProviders: ["cpu"],
         });
 
@@ -115,7 +130,7 @@
       async function getModel(name) {
         if (modelCache.has(name)) return modelCache.get(name);
 
-        const buffer = onnxModelNames[name];
+        const buffer = window.onnxModuleNames[name];
         const promise = loadModel(buffer).catch((err) => {
           modelCache.delete(name); // Allow retry on failure
           throw err;
@@ -209,19 +224,25 @@
       }
 
       function MovieSearchBox({ onMovieSelect, isLoading }) {
+        const [movieDatabase, setMovieDatabase] = useState(undefined);
         const [searchQuery, setSearchQuery] = useState("");
         const [searchResults, setSearchResults] = useState([]);
 
         useEffect(() => {
-          if (!searchQuery.trim()) {
+          window.movieDatabase.then((v) => setMovieDatabase(v));
+        }, []);
+
+        useEffect(() => {
+          if (!searchQuery.trim() | !movieDatabase) {
             setSearchResults([]);
             return;
           }
 
+          console.log(movieDatabase)
 
-          const results = movieDatabase.filter(({ title }) => title.toLowerCase().includes(searchQuery.toLowerCase())).slice(0,10)
+          const results = movieDatabase.filter(({ title }) => String(title).toLowerCase().includes(searchQuery.toLowerCase())).slice(0,10)
           setSearchResults(results);
-        }, [searchQuery]);
+        }, [searchQuery, movieDatabase]);
 
         return html`
           <div
@@ -409,7 +430,7 @@
 
             try {
               const results = {};
-              const modelNames = Object.keys(onnxModelNames);
+              const modelNames = Object.keys(window.onnxModuleNames);
 
               // Run inference for all models
               for (const modelName of modelNames) {
@@ -423,7 +444,7 @@
                   name,
                   portion,
                   included: imageData.movie
-                    ? imageData.movie[name] === "1"
+                    ? imageData.movie[name] === 1
                     : false,
                 }));
               }

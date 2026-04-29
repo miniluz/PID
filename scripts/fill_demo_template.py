@@ -1,9 +1,49 @@
 import base64
 import csv
+import hashlib
 import json
 import re
-import zlib
 from pathlib import Path
+
+import brotli
+
+CACHE_DIR = Path("cache")
+CACHE_DIR.mkdir(exist_ok=True)
+
+
+def file_hash(path: Path) -> str:
+    """Compute a stable hash of a file."""
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        while chunk := f.read(8192):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def cache_read(cache_file: Path):
+    if cache_file.exists():
+        return cache_file.read_text()
+    return None
+
+
+def cache_write(cache_file: Path, value: str):
+    cache_file.write_text(value)
+
+
+def encode_file_brotli_base64(path: Path, cache_prefix: str) -> str:
+    h = file_hash(path)
+    cache_file = CACHE_DIR / f"{cache_prefix}_{h}.txt"
+
+    cached = cache_read(cache_file)
+    if cached:
+        return cached
+
+    data = path.read_bytes()
+    compressed = brotli.compress(data)
+    b64 = base64.b64encode(compressed).decode("ascii")
+
+    cache_write(cache_file, b64)
+    return b64
 
 
 def fill_html_template():
@@ -24,12 +64,10 @@ def fill_html_template():
         if not onnx_path.exists():
             raise FileNotFoundError(f"ONNX file not found: {onnx_path}")
 
-        data = onnx_path.read_bytes()
-        # Convert to Uint8Array literal
-        array_values = ",".join(str(b) for b in data)
-        return f"new Uint8Array([{array_values}])"
+        b64 = encode_file_brotli_base64(onnx_path, "onnx")
 
-    # Replace ONNX file references
+        return f'window.decodeBrotliBase64("{b64}")'
+
     content = onnx_pattern.sub(onnx_replacement, content)
 
     # Pattern: /* movie_database */ null
@@ -39,21 +77,30 @@ def fill_html_template():
         if not movies_csv_path.exists():
             raise FileNotFoundError(f"Movies CSV file not found: {movies_csv_path}")
 
-        movies = []
-        with open(movies_csv_path, "r", encoding="utf-8") as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                movies.append(row)
+        h = file_hash(movies_csv_path)
+        cache_file = CACHE_DIR / f"movies_{h}.txt"
 
-        # Convert to JSON string
-        json_bytes = json.dumps(movies).encode("utf-8")
-        compressed = zlib.compress(json_bytes)
-        b64 = base64.b64encode(compressed).decode("ascii")
+        cached = cache_read(cache_file)
+        if cached:
+            b64 = cached
+        else:
+            movies = []
+            with open(movies_csv_path, "r", encoding="utf-8") as csvfile:
+                reader = csv.DictReader(csvfile)
+                for row in reader:
+                    for key, value in row.items():
+                        if value.isdigit():
+                            row[key] = int(value)
+                    movies.append(row)
 
-        # return f'JSON.parse(pako.inflate(Uint8Array.from(atob("{b64}"), c => c.charCodeAt(0)), {{ to: "string" }}))'
-        return f'JSON.parse(pako.inflate((b=>{{let t="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",l=b.length,o=new Uint8Array(l*3/4|0),p=0,i=0,c1,c2,c3,c4;for(;i<l;){{c1=t.indexOf(b[i++]);c2=t.indexOf(b[i++]);c3=t.indexOf(b[i++]);c4=t.indexOf(b[i++]);o[p++]=(c1<<2)|(c2>>4);if(c3>=0)o[p++]=((c2&15)<<4)|(c3>>2);if(c4>=0)o[p++]=((c3&3)<<6)|c4;}}return o.subarray(0,p);}})("{b64}"),{{to:"string"}}))'
+            json_bytes = json.dumps(movies, separators=(",", ":")).encode("utf-8")
+            compressed = brotli.compress(json_bytes)
+            b64 = base64.b64encode(compressed).decode("ascii")
 
-    # Replace movie database reference
+            cache_write(cache_file, b64)
+
+        return f'window.decodeBrotliBase64("{b64}").then(b => JSON.parse(new TextDecoder().decode(b)))'
+
     content = movie_pattern.sub(movie_replacement, content)
 
     output_path.write_text(content)

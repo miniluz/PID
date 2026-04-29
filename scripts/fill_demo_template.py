@@ -49,7 +49,7 @@ def fill_html_template():
     html_path = Path("src/demo_template.html")
     onnx_dir = Path("src/resultados_onnx")
     movies_csv_path = Path("scripts/movies_preprocesado.csv")
-    output_path = Path("src/demo.html")
+    output_path = Path("pages/demo.html")
 
     content = html_path.read_text()
 

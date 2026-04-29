@@ -77,9 +77,10 @@
     <script>
       const onnxModelNames = {
         "Modelo base": /* conv3_filters64_dense1_neurons512.onnx */ null,
-        Dropout: /* conv3_filters64_dense1_neurons512_dropout.onnx */ null,
-        "Decaiminto de pesos":
-          /* conv3_filters64_dense1_neurons512_weight_decay.onnx */ null,
+        "Dropout": /* conv3_filters64_dense1_neurons512_dropout.onnx */ null,
+        "Decaimiento de pesos": /* conv3_filters64_dense1_neurons512_weight_decay.onnx */ null,
+        "Normalización por baches": /* conv3_filters64_dense1_neurons512_batch_normalization.onnx */ null,
+        "Aumentación de datos": /* conv3_filters64_dense1_neurons512_data_augmentation.onnx */ null,
       };
     </script>
 
@@ -298,7 +299,7 @@
 
         return html`<table class="table">
           <thead>
-            <tr>
+            <tr class="text-center">
               <th>Género</th>
               ${hasExpected && html`<th>Base de datos</th>`}
               ${Object.keys(modelResults).map(
@@ -310,13 +311,13 @@
             ${sortedGenres.map(
               (genre, i) => html`
                 <tr
-                  class="animate-fade-in-up hover:bg-base-200"
+                  class="animate-fade-in-up hover:bg-base-200 text-center"
                   style="animation-delay: ${i * 30}ms; opacity: 0"
                 >
                    <td class="${genre.included ? "font-bold text-success" : ""} text-xl">
                      ${genre.name}
                    </td>
-                   ${hasExpected && html`<td class="text-left">
+                   ${hasExpected && html`<td>
                      ${genre.included
                        ? html`<span class="text-success text-2xl">✅</span>`
                        : ""}

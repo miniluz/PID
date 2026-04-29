@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Demo para Juzgando por la Portada</title>
+    <meta
+      name="description"
+      content="Una demo simple de los modelos de Juzgando por la Portada"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@5"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style type="text/tailwindcss">
+      @theme {
+        --color-primary: #1a0033;
+        --color-secondary: #2a0055;
+        --color-tertiary: #3a0077;
+        --color-text-primary: #ffffff;
+        --color-text-secondary: #cccccc;
+        --color-accent-primary: #8b5cf6;
+        --color-accent-secondary: #10b981;
+        --color-border: #555555;
+
+        --font-inter:
+          Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        --font-mono: "JetBrains Mono", "Fira Code", Consolas, monospace;
+
+        --animate-fade-in-up: fadeInUp 0.5s ease forwards;
+        --animate-spin: spin 1s linear infinite;
+        --animate-pulse: pulse 2s infinite;
+
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        @keyframes spin {
+          to {
+            transform: rotate(360deg);
+          }
+        }
+        @keyframes pulse {
+          0%,
+          100% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0.7;
+          }
+        }
+      }
+    </style>
+
+    <script type="module">
+      import * as pako from "https://esm.sh/pako";
+
+      window.movieDatabase = /* movie_database */ null;
+    </script>
+
+    <script>
+      const onnxModelNames = {
+        "Modelo base": /* conv3_filters64_dense1_neurons512.onnx */ null,
+        Dropout: /* conv3_filters64_dense1_neurons512_dropout.onnx */ null,
+        "Decaiminto de pesos":
+          /* conv3_filters64_dense1_neurons512_weight_decay.onnx */ null,
+      };
+    </script>
+
+    <script type="module">
+      import * as ort from "https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.mjs";
+
+      import { h, render } from "https://esm.sh/preact";
+      import { useState, useEffect } from "https://esm.sh/preact/hooks";
+      import htm from "https://esm.sh/htm";
+
+      const html = htm.bind(h);
+
+      // CONFIGURABLE MAPPINGS
+      // Example node number to tag name mapping
+      const outputToGenreMap =
+      ['Action', 'Adventure', 'Animation', 'Comedy', 'Crime', 'Documentary',
+       'Drama', 'Family', 'Fantasy', 'History', 'Horror', 'Music', 'Mystery',
+       'Romance', 'Science Fiction', 'TV Movie', 'Thriller', 'War', 'Western'];
+
+      async function loadModel(buffer) {
+        if (!buffer) throw new Error("Model buffer empty");
+
+        const model = await ort.InferenceSession.create(buffer, {
+          executionProviders: ["cpu"],
+        });
+
+        return model;
+      }
+
+      const modelCache = new Map();
+
+      async function getModel(name) {
+        if (modelCache.has(name)) return modelCache.get(name);
+
+        const buffer = onnxModelNames[name];
+        const promise = loadModel(buffer).catch((err) => {
+          modelCache.delete(name); // Allow retry on failure
+          throw err;
+        });
+
+        modelCache.set(name, promise);
+        return promise;
+      }
+
+      function nchwToNhwc(input, [N, C, H, W], keepChannels = [0, 1, 2]) {
+        const outC = keepChannels.length;
+        const output = new Float32Array(N * H * W * outC);
+
+        for (let n = 0; n < N; n++) {
+          for (let h = 0; h < H; h++) {
+            for (let w = 0; w < W; w++) {
+              for (let c = 0; c < outC; c++) {
+                const inC = keepChannels[c];
+
+                const inputIndex = n * C * H * W + inC * H * W + h * W + w;
+
+                const outputIndex =
+                  n * H * W * outC + h * W * outC + w * outC + c;
+
+                output[outputIndex] = input[inputIndex];
+              }
+            }
+          }
+        }
+
+        return output;
+      }
+
+      async function runInference(imageUrl, modelName) {
+        const model = await getModel(modelName);
+
+        const inputName = model.inputNames[0];
+        const [, height, width, channels] = model.inputMetadata[0].shape;
+
+        // Load image
+        const img = new Image();
+        img.src = imageUrl;
+
+        await new Promise((resolve, reject) => {
+          img.onload = resolve;
+          img.onerror = reject;
+        });
+
+        // Image → tensor (NHWC, resized)
+        const tensor = await ort.Tensor.fromImage(img, {
+          resizedWidth: width,
+          resizedHeight: height,
+        });
+
+        const data = tensor.data;
+
+        const normalized = new Float32Array(height * width * 3);
+
+        for (let h = 0; h < height; h++) {
+          for (let w = 0; w < width; w++) {
+            for (let c = 0; c < 3; c++) {
+              const inputIndex = c * height * width + h * width + w;
+
+              const outputIndex = h * width * 3 + w * 3 + c;
+
+              normalized[outputIndex] = data[inputIndex];
+            }
+          }
+        }
+
+        const normalized_tensor = new ort.Tensor("float32", normalized, [
+          1,
+          height,
+          width,
+          3,
+        ]);
+
+        const results = await model.run({
+          [inputName]: normalized_tensor,
+        });
+
+        const outputName = model.outputNames[0];
+        const output = results[outputName].data; // length = 19
+
+        const tags = Array.from(output).map((p, i) => ({
+          name: outputToGenreMap[i] || `Class ${i}`,
+          portion: p,
+        }));
+
+        return tags;
+      }
+
+      function MovieSearchBox({ onMovieSelect, isLoading }) {
+        const [searchQuery, setSearchQuery] = useState("");
+        const [searchResults, setSearchResults] = useState([]);
+
+        useEffect(() => {
+          if (!searchQuery.trim()) {
+            setSearchResults([]);
+            return;
+          }
+
+
+          const results = movieDatabase.filter(({ title }) => title.toLowerCase().includes(searchQuery.toLowerCase())).slice(0,10)
+          setSearchResults(results);
+        }, [searchQuery]);
+
+        return html`
+          <div
+            class="flex flex-col items-center justify-center gap-6 h-full relative"
+          >
+            <input
+              type="text"
+              class="input input-bordered w-full text-base"
+              placeholder="🔍 Busque una película (en inglés)"
+              value=${searchQuery}
+              onInput=${(e) => setSearchQuery(e.target.value)}
+              disabled=${isLoading}
+            />
+            ${searchResults.length > 0 &&
+            html`
+              <ul
+                class="dropdown-content menu p-2 bg-base-100 border border-base-content/20 rounded-box shadow-xl absolute top-full left-0 right-0 mt-1 max-h-72 overflow-y-auto z-50 flex-nowrap"
+              >
+                ${searchResults.map(
+                  (movie) => html`
+                    <li>
+                      <a
+                        class="cursor-pointer"
+                        onClick=${() => {
+                          setSearchQuery("");
+                          setSearchResults([]);
+                          onMovieSelect(movie);
+                        }}
+                      >
+                        ${movie.title}
+                      </a>
+                    </li>
+                  `,
+                )}
+              </ul>
+            `}
+          </div>
+        `;
+      }
+
+      function RadialProgress({ portion, index }) {
+        return html`
+          <div class="radial-progress ${portion > 0.25 ? 'text-accent-primary' : ''} font-semibold" style="--value:${portion * 100};">
+            ${(portion * 100).toFixed(2)}%
+          </div>
+        `;
+      }
+
+      function GenreTable({ modelResults, hasExpected }) {
+        const modelNames = Object.keys(modelResults);
+
+        const genreMap = {};
+
+        // Calculate average for each genre
+        for (const modelName of modelNames) {
+          const results = modelResults[modelName];
+          for (const { name, portion, included } of results) {
+            if (!genreMap[name]) {
+              genreMap[name] = {
+                name,
+                average: 0,
+                included,
+                modelPortions: {},
+              };
+            }
+            genreMap[name].modelPortions[modelName] = portion;
+            genreMap[name].average += portion;
+          }
+        }
+
+        // Sort first by expected (included), then by average
+        const sortedGenres = Object.values(genreMap).sort(
+          (a, b) => b.included - a.included || b.average - a.average,
+        );
+
+        return html`<table class="table">
+          <thead>
+            <tr>
+              <th>Género</th>
+              ${hasExpected && html`<th>Base de datos</th>`}
+              ${Object.keys(modelResults).map(
+                (modelName) => html` <th>${modelName}</th> `,
+              )}
+            </tr>
+          </thead>
+          <tbody>
+            ${sortedGenres.map(
+              (genre, i) => html`
+                <tr
+                  class="animate-fade-in-up hover:bg-base-200"
+                  style="animation-delay: ${i * 30}ms; opacity: 0"
+                >
+                   <td class="${genre.included ? "font-bold text-success" : ""} text-xl">
+                     ${genre.name}
+                   </td>
+                   ${hasExpected && html`<td class="text-left">
+                     ${genre.included
+                       ? html`<span class="text-success text-2xl">✅</span>`
+                       : ""}
+                   </td>`}
+                  ${modelNames.map(
+                    (modelName) => html`
+                      <td>
+                        <${RadialProgress}
+                          portion=${genre.modelPortions[modelName]}
+                          index=${i}
+                        />
+                      </td>
+                    `,
+                  )}
+                </tr>
+              `,
+            )}
+          </tbody>
+        </table>`;
+      }
+
+      function Genres({ modelResults, isLoading, hasExpected }) {
+        return modelResults
+          ? html`<${GenreTable} modelResults=${modelResults} hasExpected=${hasExpected}/>`
+          : isLoading
+            ? html`
+                <div class="flex items-center justify-center">
+                  <span class="loading loading-spinner"></span>
+                </div>
+              `
+            : html`
+                <div class="text-center opacity-70">
+                  Seleccione una película o suba una imagen para analizarla
+                </div>
+              `;
+      }
+
+      function App() {
+        const [imageData, setImageData] = useState(undefined);
+
+        const [modelResults, setModelResults] = useState(undefined);
+        const [isLoading, setIsLoading] = useState(false);
+        const [animationKey, setAnimationKey] = useState(0);
+
+        // ---- IMAGE UPLOAD ----
+        const handleImageUpload = () => {
+          const input = document.createElement("input");
+          input.type = "file";
+          input.accept = "image/*";
+          input.style.display = "none";
+
+          input.onchange = (e) => {
+            const file = e.target.files?.[0];
+            if (!file) return document.body.removeChild(input);
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              setImageData({ imageUrl: event.target.result });
+              document.body.removeChild(input);
+            };
+
+            reader.onerror = () => {
+              console.error("Error reading file");
+              document.body.removeChild(input);
+            };
+
+            reader.readAsDataURL(file);
+          };
+
+          document.body.appendChild(input);
+          input.click();
+        };
+
+        // ---- MOVIE SELECT ----
+        const handleMovieSelect = (movie) => {
+          const imageUrl = `https://image.tmdb.org/t/p/w300_and_h450_face${movie.poster_path}`;
+          setImageData({ imageUrl, movie });
+        };
+
+        // ---- INFERENCE ----
+        useEffect(() => {
+          if (!imageData) return;
+
+          let cancelled = false;
+
+          const run = async () => {
+            setIsLoading(true);
+            setModelResults(undefined);
+
+            try {
+              const results = {};
+              const modelNames = Object.keys(onnxModelNames);
+
+              // Run inference for all models
+              for (const modelName of modelNames) {
+                const result = await runInference(
+                  imageData.imageUrl,
+                  modelName,
+                );
+                if (cancelled) return;
+
+                results[modelName] = result.map(({ name, portion }) => ({
+                  name,
+                  portion,
+                  included: imageData.movie
+                    ? imageData.movie[name] === "1"
+                    : false,
+                }));
+              }
+
+              if (cancelled) return;
+              setModelResults(results);
+              setAnimationKey((k) => k + 1);
+            } catch (err) {
+              console.error("Inference error:", err);
+            } finally {
+              if (!cancelled) setIsLoading(false);
+            }
+          };
+
+          run();
+
+          return () => {
+            cancelled = true;
+          };
+        }, [imageData]);
+
+        // ---- RENDER ----
+        return html`
+          <div
+            class="flex flex-col justify-center items-center gap-10 p-10 max-w-7xl mx-auto min-h-screen"
+          >
+            <h1 class="text-4xl md:text-5xl font-bold text-center text-primary">
+              Juzgando por la portada
+            </h1>
+
+            <!-- Movie Search -->
+            <div class="w-full max-w-md">
+              <${MovieSearchBox}
+                onMovieSelect=${handleMovieSelect}
+                isLoading=${isLoading}
+              />
+            </div>
+
+            <!-- Image Upload Button -->
+            <button
+              class="btn btn-primary btn-lg"
+              onClick=${handleImageUpload}
+              disabled=${isLoading}
+            >
+              Subir imagen
+            </button>
+
+            <!-- Image Display -->
+            ${imageData?.imageUrl &&
+            html`
+              <img
+                src="${imageData.imageUrl}"
+                class="max-w-md object-contain rounded-xl shadow-lg"
+                alt="Imagen subida"
+              />
+            `}
+
+            <!-- Results Table -->
+            <div class="w-full">
+              <${Genres}
+                modelResults=${modelResults}
+                isLoading=${isLoading}
+                hasExpected=${imageData?.movie !== undefined}
+              />
+            </div>
+          </div>
+        `;
+      }
+
+      render(html`<${App} />`, document.getElementById("app"));
+    </script>
+  </head>
+
+  <body
+    class="bg-slate-950 font-inter min-h-screen leading-relaxed m-0 p-0 box-border"
+    data-theme="dark"
+  >
+    <div id="app"></div>
+  </body>
+</html>

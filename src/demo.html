@@ -164,6 +164,7 @@
         overflow-y: auto;
         flex: 1;
         min-height: 0;
+        max-height: 60vp;
       }
 
       .tag-display-box::-webkit-scrollbar {
@@ -285,7 +286,15 @@
         padding: 0 20px;
       }
 
-      .dropdown-container {
+       .dropdown-container {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        width: 100%;
+        max-width: 500px;
+      }
+
+      .search-container {
         display: flex;
         flex-direction: column;
         gap: 16px;
@@ -315,6 +324,62 @@
         outline: none;
         border-color: var(--accent-primary);
         box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+
+      .search-input {
+        padding: 14px 20px;
+        border: 2px solid var(--border-color);
+        border-radius: 10px;
+        font-size: 16px;
+        background-color: var(--bg-tertiary);
+        color: var(--text-primary);
+        transition: border-color var(--transition-speed) ease;
+        font-family: "Inter", sans-serif;
+      }
+
+      .search-input:focus {
+        outline: none;
+        border-color: var(--accent-primary);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+
+      .search-results {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: var(--bg-secondary);
+        border: 2px solid var(--border-color);
+        border-radius: 10px;
+        margin-top: 4px;
+        max-height: 300px;
+        overflow-y: auto;
+        z-index: 100;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      }
+
+      .search-result-item {
+        padding: 12px 16px;
+        cursor: pointer;
+        transition: background-color var(--transition-speed) ease;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .search-result-item:hover {
+        background-color: var(--bg-tertiary);
+      }
+
+      .search-result-item:last-child {
+        border-bottom: none;
+      }
+
+      .movie-poster {
+        max-width: 300px;
+        max-height: 450px;
+        object-fit: contain;
+        border-radius: 12px;
+        border: 2px solid var(--border-color);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
       }
 
       .status-text {
@@ -435,8 +500,10 @@
       }
     </style>
 
-    <script>
-      const movieDatabase = /* movie_database */ null,
+    <script type = "module">
+      import * as pako from 'https://esm.sh/pako'
+
+      window.movieDatabase = /* movie_database */ null;
     </script>
 
     <script>
@@ -453,6 +520,7 @@
       import { h, render } from "https://esm.sh/preact";
       import { useState, useEffect } from "https://esm.sh/preact/hooks";
       import htm from "https://esm.sh/htm";
+      import Fuse from "https://esm.sh/fuse.js";
 
       const html = htm.bind(h);
 
@@ -479,6 +547,15 @@
         "TV Movie",
         "Western",
       ];
+
+      // Create Fuse instance for movie search
+      const fuseInstance = window.movieDatabase && Array.isArray(window.movieDatabase) 
+        ? new Fuse(window.movieDatabase, {
+          keys: ['title'],
+          threshold: 0.4,
+          includeScore: true
+        })
+        : null;
 
       async function loadModel(buffer) {
         if (!buffer) throw new Error("Model buffer empty");
@@ -577,13 +654,9 @@
           3,
         ]);
 
-        debugger;
-
         const results = await model.run({
           [inputName]: normalized_tensor,
         });
-
-        debugger;
 
         const outputName = model.outputNames[0];
         const output = results[outputName].data; // length = 19
@@ -593,14 +666,13 @@
             name: outputToGenreMap[i] || `Class ${i}`,
             portion: p,
           }))
-          .sort((a, b) => b.portion - a.portion);
 
         return tags;
       }
 
-      function GenreDisplay({ name, portion, index, animationKey }) {
+      function GenreDisplay({ name, portion, index, animationKey, isInMovie }) {
         const [animatedPercentage, setAnimatedPercentage] = useState(0);
-        const isIncluded = portion > 0.5; // Example threshold for inclusion
+        const isIncluded = portion > 0.25;
 
         useEffect(() => {
           setAnimatedPercentage(0);
@@ -633,7 +705,12 @@
 
         return html`
           <div class="tag-item" style="animation-delay: ${index * 30}ms">
-            <div class="tag-name ${isIncluded ? "included" : ""}">${name}</div>
+            <div class="tag-name ${isIncluded ? "included" : ""}">
+              ${isInMovie ? html` ✓` : ""}
+            </div>
+            <div class="tag-name ${isIncluded ? "included" : ""}">
+              ${name}
+            </div>
             <div class="percentage-bar-container">
               <div
                 class="percentage-bar ${isIncluded ? "included" : ""}"
@@ -677,8 +754,53 @@
         `;
       }
 
+      function MovieSearchBox({ onMovieSelect, isLoading }) {
+        const [searchQuery, setSearchQuery] = useState("");
+        const [searchResults, setSearchResults] = useState([]);
+
+        useEffect(() => {
+          if (!searchQuery.trim()) {
+            setSearchResults([]);
+            return;
+          }
+
+          if (!fuseInstance) {
+            return;
+          }
+
+          const results = fuseInstance.search(searchQuery);
+          setSearchResults(results.slice(0, 10).map(result => result.item));
+        }, [searchQuery]);
+
+        return html`
+          <div class="image-upload-box">
+            <input
+              type="text"
+              class="search-input"
+              placeholder="Search movies..."
+              value=${searchQuery}
+              onInput=${(e) => setSearchQuery(e.target.value)}
+              disabled=${isLoading}
+            />
+            ${searchResults.length > 0 && html`
+              <div class="search-results">
+                ${searchResults.map(movie => html`
+                  <div
+                    class="search-result-item"
+                    onClick=${() => { setSearchQuery(""); setSearchResults([]); onMovieSelect(movie); } }
+                  >
+                    ${movie.title}
+                  </div>
+                `)}
+              </div>
+            `}
+          </div>
+        `;
+      }
+
       function App() {
         const [imageUrl, setImageUrl] = useState(null);
+        const [selectedMovie, setSelectedMovie] = useState(null);
         const [selectedModel, setSelectedModel] = useState("Modelo base");
         const [tags, setTags] = useState([]);
         const [isLoading, setIsLoading] = useState(false);
@@ -699,6 +821,7 @@
               const reader = new FileReader();
               reader.onload = (event) => {
                 setImageUrl(event.target.result);
+                setSelectedMovie(null); // Clear movie selection when uploading image
                 setIsUploading(false);
                 // Remove input after use
                 document.body.removeChild(input);
@@ -716,6 +839,12 @@
 
           document.body.appendChild(input);
           input.click();
+        };
+
+        const handleMovieSelect = (movie) => {
+          setSelectedMovie(movie);
+          const posterUrl = `https://image.tmdb.org/t/p/w300_and_h450_face${movie.poster_path}`;
+          setImageUrl(posterUrl);
         };
 
         // Enhanced model change handler with animation
@@ -744,7 +873,10 @@
           runInference(imageUrl, selectedModel)
             .then((result) => {
               if (mounted) {
-                setTags(result);
+                setTags(result
+                  .map(({ name, portion }) => ({ name, portion, included: selectedMovie[name] === "1" }))
+                  .sort((a, b) => b.included - a.included || b.portion - a.portion)
+                );
                 setAnimationKey((prev) => prev + 1); // Trigger new animations
               }
             })
@@ -760,7 +892,8 @@
           return () => {
             mounted = false;
           };
-        }, [imageUrl, selectedModel]);
+        }, [imageUrl, selectedModel, selectedMovie]);
+
 
         return html`
           <div class="app-container">
@@ -768,6 +901,10 @@
 
             <div class="rectangles-container">
               <div class="rectangle">
+                <${MovieSearchBox}
+                  onMovieSelect=${handleMovieSelect}
+                  isLoading=${isUploading}
+                />
                 <${ImageUploadBox}
                   imageUrl=${imageUrl}
                   onImageUpload=${handleImageUpload}
@@ -799,6 +936,7 @@
                     : tags.length > 0
                       ? html`
                           <div class="tag-header">
+                            <div class="header-label">Expected</div>
                             <div class="header-label">Genre</div>
                             <div class="header-label">Confidence</div>
                             <div class="header-label">Score</div>
@@ -811,6 +949,7 @@
                                 portion=${tag.portion}
                                 index=${index}
                                 animationKey=${animationKey}
+                                isInMovie=${tag.included}
                               />
                             `,
                           )}

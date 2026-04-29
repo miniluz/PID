@@ -1,6 +1,8 @@
-import re
+import base64
 import csv
 import json
+import re
+import zlib
 from pathlib import Path
 
 
@@ -40,15 +42,16 @@ def fill_html_template():
         movies = []
         with open(movies_csv_path, "r", encoding="utf-8") as csvfile:
             reader = csv.DictReader(csvfile)
-            # Read only first 5 rows
-            for i, row in enumerate(reader):
-                if i >= 5:
-                    break
+            for row in reader:
                 movies.append(row)
 
         # Convert to JSON string
-        json_str = json.dumps(movies, indent=2)
-        return json_str
+        json_bytes = json.dumps(movies).encode("utf-8")
+        compressed = zlib.compress(json_bytes)
+        b64 = base64.b64encode(compressed).decode("ascii")
+
+        # return f'JSON.parse(pako.inflate(Uint8Array.from(atob("{b64}"), c => c.charCodeAt(0)), {{ to: "string" }}))'
+        return f'JSON.parse(pako.inflate((b=>{{let t="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",l=b.length,o=new Uint8Array(l*3/4|0),p=0,i=0,c1,c2,c3,c4;for(;i<l;){{c1=t.indexOf(b[i++]);c2=t.indexOf(b[i++]);c3=t.indexOf(b[i++]);c4=t.indexOf(b[i++]);o[p++]=(c1<<2)|(c2>>4);if(c3>=0)o[p++]=((c2&15)<<4)|(c3>>2);if(c4>=0)o[p++]=((c3&3)<<6)|c4;}}return o.subarray(0,p);}})("{b64}"),{{to:"string"}}))'
 
     # Replace movie database reference
     content = movie_pattern.sub(movie_replacement, content)

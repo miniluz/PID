@@ -16,3 +16,4 @@ DATA AUGMENTATION
   precision_macro: 0.5483
   recall_macro: 0.0853
   f1_macro: 0.1258
+  binary_accuracy: 0.9207

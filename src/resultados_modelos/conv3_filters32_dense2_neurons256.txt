@@ -12,3 +12,4 @@
   precision_macro: 0.5209
   recall_macro: 0.0751
   f1_macro: 0.1150
+  binary_accuracy: 0.9129

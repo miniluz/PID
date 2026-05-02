@@ -16,3 +16,4 @@ DROPOUT
   precision_macro: 0.4761
   recall_macro: 0.0682
   f1_macro: 0.1008
+  binary_accuracy: 0.9197

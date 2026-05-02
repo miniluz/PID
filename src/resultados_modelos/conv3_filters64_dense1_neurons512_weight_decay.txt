@@ -16,3 +16,4 @@ WEIGHT DECAY
   precision_macro: 0.5187
   recall_macro: 0.0953
   f1_macro: 0.1411
+  binary_accuracy: 0.9208

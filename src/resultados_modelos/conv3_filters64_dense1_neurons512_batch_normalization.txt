@@ -16,3 +16,4 @@ BATCH NORMALIZATION
   precision_macro: 0.4949
   recall_macro: 0.0717
   f1_macro: 0.1004
+  binary_accuracy: 0.9184

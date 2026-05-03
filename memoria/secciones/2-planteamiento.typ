@@ -3,7 +3,7 @@
 #show: style-tables
 
 = Planteamiento teórico
-
+<sec:dos>
 == Redes neuronales artificiales
 
 Una red neuronal artificial es un modelo computacional inspirado en el funcionamiento del sistema nervioso biológico.
@@ -131,7 +131,12 @@ La operación equivale a deslizar cada núcleo sobre la imagen y calcular el pro
 resulta en una imagen propia, por lo que aplicar el banco de filtros $bold(K)$ resulta en otro tensor de imágenes con
 $|bold(K)|$ canales, $RR^(H' times W' times |bold(K)|$.
 
-// TODO! Añadir imagen
+
+#figure(
+  image("/figures/capa_convolucional_diagrama.jpg", width: 70%),
+  caption: "Aplicando un filtro en una capa convolucional",
+)<fig:diagrama_capa_convolucional>
+
 
 Los hiperparámetros de la capa son:
 - La cantidad de núcleos $|bold(K)|$
@@ -164,7 +169,7 @@ TODO: si se añade hay que añadir una cita. No lo añado porque no hace nada
 
 ==== Capa de normalización por lotes (_batch normalization_)
 
-La normalización por lotes busca reducir la variabilidad de la pre-activación de los kernels. Reducir la variabilidad
+La normalización @article_batch_normalization_ioffe por lotes busca reducir la variabilidad de la pre-activación de los kernels. Reducir la variabilidad
 acelera la convergencia y reduce la sensibilidad a la iniciación de pesos. Para hacerlo, se calculan la media
 $mu_cal(B)$ y la varianza $sigma_cal(B)^2$ de la salida del kernel, y se usa para transformar la pre-activación antes de
 aplicar la función de activación @book_deep_learning_goodfellow. Primero, aplican una transformación afín a los valores
@@ -178,7 +183,6 @@ $
   y = gamma hat(z) + beta
 $
 
-// TODO: añadir cita article_batch_normalization_ioffe
 
 ==== Dropout
 
@@ -198,8 +202,10 @@ inferencia y facilita realizar entrenamiento con otros parámetros, como por eje
 El dropout también se puede aplicar a las capas convolucionales, desactivando canales enteros (o lo que es lo mismo,
 algunos $k$ del banco de filtros $K$). Esto se denomina dropout espacial. La compensación se realiza de la misma manera.
 
-// TODO! Cita
-// TODO! Citar por qué hacemos 0.1 para convolucionales y 0.4 para densas
+En este proyecto se ha decidido asignar un $p$ de *0.1* para las capas convolucionales y de *0.4* para las capas densas.
+Esto se debe a las diferencias en número de parámetros de la capa y el riesgo de sobreajuste, por lo que está ampliamente consolidado
+que $p$ para las capas convolucionales debe ser bajo (entre 0.1 y 0.2) y para las capas densas más alto (entre 0.3 y 0.5).
+
 
 ==== Decaimiento de pesos
 <sec:wdecay>
@@ -211,6 +217,8 @@ pesos grandes, tanto en las capas convolucionales como en las densas @book_deep_
 Consiste en aplicar transformaciones aleatorias (rotación, recorte, espejo, cambio de brillo, cambio de saturación,
 etc.) a las imágenes durante el entrenamiento, aumentando artificialmente la diversidad del conjunto de datos y haciendo
 a la red resistente a estas transformaciones @book_deep_learning_goodfellow.
+
+En el caso de este proyecto, las aplicaciones concretas que se aplican son cambios de brillo y también _simetría especular_ o reflexión en el eje vertical.
 
 /*
 * No vale la pena mencionar esto si no lo usamos.
@@ -238,13 +246,15 @@ Adam o Adaptative Momentum Estimation es un optimizador robusto muy usado en la 
 
 ==== AdamW
 
-Para el modelo al se va a aplicar weight decay, explicado en la @sec:wdecay, va a usarse una variante de Adam conocida como AdamW. Este algoritmo es más actual que Adam y también es bastante usado para lograr una convergencia estable y un buen rendimiento en redes complejas. La ventaja que supone frente a Adam es que, al usar decaimiento de pesos, mejora la generalización del modelo. 
+Para el modelo al se va a aplicar weight decay, explicado en la @sec:wdecay, va a usarse una variante de Adam conocida como AdamW @loshchilov2017decoupled. Este algoritmo es más actual que Adam y también es bastante usado para lograr una convergencia estable y un buen rendimiento en redes complejas. La ventaja que supone frente a Adam es que, al usar decaimiento de pesos, mejora la generalización del modelo. 
 
-// TODO: referenciar el paper original de AdamW https://arxiv.org/pdf/1711.05101  https://arxiv.org/abs/1711.05101
 
 == Flujo de la red
 
-// TODO: Sería bueno añadir una imagen
+#figure(
+  image("/figures/flujo_red_cnn_o1.png", width: 70%),
+  caption: "Esquema de flujo de red de una red neuronal convolucional para clasificación multiclase",
+)<fig:flujo_cnn>
 
 En resumen, el flujo de una red neuronal convolucional para tareas multi-etiqueta es:
 

@@ -17,12 +17,13 @@ dominios, y el uso de convoluciones ha permitido que revolucionen la visión art
 entrenar una red neuronal convolucional (CNN) para realizar tal tarea de clasificación multi-etiqueta: identificar los
 géneros de una película a partir de su póster.
 
-A continuación, se introducen los objetivos del proyecto. Luego, se presentan en la sección 2 las bases teóricas del
+A continuación, se introducen los objetivos del proyecto. Luego, se presentan en la @sec:dos las bases teóricas del
 modelo propuesto, desde los perceptrones multicapa hasta las técnicas de regularización propias de las CNN.
-Posteriormente, las secciones 3 y 4 abordan la implementación y la experimentación respectivamente, y la sección 5
-cierra con las conclusiones derivadas del trabajo.
+Posteriormente, la @sec:tres aborda la implementación, las tecnologías que se usan y paso por paso cómo se ha implementado.
+La @sec:cuatro //aborda la experimentación
+Finalmente la @sec:cinco cierra con las conlusiones del trabajo mostrando los resultados, analizándolos, y haciendo una restrospectiva de cambios en el desarrollo del trabajo.
 
-//  TODO! aumentar las descripciones de la 3, la 4 y la 5 al hacerlas.
+//  TODO! aumentar las descripciones de la 4 al hacerlas. 
 
 == Objetivos
 
@@ -39,7 +40,6 @@ Los objetivos del proyecto son, en orden de prioridad descendiente:
   - _Dropout_
   - Decaimiento de pesos
   - Aumentación de datos
-/* - GAP si lo usamos */
 + Diseñar y entrenar una red que combine las técnicas que han tenido un impacto positivo, y compararla con la original.
   público técnico que únicamente conoce los perceptrones multicapa.
 + Crear una interfaz de usuario interactiva para el uso de los modelos.

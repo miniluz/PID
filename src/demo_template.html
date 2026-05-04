@@ -59,10 +59,12 @@
 
         const ds = new DecompressionStream("brotli");
         const decompressedStream = new Blob([bytes]).stream().pipeThrough(ds);
-        const arrayBuffer = await new Response(decompressedStream).arrayBuffer();
+        const arrayBuffer = await new Response(
+          decompressedStream,
+        ).arrayBuffer();
 
         return new Uint8Array(arrayBuffer);
-      }
+      };
     </script>
 
     <script type="module">
@@ -72,10 +74,13 @@
     <script type="module">
       window.onnxModuleNames = {
         "Modelo base": /* conv3_filters64_dense1_neurons512.onnx */ null,
-        "Dropout": /* conv3_filters64_dense1_neurons512_dropout.onnx */ null,
-        "Decaimiento de pesos": /* conv3_filters64_dense1_neurons512_weight_decay.onnx */ null,
-        "Normalización por baches": /* conv3_filters64_dense1_neurons512_batch_normalization.onnx */ null,
-        "Aumentación de datos": /* conv3_filters64_dense1_neurons512_data_augmentation.onnx */ null,
+        Dropout: /* conv3_filters64_dense1_neurons512_dropout.onnx */ null,
+        "Decaimiento de pesos":
+          /* conv3_filters64_dense1_neurons512_weight_decay.onnx */ null,
+        "Normalización por baches":
+          /* conv3_filters64_dense1_neurons512_batch_normalization.onnx */ null,
+        "Aumentación de datos":
+          /* conv3_filters64_dense1_neurons512_data_augmentation.onnx */ null,
       };
     </script>
 
@@ -88,10 +93,40 @@
 
       const html = htm.bind(h);
 
-      const outputToGenreMap =
-      ['Action', 'Adventure', 'Animation', 'Comedy', 'Crime', 'Documentary',
-       'Drama', 'Family', 'Fantasy', 'History', 'Horror', 'Music', 'Mystery',
-       'Romance', 'Science Fiction', 'TV Movie', 'Thriller', 'War', 'Western'];
+      const modelDescriptions = {
+        "Modelo base":
+          "Un modelo convolucional clásico: 3 capas convolucionales de 64, 128 y 256 filtros, y una capa densa de 512 neuronas.",
+        Dropout:
+          "Una modificación del modelo base añadiendo un dropout del 10% a las capas convolucionales y del 40% a la capa densa. En el dropout, una selección aleatoria de la red se desactiva durante el entrenamiento para incentivar la redundancia.",
+        "Decaimiento de pesos":
+          "Una modificación del modelo base que añade la magnitud de los pesos a la función de pérdida, incentivando que los pesos disminuyan durante el entrenamiento para promover la estabilidad.",
+        "Normalización por baches":
+          "Una modificación del modelo base. Modifica la salida de cada neurona respecto a un minilote de manera que el valor promedio es 0 y la desviación estándar está en 1, normalizando la salida para promover la estabilidad.",
+        "Aumentación de datos":
+          "La estructura del modelo es la misma. Sin embargo, los datos de amplían artificialmente añadiendo una posibilidad de que la imagen tenga un espejo horizontal y modificando el brillo de forma aleatoria, para evitar que la red sea inestable respecto a cambios menores.",
+      };
+
+      const outputToGenreMap = [
+        "Action",
+        "Adventure",
+        "Animation",
+        "Comedy",
+        "Crime",
+        "Documentary",
+        "Drama",
+        "Family",
+        "Fantasy",
+        "History",
+        "Horror",
+        "Music",
+        "Mystery",
+        "Romance",
+        "Science Fiction",
+        "TV Movie",
+        "Thriller",
+        "War",
+        "Western",
+      ];
 
       async function loadModel(buffer) {
         if (!buffer) throw new Error("Model buffer empty");
@@ -215,7 +250,11 @@
             return;
           }
 
-          const results = movieDatabase.filter(({ title }) => String(title).toLowerCase().includes(searchQuery.toLowerCase())).slice(0,10)
+          const results = movieDatabase
+            .filter(({ title }) =>
+              String(title).toLowerCase().includes(searchQuery.toLowerCase()),
+            )
+            .slice(0, 5);
           setSearchResults(results);
         }, [searchQuery, movieDatabase]);
 
@@ -260,7 +299,12 @@
 
       function RadialProgress({ portion, index }) {
         return html`
-          <div class="radial-progress ${portion > 0.25 ? 'text-accent-primary' : ''} font-semibold" style="--value:${portion * 100};">
+          <div
+            class="radial-progress ${portion > 0.25
+              ? "text-accent-primary"
+              : ""} font-semibold"
+            style="--value:${portion * 100};"
+          >
             ${(portion * 100).toFixed(1)}%
           </div>
         `;
@@ -296,9 +340,26 @@
           <thead>
             <tr class="text-center">
               <th>Género</th>
-              ${hasExpected && html`<th>Base de datos</th>`}
+              ${hasExpected &&
+              html`<th>
+                <div
+                  class="tooltip tooltip-bottom"
+                  data-tip="Los géneros que la base de datos considera que tiene la película."
+                >
+                  Base de datos
+                </div>
+              </th>`}
               ${Object.keys(modelResults).map(
-                (modelName) => html` <th>${modelName}</th> `,
+                (modelName) => html`
+                  <th>
+                    <div
+                      class="tooltip tooltip-bottom"
+                      data-tip="${modelDescriptions[modelName]}"
+                    >
+                      ${modelName}
+                    </div>
+                  </th>
+                `,
               )}
             </tr>
           </thead>
@@ -309,14 +370,19 @@
                   class="animate-fade-in-up hover:bg-base-200 text-center"
                   style="animation-delay: ${i * 30}ms; opacity: 0"
                 >
-                   <td class="${genre.inDatabase ? "font-bold text-success" : ""} text-xl">
-                     ${genre.name}
-                   </td>
-                   ${hasExpected && html`<td>
-                     ${genre.inDatabase
-                       ? html`<span class="text-success text-2xl">✅</span>`
-                       : ""}
-                   </td>`}
+                  <td
+                    class="${genre.inDatabase
+                      ? "font-bold text-success"
+                      : ""} text-xl"
+                  >
+                    ${genre.name}
+                  </td>
+                  ${hasExpected &&
+                  html`<td>
+                    ${genre.inDatabase
+                      ? html`<span class="text-success text-2xl">✅</span>`
+                      : ""}
+                  </td>`}
                   ${modelNames.map(
                     (modelName) => html`
                       <td>
@@ -336,7 +402,10 @@
 
       function Genres({ modelResults, isLoading, hasExpected }) {
         return modelResults
-          ? html`<${GenreTable} modelResults=${modelResults} hasExpected=${hasExpected}/>`
+          ? html`<${GenreTable}
+              modelResults=${modelResults}
+              hasExpected=${hasExpected}
+            />`
           : isLoading
             ? html`
                 <div class="flex items-center justify-center">

@@ -2,23 +2,10 @@
 <sec:cinco>
 Incluyen análisis de los resultados obtenidos y desviaciones en la planificación inicial.
 
-== Resultados obtenidos
-
-Para facilitar la lectura de estos datos, hago referencia a la @sec:metricasvalidacion en la que se explican las distintas métricas usadas para la validación y evaluación de los modelos.
-
-También me remito a la @sec:busquedacuadricula para explicar los nombres de los modelos. Sus nombres definen la estructura de este. 
-
-La siguiente tabla recopila los resultados de todos los modelos obtenidos en la búsqueda de cuadrícula realizada para hallar los hiperparámetros del modelo base.
-
-#include "../tables/tabla_resultados_metricas_cuadricula.typ"
-
-La siguiente tabla recopila las métricas obtenidas de todos los modelos finales obtenidos a lo largo del proyecto (sin contar con los entrenados en la búsqueda en cuadrícula).
-
-#include "../tables/tabla_resultados_metricas_finales.typ"
-
 == Análisis de resultados
 
-El objetivo de este proyecto era verificar si aplicando diferentes técnicas a una red neuronal convolucional (creada para sacar los géneros de películas según sus portadas) se podrían mejorar sus resultados. Según las métricas que han sido definidas, *no*.
+El objetivo de este proyecto era verificar si aplicando diferentes técnicas a una red neuronal convolucional (creada para sacar los 
+géneros de películas según sus portadas) se podrían mejorar sus resultados. Según las métricas que han sido definidas, *no*.
 
 Con ninguna de las 4 técnicas probadas se han obtenido mejores resultados que con el modelo base. La efectividad de estos modelos ha sido 
 peor generalmente que la del modelo base, en todas las métricas empeoran los resultados a excepción de la _exactitud binaria_.
@@ -29,8 +16,48 @@ que estas diferencias en los resultados de la métrica de la exactitud binaria s
 
 === Posibles causas
 
-//TODO
-Aún está por hacer, pero aquí investigar, intentar comprender lo que está pasando y por qué no ha mejorado el resultado (haciendo referencias bibliográficas preferiblemente).
+En esta sección se investigan y analizan posibles motivos por el que ninguna de las técnicas aplicadas ha mejorado los resultados con respecto 
+al modelo base. Se analizará cada una de ellas por separado. También se compara el resultado de la métrica _f1_macro_ con el modelo base ya que consideramos que 
+es buena a la hora de reflejar la efectividad de nuestros modelos.
+
+==== Dropout
+
+*f1_macro: (base) 0.1606 -> 0.1008*
+
+Tomando en cuenta que los modelos pequeños han dado peores resultados como hemos visto en el entrenamiento de rejilla, es posible que
+al desactiavr neuronas con el dropout el modelo carezca de la capacidad y o complejidad suficiente como para aprender a clasificar 
+correctamente las portadas de películas. Concretamente, como el dropout también afecta a la capa densa, que es muy relevante a la hora de 
+clasificar, puede que cause peor rendimiento general del modelo.
+
+==== Aumentación de datos
+
+*f1_macro: (base) 0.1606 -> 0.1258*
+
+Como se ha explicado anteriormente, la aumentación de datos consiste en aplicar transformaciones a los datos de entrada, es decir, a las
+imágenes de los posters. Puede que al aplicar cambios de brillo y simetría especular se pierdan algunos rasgos de estas imágenes que son
+ importantes a la hora de predecir sus géneros.
+
+Pongamos por ejemplo una película que sea de terror, es probable que tenga una portada con colores oscuros mayoritariamente. Al hacer que 
+el brillo de la portada sea superior, la red neuronal no va a detectar los caraterísticos tonos oscuros en la portada y entonces es menos 
+probable que deduzca que es de terror. Fuera de este ejemplo de película de terror tanto el brillo como la simetría especular pueden 
+afectar de formas distintas empeorando así los resultados.
+
+==== Normalización de lotes
+
+*f1_macro: (base) 0.1606 -> 0.1004*
+
+Tras investigar, no se ha podido llegar a una teoría sólida de por qué la normalización por lotes ha afectado negativamente al modelo base.
+Sin embargo, opciones que se han barajado han sido que la normalización de lotes afecte a cómo se captan los detalles de las imágenes y que 
+el mal resultado del modelo es fruto de la aleatoriedad del entrenamiento.
+
+==== Decaimiento de pesos
+
+*f1_macro: (base) 0.1606 -> 0.1411*
+
+El decaimiento de pesos, como su nombre indica, consiste en reducir pesos que son grandes. Esto se hace para evitar sobreajuste a los 
+datos de entrenamiento, pero puede ser que al hacerlo el modelo ignore o no valore lo suficiente algunos patrones en particular que puede 
+que sean muy relevantes.
+
 
 
 == Desviaciones de lo planificado
@@ -38,5 +65,5 @@ Aún está por hacer, pero aquí investigar, intentar comprender lo que está pa
 A diferencia de lo planeado, se han acabado entrenando menos modelos de lo que se planeaba originalmente.
 
 Esto a sido por dos motivos principales:
-- El tamaño de la búsqueda de cuadrícula tuvo que ser recortado porque el entrenamiento tardaba más de lo previsto
+- El tamaño de la búsqueda de cuadrícula tuvo que ser recortado porque el entrenamiento tardaba más de lo previsto. Se pretendía probar con 2, 3, y 4 capas convolucionales, pero sólo se ha hecho con 2 y 3.
 - Se planeaba entrenar un modelo final aplicando todas las técnicas que diesen buenos resultados, pero como ninguna de las técnicas aplicadas ha mejorado ninguna métrica con respecto al modelo base, este último modelo ha sido omitido.

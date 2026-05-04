@@ -20,10 +20,10 @@ géneros de una película a partir de su póster.
 A continuación, se introducen los objetivos del proyecto. Luego, se presentan en la @sec:dos las bases teóricas del
 modelo propuesto, desde los perceptrones multicapa hasta las técnicas de regularización propias de las CNN.
 Posteriormente, la @sec:tres aborda la implementación, las tecnologías que se usan y paso por paso cómo se ha implementado.
-La @sec:cuatro //aborda la experimentación
-Finalmente la @sec:cinco cierra con las conlusiones del trabajo mostrando los resultados, analizándolos, y haciendo una restrospectiva de cambios en el desarrollo del trabajo.
-
-//  TODO! aumentar las descripciones de la 4 al hacerlas. 
+En la @sec:cuatro se especifican diferentes cosas relacionadas con el desarrollo del proyecto y se muestran los resultados concretos en tablas 
+además de mostrar la definición con tensorflow de los distintos modelos.
+Finalmente la @sec:cinco cierra con las conlusiones del trabajo analizando los resultados y haciendo una restrospectiva de cambios en el 
+desarrollo del trabajo.
 
 == Objetivos
 

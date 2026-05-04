@@ -37,6 +37,6 @@
 #include "secciones/3-implementación.typ"
 #include "secciones/4-experimentación.typ"
 #include "secciones/5-conclusiones.typ"
-#include "secciones/ejemplos_bórrame.typ"
+//#include "secciones/ejemplos_bórrame.typ"
 
 #bibliography("bibliografía.bib", style: "ieee")

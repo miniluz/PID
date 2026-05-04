@@ -25,6 +25,8 @@ entrenamiento, y la última capa es la salida. Las centrales se denominan capas 
 de los valores de todas las salidas de la capa anterior, por lo que se también se denominan capas densas, ya que todos
 los nodos de una capa están conectados a todos los de la siguiente.
 
+ 
+
 Los valores de la red que se modifican durante el entrenamiento, como los pesos y sesgos, se denominan parámetros, y los
 que no se modifican, como la cantidad de capas, la cantidad de neuronas por capa y las funciones de activación, se
 denominan hiperparámetros. Generalmente, los hiperparámetros se determinan en base a trabajos previos, a la literatura,
@@ -157,13 +159,21 @@ el promedio, añadiendo un pixel a la salida. Otra muy común es la de máximo, 
 máximo de la ventana en lugar del promedio. Hacer pooling por máximo o promedio con $S = T = 2$ reduce a la mitad la
 resolución de la imagen.
 
-/*
-Otro tipo es el _global average pooling_ o GAP. Este toma el promedio de todos los valores de la imagen por cada canal,
-reduciendo un tensor de $H times W times C$ a un vector unidimensional de tamaño $C$. Elimina completamente la dimensión
+#figure(
+  image("/figures/Pooling-Max-Pooling.png", width: 70%),
+  caption: "Ejemplo de pooling por máximo",
+)<fig:max_pooling>
+Créditos: _Pooling (Max Pooling)_, The University of Science & Technology
+
+Otro tipo es el _global average pooling_ o GAP @lin2013network_in_network. Este toma el promedio de todos los valores de la imagen por cada
+canal, reduciendo un tensor de $H times W times C$ a un vector unidimensional de tamaño $C$. Elimina completamente la dimensión
 espacial. Generalmente se usa como alternativa a aplanar la última capa.
 
-TODO: si se añade hay que añadir una cita. No lo añado porque no hace nada
-*/
+#figure(
+  image("/figures/Global-Avg-Pooling.png", width: 70%),
+  caption: "Ejemplo de GAP",
+)<fig:gap>
+Créditos: _Global Average Pooling_, Opengenus
 
 === Técnicas de regularización y normalización
 
@@ -202,6 +212,12 @@ inferencia y facilita realizar entrenamiento con otros parámetros, como por eje
 El dropout también se puede aplicar a las capas convolucionales, desactivando canales enteros (o lo que es lo mismo,
 algunos $k$ del banco de filtros $K$). Esto se denomina dropout espacial. La compensación se realiza de la misma manera.
 
+#figure(
+  image("/figures/dropout.png", width: 70%),
+  caption: "Ejemplo de dropout",
+)<fig:dropout>
+Créditos: _Dropout_, Dot Net Tutorials
+
 En este proyecto se ha decidido asignar un $p$ de *0.1* para las capas convolucionales y de *0.4* para las capas densas.
 Esto se debe a las diferencias en número de parámetros de la capa y el riesgo de sobreajuste, por lo que está ampliamente consolidado
 que $p$ para las capas convolucionales debe ser bajo (entre 0.1 y 0.2) y para las capas densas más alto (entre 0.3 y 0.5).
@@ -217,6 +233,13 @@ pesos grandes, tanto en las capas convolucionales como en las densas @book_deep_
 Consiste en aplicar transformaciones aleatorias (rotación, recorte, espejo, cambio de brillo, cambio de saturación,
 etc.) a las imágenes durante el entrenamiento, aumentando artificialmente la diversidad del conjunto de datos y haciendo
 a la red resistente a estas transformaciones @book_deep_learning_goodfellow.
+
+#figure(
+  image("/figures/data_aug.png", width: 70%),
+  caption: "Ejemplo de aumentación de datos con imagen del número 7",
+)<fig:data_aug>
+Créditos: _Embedding Rotate-and-Scale Net for Learning Invariant Features of Simple Images_; Zihang He, Xiang Ye, Zuguo He, Yong Li @he2019rotate_scale_net
+
 
 En el caso de este proyecto, las aplicaciones concretas que se aplican son cambios de brillo y también _simetría especular_ o reflexión en el eje vertical.
 
@@ -278,6 +301,12 @@ del nodo correspondiente lo supera.
 == Búsqueda de cuadrícula o rejilla
 
 La búsqueda de cuadrícula o grid search es una técnica usada en el entrenamiento de redes neuronales para explorar los resultados con diferentes combinaciones de hiperparámetros. El usuario selecciona una cantidad de hiperparámetros que probar de diferentes tipos, y a continuación el algoritmo entrena y prueba un modelo por cada una de las combinaciones posibles. El experimento que tras probarlo proporcione los mejores resultados es el que se considerará que tiene los mejores hiperparámetros.
+
+#figure(
+  image("/figures/grid_search.png", width: 80%),
+  caption: "Esquema para visualizar concepto de búsqueda de rejilla",
+)<fig:grid_search_img>
+Créditos: _Grid Search in Machine Learning_; "Binoy", de Scaler
 
 == Parada temprana
 <sec:earlystopping>

@@ -64,7 +64,7 @@ En esta parte de la implementación se define una función que permite observar 
 Para ver cómo se efectivo podemos considerar un modelo, necesitamos más información que la precisión y la pérdida. Para ello se implementa una función que, dado un modelo, imprime las métricas de validación definidas en la @sec:metricasvalidacion.
 
 === Búsqueda en cuadrícula o rejilla
-
+<sec:busquedacuadricula2>
 Para maximizar la efectividad del modelo base sobre el que partiremos para aplicar las distintas técnicas, se ha hecho una búsqueda en cuadrícula. Esta sigue lo definido en la @sec:busquedacuadricula. La funcionalidad de la búsqueda en cuadrícula se ha implementado manualmente para poderla entender y controlar de mejor manera. Esto nos ha permitido guardar los resultados (las métricas de validación) de cada uno de los modelos probados con diferentes combinaciones de hiperparámetros en ficheros de texto.
 
 

@@ -1,38 +1,15 @@
 = Experimentación
 <sec:cuatro>
 
-== Concreto selección hiperparámetros
+== Selección de hiperparámetros
+<sec_seleccion_hiperparametros>
 
-Recapitulando en lo referente a la búsqueda de cuadrícula y la selección de hiperparámetros: se ha implementado manualmente una función que se encarga de hacer esta búsqueda de cuadrícula (@sec:busquedacuadricula2). También, como se dijo en la @sec:busquedacuadricula, se ha hecho una búsqueda de rejilla siguiendo lo anteriormente definido.
+Se ha realizado la búsqueda en cuadrícula especificada en la sección anterior. Originalmente se tenía pensado realizar la
+búsqueda de cuadrícula con 2, 3 y 4 capas convolucionales. Sin embargo, tras notar que no habría suficiente tiempo para
+completarla, se decidió sólo entrenar modelos con 2 y 3 capas convolucionales.
 
-Así, por ejemplo con los hiperparámetros de 
-- 3 capas convolucionales
-- 64 filtros de la primera capa de convolución
-- 1 capas densas
-- 512 nodos en la primera capa densa
-nos quedaríamos con una red neuronal estructurada de la siguiente forma:
-
-#figure(
-  image("/figures/modelo_base.png", width: 80%),
-  caption: "Esquema del modelo descrito, que es el modelo base",
-)<fig:modelo_base>
-
-/*
-capa conv 64 kernel = (3,3)
-capa maxpooling (pool size = (2,2))
-capa conv 128 kernel = (3,3)
-capa maxpooling (pool size = (2,2))
-capa conv 256 kernel = (3,3)
-capa maxpooling (pool size = (2,2))
-capa GAP
-capa densa 512 (relu)
-capa densa 256 (relu)
-capa densa de salida nº de géneros (sigmoide)
-*/
-
-Originalmente se tenía pensado realizar la búsqueda de cuadrícula con 2, 3 y 4 capas convolucionales. Sin embargo, tras 
-notar el tiempo excesivo que se tardarían a entrenar todos los modelos, se decidió sólo entrenar modelos con 2 y 3 capas 
-convolucionales.
+Resultó que la combinación con los mejores resultados era de 3 capas convolucionales, con la primera capa con 64 filtros,
+con dos capas densas, con la primera teniendo 512 neuronas.
 
 == Definición de modelos
 

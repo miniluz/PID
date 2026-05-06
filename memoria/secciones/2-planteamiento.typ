@@ -290,7 +290,7 @@ En resumen, el flujo de una red neuronal convolucional para tareas multi-etiquet
   posible en el rango $(-inf, +inf)$.
 + Se aplica la función de activación sigmoide para reducir al rango $(0,1)$ (p. ej. $(0.01, 0.87, 0.2)$).
 
-Luego, en el entrenamiento
+Luego, en el entrenamiento:
 + Se calcula el error (media de entropías cruzadas individuales) de la salida obtenida con la salida esperada (p. ej.
   $(0, 1, 0)$).
 + Se realiza la retropropagación.
@@ -303,18 +303,25 @@ del nodo correspondiente lo supera.
 La búsqueda de cuadrícula o grid search es una técnica usada en el entrenamiento de redes neuronales para explorar los resultados con diferentes combinaciones de hiperparámetros. El usuario selecciona una cantidad de hiperparámetros que probar de diferentes tipos, y a continuación el algoritmo entrena y prueba un modelo por cada una de las combinaciones posibles. El experimento que tras probarlo proporcione los mejores resultados es el que se considerará que tiene los mejores hiperparámetros.
 
 #figure(
-  image("/figures/grid_search.png", width: 80%),
+  image("/figures/grid_search.png", width: 40%),
   caption: "Esquema para visualizar concepto de búsqueda de rejilla",
 )<fig:grid_search_img>
 Créditos: _Grid Search in Machine Learning_; "Binoy", de Scaler
 
 == Parada temprana
 <sec:earlystopping>
-A la hora de entrenar modelos muy grandes, hay ocasiones en las que vemos que el error en el entrenamiento va bajando, sin embargo a la hora de validar el modelo, el error es más alto de lo que se esperaba. A este comportamiento se le llama *sobreajuste* (_overfitting_). A lo largo del entrenamiento, puede que el error del entrenamiento vaya bajando poco a poco, pero al haber un sobreajuste, el modelo pierde capacidad de generalización y entonces el error de validación cada vez empeora más.
+A la hora de entrenar modelos muy grandes, hay ocasiones en las que vemos que el error en el entrenamiento va bajando,
+sin embargo a la hora de validar el modelo, el error es más alto de lo que se esperaba. A este comportamiento se le llama
+sobreajuste (_overfitting_). A lo largo del entrenamiento, puede que el error del entrenamiento vaya bajando poco a poco,
+pero al haber un sobreajuste, el modelo pierde capacidad de generalización y entonces el error de validación cada vez empeora más.
 
-La *parada temprana* (_early stopping_) se tata de una estrategia de entrenamiento en la que cada vez que mejora cierta cantidad el error de validación de cada batch, se guardan los parámetros del modelo. Estos parámetros se mantienen hasta que el error de validación del batch empieza a empeorar durante ciertas épocas. En caso de que mejore antes de que pasen las épocas definidas (parámetro _paciencia_), se sobreescriben los parámetros del modelo. En caso contrario, si tras varias épocas no ha habido una mejoría, se para el entrenamiento antes de acabarlo y se devuelven los parámetros del modelo que ha logrado obtener el menor error de validación. De esta forma, lo que se logra es que mejore la capacidad de generalización del modelo porque se minimiza el error de validación a la par de que se omite el entrenamiento que probablemente no vaya a afectar de forma positiva al modelo, haciendo así mucho más rápido el proceso de entrenamiento.
-
-Esta estrategia es popular por su simplicidad y su efectividad, así que se va a aplicar a la hora de entrenar modelos en este proyecto.
+La parada temprana (_early stopping_) se tata de una estrategia de entrenamiento en la que cada vez que mejora cierta cantidad el error de validación
+de cada batch, se guardan los parámetros del modelo. Estos parámetros se mantienen hasta que el error de validación del batch empieza a empeorar
+durante ciertas épocas. En caso de que mejore antes de que pasen las épocas definidas (parámetro _paciencia_), se sobreescriben los parámetros del modelo.
+En caso contrario, si tras varias épocas no ha habido una mejoría, se para el entrenamiento antes de acabarlo y se devuelven los parámetros del modelo
+que ha logrado obtener el menor error de validación. De esta forma, lo que se logra es que mejore la capacidad de generalización del modelo porque
+se minimiza el error de validación a la par de que se omite el entrenamiento que probablemente no vaya a afectar de forma positiva al modelo, haciendo
+así mucho más rápido el proceso de entrenamiento.
 
 == Validación
 <sec:metricasvalidacion>

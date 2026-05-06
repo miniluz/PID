@@ -24,7 +24,7 @@ es buena a la hora de reflejar la efectividad de nuestros modelos.
 
 *f1_macro: (base) 0.1606 -> 0.1008*
 
-Tomando en cuenta que los modelos pequeños han dado peores resultados como hemos visto en el entrenamiento de rejilla, es posible que
+Tomando en cuenta que los modelos pequeños han dado peores resultados como hemos visto en la búsqueda de rejilla, es posible que
 al desactiavr neuronas con el dropout el modelo carezca de la capacidad y o complejidad suficiente como para aprender a clasificar 
 correctamente las portadas de películas. Concretamente, como el dropout también afecta a la capa densa, que es muy relevante a la hora de 
 clasificar, puede que cause peor rendimiento general del modelo.

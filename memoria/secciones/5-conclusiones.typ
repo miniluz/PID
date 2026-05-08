@@ -17,8 +17,9 @@ que estas diferencias en los resultados de la métrica de la exactitud binaria s
 === Posibles causas
 
 En esta sección se investigan y analizan posibles motivos por el que ninguna de las técnicas aplicadas ha mejorado los resultados con respecto 
-al modelo base. Se analizará cada una de ellas por separado. También se compara el resultado de la métrica _f1_macro_ con el modelo base ya que consideramos que 
-es buena a la hora de reflejar la efectividad de nuestros modelos.
+al modelo base. Se analizará cada una de ellas por separado. También se compara el resultado de las métricas _f1_macro_ y _f1_micro_ con el modelo base ya que consideramos que es buena a la hora de reflejar la efectividad de nuestros modelos.
+
+Una red con mejor _macro_ funciona mejor para películas con cualquier etiqueta, una red con mejor _micro_ funciona mejor con una película con etiquetas más comunes (las que más abunden en los datos de entrenamiento).
 
 ==== Dropout
 

@@ -10,6 +10,14 @@ Una red neuronal artificial es un modelo computacional inspirado en el funcionam
 Está formada por unidades de cómputo básicas denominadas neuronas o nodos, organizadas en capas y conectadas entre sí
 mediante pesos aprendibles.
 
+#figure(
+  image("/figures/Redes_neuronales_esquema.png", width: 80%),
+  caption: [Esquema de una red neuronal 
+
+  Créditos: atriainnovation.com
+  ],
+)<fig:redes_neuronales_esquema>
+
 La pre-activación de un nodo es el producto escalar de sus entradas $x_1, x_2, dots, x_n$ con sus pesos
 $w_1, w_2, dots, w_n$ más un sesgo $b$, y su activación (su salida) es el resultado de aplicar una función de activación
 $sigma$ a la pre-activación: $sigma\(z\)$. Los pesos $w_i$ y el sesgo $b$ son los parámetros del nodo, y son lo que se
@@ -136,7 +144,10 @@ $|bold(K)|$ canales, $RR^(H' times W' times |bold(K)|$.
 
 #figure(
   image("/figures/capa_convolucional_diagrama.jpg", width: 70%),
-  caption: "Aplicando un filtro en una capa convolucional",
+  caption: [Aplicando un filtro en una capa convolucional
+
+  Créditos: _Deep learning for fluid velocity field estimation: A review_, Changdong Yu, Xiaojun Bi, Yiwei Fan
+  ],
 )<fig:diagrama_capa_convolucional>
 
 
@@ -161,9 +172,11 @@ resolución de la imagen.
 
 #figure(
   image("/figures/Pooling-Max-Pooling.png", width: 70%),
-  caption: "Ejemplo de pooling por máximo",
+  caption: [Ejemplo de pooling por máximo
+
+  Créditos: _Pooling (Max Pooling)_, The University of Science & Technology
+  ],
 )<fig:max_pooling>
-Créditos: _Pooling (Max Pooling)_, The University of Science & Technology
 
 Otro tipo es el _global average pooling_ o GAP @lin2013network_in_network. Este toma el promedio de todos los valores de la imagen por cada
 canal, reduciendo un tensor de $H times W times C$ a un vector unidimensional de tamaño $C$. Elimina completamente la dimensión
@@ -171,9 +184,12 @@ espacial. Generalmente se usa como alternativa a aplanar la última capa.
 
 #figure(
   image("/figures/Global-Avg-Pooling.png", width: 70%),
-  caption: "Ejemplo de GAP",
+  caption: [Ejemplo de GAP
+
+  Créditos: _Global Average Pooling_, Opengenus
+  ],
 )<fig:gap>
-Créditos: _Global Average Pooling_, Opengenus
+
 
 === Técnicas de regularización y normalización
 
@@ -214,9 +230,12 @@ algunos $k$ del banco de filtros $K$). Esto se denomina dropout espacial. La com
 
 #figure(
   image("/figures/dropout.png", width: 70%),
-  caption: "Ejemplo de dropout",
+  caption: [Ejemplo de dropout
+
+  Créditos: _Dropout_, Dot Net Tutorials
+  ],
 )<fig:dropout>
-Créditos: _Dropout_, Dot Net Tutorials
+
 
 En este proyecto se ha decidido asignar un $p$ de *0.1* para las capas convolucionales y de *0.4* para las capas densas.
 Esto se debe a las diferencias en número de parámetros de la capa y el riesgo de sobreajuste, por lo que está ampliamente consolidado
@@ -236,9 +255,12 @@ a la red resistente a estas transformaciones @book_deep_learning_goodfellow.
 
 #figure(
   image("/figures/data_aug.png", width: 70%),
-  caption: "Ejemplo de aumentación de datos con imagen del número 7",
+  caption: [Ejemplo de aumentación de datos con imagen del número 7
+
+  Créditos: _Embedding Rotate-and-Scale Net for Learning Invariant Features of Simple Images_; Zihang He, Xiang Ye, Zuguo He, Yong Li @he2019rotate_scale_net
+  ],
 )<fig:data_aug>
-Créditos: _Embedding Rotate-and-Scale Net for Learning Invariant Features of Simple Images_; Zihang He, Xiang Ye, Zuguo He, Yong Li @he2019rotate_scale_net
+
 
 
 En el caso de este proyecto, las aplicaciones concretas que se aplican son cambios de brillo y también _simetría especular_ o reflexión en el eje vertical.
@@ -276,7 +298,10 @@ Para el modelo al se va a aplicar weight decay, explicado en la @sec:wdecay, va 
 
 #figure(
   image("/figures/flujo_red_cnn_o1.png", width: 70%),
-  caption: "Esquema de flujo de red de una red neuronal convolucional para clasificación multiclase",
+  caption: [Esquema de flujo de red de una red neuronal convolucional para clasificación multiclase
+
+  Créditos: www.dragon1.com, Dragon1 
+  ],
 )<fig:flujo_cnn>
 
 En resumen, el flujo de una red neuronal convolucional para tareas multi-etiqueta es:
@@ -304,9 +329,11 @@ La búsqueda de cuadrícula o grid search es una técnica usada en el entrenamie
 
 #figure(
   image("/figures/grid_search.png", width: 40%),
-  caption: "Esquema para visualizar concepto de búsqueda de rejilla",
+  caption: [Esquema para visualizar concepto de búsqueda de rejilla
+  
+  Créditos: _Grid Search in Machine Learning_; "Binoy", de Scaler
+  ],
 )<fig:grid_search_img>
-Créditos: _Grid Search in Machine Learning_; "Binoy", de Scaler
 
 == Parada temprana
 <sec:earlystopping>
@@ -322,6 +349,14 @@ En caso contrario, si tras varias épocas no ha habido una mejoría, se para el 
 que ha logrado obtener el menor error de validación. De esta forma, lo que se logra es que mejore la capacidad de generalización del modelo porque
 se minimiza el error de validación a la par de que se omite el entrenamiento que probablemente no vaya a afectar de forma positiva al modelo, haciendo
 así mucho más rápido el proceso de entrenamiento.
+
+#figure(
+  image("/figures/early_stopping_diagram.png", width: 80%),
+  caption: [Grafica comparando el error y el número de iteraciones marcando la parada temprana 
+
+  Créditos: _What is Early Stopping in Deep Learning?_, "Cyborg"
+  ],
+)<fig:early_stopping_diagram>
 
 == Validación
 <sec:metricasvalidacion>

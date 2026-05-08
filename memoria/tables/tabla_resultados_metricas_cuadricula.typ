@@ -7,7 +7,7 @@
     columns: (4cm, auto, auto, auto, auto, auto, auto, auto, auto),
     // Alineamiento del texto. El alineamiento puede ser horizontal u hor+ver
     align: (center, left, left, left, left, left, left, left, left),
-    [Modelo], [exact match], [precision micro], [recall micro], [f1 micro], [precision macro], [recall macro], [f1 macro], [binary accuracy],
+    [Modelo], [C.E.], [P. mic.], [E. mic.], [F1 mic.], [P. mac.], [E. mac.], [F1 mac.], [E. B.],
     [conv2 filters32 dense1 neurons256], [0.0235], [0.6010], [0.0300], [0.0571], [0.2364], [0.0144], [0.0260], [0.9157],
     [conv2 filters32 dense1 neurons512], [0.0838], [0.5897], [0.1014], [0.1730], [0.3670], [0.0415], [0.0659], [0.9179],
     [conv2 filters32 dense2 neurons256], [0.0912], [0.5871], [0.1174], [0.1957], [0.4400], [0.0540], [0.0815], [0.9181],

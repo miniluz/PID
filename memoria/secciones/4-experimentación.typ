@@ -196,9 +196,29 @@ También me remito a la @sec:busquedacuadricula para explicar los nombres de los
 
 La siguiente tabla recopila los resultados de todos los modelos obtenidos en la búsqueda de cuadrícula realizada para hallar los hiperparámetros del modelo base.
 
+Leyenda:
+- C.E.    ->  Coincidencia exacta (exact match ratio)
+- P. mic. ->  Precisión (precision) *micro*
+- E. mic. ->  Exhaustividad (recall) *micro*
+- F1 mic. ->  Puntuación F1 (F1 score) *micro*
+- P. mac. ->  Precisión (precision) *macro*
+- E. mac. ->  Exhaustividad (recall) *macro*
+- F1 mac. ->  Puntuación F1 (F1 score) *macro*
+- E. B.   ->  Exactitud binaria (binary accuracy)
+
 #include "../tables/tabla_resultados_metricas_cuadricula.typ"
 
 La siguiente tabla recopila las métricas obtenidas de todos los modelos finales obtenidos a lo largo del proyecto (sin contar con los entrenados en la búsqueda en cuadrícula).
+
+Leyenda:
+- C.E.    ->  Coincidencia exacta (exact match ratio)
+- P. mic. ->  Precisión (precision) *micro*
+- E. mic. ->  Exhaustividad (recall) *micro*
+- F1 mic. ->  Puntuación F1 (F1 score) *micro*
+- P. mac. ->  Precisión (precision) *macro*
+- E. mac. ->  Exhaustividad (recall) *macro*
+- F1 mac. ->  Puntuación F1 (F1 score) *macro*
+- E. B.   ->  Exactitud binaria (binary accuracy)
 
 #include "../tables/tabla_resultados_metricas_finales.typ"
 

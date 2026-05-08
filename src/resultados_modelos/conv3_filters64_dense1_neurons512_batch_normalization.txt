@@ -9,11 +9,11 @@ BATCH NORMALIZATION
 
 
 === MÉTRICAS ===
-  exact_match: 0.1186
-  precision_micro: 0.5756
-  recall_micro: 0.1556
-  f1_micro: 0.2450
-  precision_macro: 0.4949
-  recall_macro: 0.0717
-  f1_macro: 0.1004
-  binary_accuracy: 0.9184
+  exact_match: 0.0557
+  precision_micro: 0.5684
+  recall_micro: 0.0716
+  f1_micro: 0.1272
+  precision_macro: 0.2770
+  recall_macro: 0.0309
+  f1_macro: 0.0507
+  binary_accuracy: 0.9163

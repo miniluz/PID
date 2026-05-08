@@ -9,11 +9,11 @@ WEIGHT DECAY
 
 
 === MÉTRICAS ===
-  exact_match: 0.1539
-  precision_micro: 0.6142
-  recall_micro: 0.1869
-  f1_micro: 0.2866
-  precision_macro: 0.5187
-  recall_macro: 0.0953
-  f1_macro: 0.1411
-  binary_accuracy: 0.9208
+  exact_match: 0.1494
+  precision_micro: 0.6130
+  recall_micro: 0.1788
+  f1_micro: 0.2769
+  precision_macro: 0.5149
+  recall_macro: 0.0886
+  f1_macro: 0.1314
+  binary_accuracy: 0.9205

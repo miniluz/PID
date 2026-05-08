@@ -8,7 +8,7 @@
 
 Una red neuronal artificial es un modelo computacional inspirado en el funcionamiento del sistema nervioso biológico.
 Está formada por unidades de cómputo básicas denominadas neuronas o nodos, organizadas en capas y conectadas entre sí
-mediante pesos aprendibles.
+mediante pesos aprendibles. Podemos ver un esquema de una red neuronal en la @fig:redes_neuronales_esquema.
 
 #figure(
   image("/figures/Redes_neuronales_esquema.png", width: 80%),
@@ -139,7 +139,9 @@ Donde $chevron.l chevron.r$ es el operador de convolución.
 
 La operación equivale a deslizar cada núcleo sobre la imagen y calcular el producto escalar en cada posición. Cada $k$
 resulta en una imagen propia, por lo que aplicar el banco de filtros $bold(K)$ resulta en otro tensor de imágenes con
-$|bold(K)|$ canales, $RR^(H' times W' times |bold(K)|$.
+$|bold(K)|$ canales, $RR^(H' times W' times |bold(K)|)$.
+
+Podemos ver en la @fig:diagrama_capa_convolucional un ejemplo de esto.
 
 
 #figure(
@@ -166,9 +168,10 @@ resolución) de la capa. Se insertan en la red convolucional con el objetivo de 
 
 Una de las más comunes es la del promedio. Los hiperparámetros son el paso $S$ y el tamaño de la ventana $T$, aunque
 generalmente coinciden. Cada $S$ pixeles, toma la ventana de $T times T$ pixeles alrededor del seleccionado y calculan
-el promedio, añadiendo un pixel a la salida. Otra muy común es la de máximo, que funciona de la misma forma pero con el
+el promedio, añadiendo un pixel a la salida. Otra muy común es la de máximo que, como podemos ver en la @fig:max_pooling, funciona de la misma forma pero con el
 máximo de la ventana en lugar del promedio. Hacer pooling por máximo o promedio con $S = T = 2$ reduce a la mitad la
 resolución de la imagen.
+
 
 #figure(
   image("/figures/Pooling-Max-Pooling.png", width: 70%),
@@ -178,7 +181,7 @@ resolución de la imagen.
   ],
 )<fig:max_pooling>
 
-Otro tipo es el _global average pooling_ o GAP @lin2013network_in_network. Este toma el promedio de todos los valores de la imagen por cada
+Otro tipo es el _global average pooling_ o GAP @lin2013network_in_network. Como se muestra en la @fig:gap, este toma el promedio de todos los valores de la imagen por cada
 canal, reduciendo un tensor de $H times W times C$ a un vector unidimensional de tamaño $C$. Elimina completamente la dimensión
 espacial. Generalmente se usa como alternativa a aplanar la última capa.
 
@@ -213,8 +216,16 @@ $
 ==== Dropout
 
 Consiste en que durante el entrenamiento, en cada caso de entrenamiento o mini-lote, se desactiva aleatoriamente una
-fracción $p$ de nodos de una capa convolucional. Esto fuerza a la red a aprender representaciones redundantes y robustas
+fracción $p$ de nodos de una capa convolucional. Podemos ver una representación de esto mismo en la @fig:dropout. Esto fuerza a la red a aprender representaciones redundantes y robustas
 @book_deep_learning_goodfellow.
+
+#figure(
+  image("/figures/dropout.png", width: 70%),
+  caption: [Ejemplo de dropout
+
+  Créditos: _Dropout_, Dot Net Tutorials
+  ],
+)<fig:dropout>
 
 Ya que únicamente quedan $(1 - p)$ nodos en el entrenamiento, sus activaciones tienden a crecer por un factor de
 $1 / (1-p)$. Para compensar esto, hay dos opciones:
@@ -228,15 +239,6 @@ inferencia y facilita realizar entrenamiento con otros parámetros, como por eje
 El dropout también se puede aplicar a las capas convolucionales, desactivando canales enteros (o lo que es lo mismo,
 algunos $k$ del banco de filtros $K$). Esto se denomina dropout espacial. La compensación se realiza de la misma manera.
 
-#figure(
-  image("/figures/dropout.png", width: 70%),
-  caption: [Ejemplo de dropout
-
-  Créditos: _Dropout_, Dot Net Tutorials
-  ],
-)<fig:dropout>
-
-
 En este proyecto se ha decidido asignar un $p$ de *0.1* para las capas convolucionales y de *0.4* para las capas densas.
 Esto se debe a las diferencias en número de parámetros de la capa y el riesgo de sobreajuste, por lo que está ampliamente consolidado
 que $p$ para las capas convolucionales debe ser bajo (entre 0.1 y 0.2) y para las capas densas más alto (entre 0.3 y 0.5).
@@ -249,7 +251,7 @@ pesos grandes, tanto en las capas convolucionales como en las densas @book_deep_
 
 ==== Aumentación de los datos
 
-Consiste en aplicar transformaciones aleatorias (rotación, recorte, espejo, cambio de brillo, cambio de saturación,
+Consiste, como se puede apreciar en la @fig:data_aug, en aplicar transformaciones aleatorias (rotación, recorte, espejo, cambio de brillo, cambio de saturación,
 etc.) a las imágenes durante el entrenamiento, aumentando artificialmente la diversidad del conjunto de datos y haciendo
 a la red resistente a estas transformaciones @book_deep_learning_goodfellow.
 
@@ -296,15 +298,7 @@ Para el modelo al se va a aplicar weight decay, explicado en la @sec:wdecay, va 
 
 == Flujo de la red
 
-#figure(
-  image("/figures/flujo_red_cnn_o1.png", width: 70%),
-  caption: [Esquema de flujo de red de una red neuronal convolucional para clasificación multiclase
-
-  Créditos: www.dragon1.com, Dragon1 
-  ],
-)<fig:flujo_cnn>
-
-En resumen, el flujo de una red neuronal convolucional para tareas multi-etiqueta es:
+Como vemos en la @fig:flujo_cnn, el flujo de una red neuronal convolucional para tareas multi-etiqueta es:
 
 + Se toma de entrada la imagen, representada como un tensor $bold(X) in RR^(H times W times C)$.
 + Se extraen las características con el bloque de convolución, con el pooling haciendo que sean cada vez más abstractas.
@@ -314,6 +308,14 @@ En resumen, el flujo de una red neuronal convolucional para tareas multi-etiquet
 + Se aplica una capa densa de $|L|$ nodos de salida (número de etiquetas), donde cada nodo representa una etiqueta
   posible en el rango $(-inf, +inf)$.
 + Se aplica la función de activación sigmoide para reducir al rango $(0,1)$ (p. ej. $(0.01, 0.87, 0.2)$).
+
+#figure(
+  image("/figures/flujo_red_cnn_o1.png", width: 70%),
+  caption: [Esquema de flujo de red de una red neuronal convolucional para clasificación multiclase
+
+  Créditos: www.dragon1.com, Dragon1 
+  ],
+)<fig:flujo_cnn>
 
 Luego, en el entrenamiento:
 + Se calcula el error (media de entropías cruzadas individuales) de la salida obtenida con la salida esperada (p. ej.
@@ -325,7 +327,7 @@ del nodo correspondiente lo supera.
 
 == Búsqueda de cuadrícula o rejilla
 
-La búsqueda de cuadrícula o grid search es una técnica usada en el entrenamiento de redes neuronales para explorar los resultados con diferentes combinaciones de hiperparámetros. El usuario selecciona una cantidad de hiperparámetros que probar de diferentes tipos, y a continuación el algoritmo entrena y prueba un modelo por cada una de las combinaciones posibles. El experimento que tras probarlo proporcione los mejores resultados es el que se considerará que tiene los mejores hiperparámetros.
+La búsqueda de cuadrícula o grid search es una técnica usada en el entrenamiento de redes neuronales para explorar los resultados con diferentes combinaciones de hiperparámetros. El usuario selecciona una cantidad de hiperparámetros que probar de diferentes tipos, y a continuación el algoritmo entrena y prueba un modelo por cada una de las combinaciones posibles, como se refleja en la @fig:grid_search_img. El experimento que tras probarlo proporcione los mejores resultados es el que se considerará que tiene los mejores hiperparámetros.
 
 #figure(
   image("/figures/grid_search.png", width: 40%),
@@ -348,10 +350,10 @@ durante ciertas épocas. En caso de que mejore antes de que pasen las épocas de
 En caso contrario, si tras varias épocas no ha habido una mejoría, se para el entrenamiento antes de acabarlo y se devuelven los parámetros del modelo
 que ha logrado obtener el menor error de validación. De esta forma, lo que se logra es que mejore la capacidad de generalización del modelo porque
 se minimiza el error de validación a la par de que se omite el entrenamiento que probablemente no vaya a afectar de forma positiva al modelo, haciendo
-así mucho más rápido el proceso de entrenamiento.
+así mucho más rápido el proceso de entrenamiento. Podemos visualizar en la @fig:early_stopping_diagram cómo parar el entrenamiento antes de que baje al máximo el error de entrenamiento puede mejorar los resultados en la validación.
 
 #figure(
-  image("/figures/early_stopping_diagram.png", width: 80%),
+  image("/figures/early_stopping_diagram.png", width: 60%),
   caption: [Grafica comparando el error y el número de iteraciones marcando la parada temprana 
 
   Créditos: _What is Early Stopping in Deep Learning?_, "Cyborg"

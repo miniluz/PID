@@ -222,8 +222,20 @@ Leyenda:
 
 #include "../tables/tabla_resultados_metricas_finales.typ"
 
-La siguiente gráfica representa, para el modelo con el que mejores resultados hemos conseguido, la evolución de la precisión y la pérdida 
-durante el entrenamiento.
+La @fig:grafica_f1_macro y la @fig:grafica_f1_micro representan de forma visual las métricas puntuación f1 macro y puntuación f1 micro de todos los modelos finales.
+
+#figure(
+  image("/figures/f1_macro_model_graph.png", width: 80%),
+  caption: "Gráfica que representa la puntuación f1 macro de los modelos",
+)<fig:grafica_f1_macro>
+
+#figure(
+  image("/figures/f1_micro_model_graph.png", width: 80%),
+  caption: "Gráfica que representa la puntuación f1 micro de los modelos",
+)<fig:grafica_f1_micro>
+
+En la @fig:grafica_modelo_base tenemos, para el modelo con el que mejores resultados hemos conseguido, la evolución de la precisión y la pérdida 
+durante el entrenamiento. 
 
 #figure(
   image("/figures/grafico_modelo_base.png", width: 80%),

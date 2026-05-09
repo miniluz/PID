@@ -38,3 +38,66 @@ la técnica usada.
 Cabe destacar que algunas de las funcionalidades que utiliza la demo únicamente está disponible en navegadores modernos.
 Se recomienda usar una versión actualizada de Chrome o Firefox para maximizar la funcionalidad.
 
+== GitHub
+
+El enlace al repositorio de GitHub del proyecto es #link("https://github.com/miniluz/PID"). 
+
+== Autoevaluación
+
+*Ángel Sánchez Ruiz:*
+
+#figure(
+  table(
+    columns: (auto, auto),
+    align: (right, center),
+    [Comprensión y dominio],                [0.65],
+    [Exposición didáctica],                 [0.65],
+    [Integración del equipo],               [1],
+    [Objetivos],                            [0.65],
+    [Aspectos didácticos],                  [1],
+    [Experimentación y conclusiones],       [1],
+    [Contenidos],                           [1],
+    [Divulgación de los contenidos],        [0.65],
+    [Bibliografía y recursos científicos],  [1],
+  ),
+  caption: "Autoevaluación Ángel",
+)<table:autoevaluacion_angel>
+
+
+*Javier Ignacio Milá de la Roca Dos Santos:*
+
+#figure(
+  table(
+    columns: (auto, auto),
+    align: (right, center),
+    [Comprensión y dominio],                [],
+    [Exposición didáctica],                 [],
+    [Integración del equipo],               [],
+    [Objetivos],                            [],
+    [Aspectos didácticos],                  [],
+    [Experimentación y conclusiones],       [],
+    [Contenidos],                           [],
+    [Divulgación de los contenidos],        [],
+    [Bibliografía y recursos científicos],  [],
+  ),
+  caption: "Autoevaluación Javier",
+)<table:autoevaluacion_javier>
+
+*César Martínez Van Der Looven:*
+
+#figure(
+  table(
+    columns: (auto, auto),
+    align: (right, center),
+    [Comprensión y dominio],                [],
+    [Exposición didáctica],                 [],
+    [Integración del equipo],               [],
+    [Objetivos],                            [],
+    [Aspectos didácticos],                  [],
+    [Experimentación y conclusiones],       [],
+    [Contenidos],                           [],
+    [Divulgación de los contenidos],        [],
+    [Bibliografía y recursos científicos],  [],
+  ),
+  caption: "Autoevaluación César",
+)<table:autoevaluacion_cesar>

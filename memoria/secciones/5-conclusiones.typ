@@ -89,6 +89,10 @@ generalmente unas 2 horas, así que consideramos que el tamaño era apropiado. N
 posible entrenar redes más grandes y probar búsquedas de cuadrícula con más combinaciones de hiperparámetros de 
 forma que exploremos muchos más modelos, potencialmente encontrando un modelo con resultados aún mejores.
 
+por último, hay muchos dramas y muchos documentales en los datos de entrenamiento por lo que los modelos tienen a 
+predecir la mayoría de cosas como dramas y documentales. Se podría haber entrenado haciedo más probable que 
+aparezcan los géneros más raros para que no haya esta preferencia por los géneros comunes.
+
 == Lecciones aprendidas
 
 En este proyecto hemos podido entender la importancia que tiene la investigación de otras fuentes a la hora de 

@@ -76,3 +76,28 @@ Esto a sido por dos motivos principales:
 - El tamaño de la búsqueda de cuadrícula tuvo que ser recortado porque el entrenamiento tardaba más de lo previsto. 
 Se pretendía probar con 2, 3, y 4 capas convolucionales, pero sólo se ha hecho con 2 y 3.
 - Se planeaba entrenar un modelo final aplicando todas las técnicas que diesen buenos resultados, pero como ninguna de las técnicas aplicadas ha mejorado ninguna métrica con respecto al modelo base, este último modelo ha sido omitido.
+
+== Propuestas de mejora y extensión
+
+Como no se ha logrado ningún modelo claramente mejor con ninguna de las técnicas, se podrían probar más técnicas. 
+Esto sería cuestión de investigar otras técnicas que encajen con lo que se pretende hacer en el proyecto y entrenar 
+modelos con esa técnica, viendo si mejora o no. Una vez se obtengan varios modelos que sí que mejoran, entonces 
+hacer el modelo combinado con las mejores técnicas que se pretendía crear al principio y analizar sus resultados.
+
+Otro punto por donde se podría expandir el proyecto sería en el tamaño de la red. Los modelos entrenados han tardado 
+generalmente unas 2 horas, así que consideramos que el tamaño era apropiado. No obstante, con mejores recursos sería 
+posible entrenar redes más grandes y probar búsquedas de cuadrícula con más combinaciones de hiperparámetros de 
+forma que exploremos muchos más modelos, potencialmente encontrando un modelo con resultados aún mejores.
+
+== Lecciones aprendidas
+
+En este proyecto hemos podido entender la importancia que tiene la investigación de otras fuentes a la hora de 
+escribir nosotros mismos documentos de investigación.
+
+También hemos aprendido que es importante tener "planes B", en nuestro caso cometimos el error de contar con que al 
+menos dos de las técnicas aplicadas a los modelos iban a dar resultados claramente positivos.
+
+Por último, hemos notado que hemos tenido una buena comunicación en general a lo largo del proyecto, lo cual creemos 
+que nos ha beneficiado bastante. Es cierto que siendo un grupo de 3 personas no ha sido demasiado difícil, pero el 
+proyecto probablemente habría sido desastroso en caso de que la comunicación fallara porque habría una gran falta de 
+coordinación. 

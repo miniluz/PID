@@ -1,22 +1,23 @@
 = Experimentación
 <sec:cuatro>
 
-== Selección de hiperparámetros
+== Selección del modelo base
 <sec_seleccion_hiperparametros>
 
-Se ha realizado la búsqueda en cuadrícula especificada en la sección anterior. Originalmente se tenía pensado realizar la
-búsqueda de cuadrícula con 2, 3 y 4 capas convolucionales. Sin embargo, tras notar que no habría suficiente tiempo para
-completarla, se decidió sólo entrenar modelos con 2 y 3 capas convolucionales.
+Se ha realizado la búsqueda en cuadrícula especificada en la sección anterior. Originalmente se tenía pensado realizar
+la búsqueda de cuadrícula con 2, 3 y 4 capas convolucionales. Sin embargo, tras notar que no habría suficiente tiempo
+para completarla, se decidió sólo entrenar modelos con 2 y 3 capas convolucionales.
 
-Resultó que la combinación con los mejores resultados era de 3 capas convolucionales, con la primera capa con 64 filtros,
-con dos capas densas, con la primera teniendo 512 neuronas.
+=== Resultados
 
-== Definición de modelos
+La siguiente tabla recopila los resultados de todos los modelos obtenidos en la búsqueda de cuadrícula realizada para
+hallar los hiperparámetros del modelo base.
 
-En esta sección se mostrará el código de tensorflow que se encarga de definir los diferentes modelos entrenados para así poder ver los
- detalles de estos con todos los parámetros.
+#include "../tables/tabla_resultados_metricas_cuadricula.typ"
 
-=== Modelo base
+Resultó que la combinación con los mejores resultados era de 3 capas convolucionales, con la primera capa con 64
+filtros, con una capa densa, con la primera teniendo 512 neuronas. Su código equivalente en TensorFlow se puede ver en
+el @cod:modelo_base.
 
 #figure(
   ```python
@@ -36,16 +37,22 @@ En esta sección se mostrará el código de tensorflow que se encarga de definir
         layers.GlobalAveragePooling2D(),
 
         layers.Dense(512, activation='relu'),
-        layers.Dense(256, activation='relu'),
-        
+
         layers.Dense(len(genre_columns), activation='sigmoid', dtype='float32')
     ]
   )
   ```,
   caption: "Definición modelo base",
-)<cod:python>
+)<cod:modelo_base>
 
-=== Modelo dropout
+
+== Modelos con mejoras
+
+A continuación se muestra el código usado para definir los modelos con mejoras:
+- El modelo con dropout en el @cod:modelo_dropout.
+- El modelo con aumentación de datos en el @cod:modelo_aumentacion.
+- El modelo con normalización de lotes en el @cod:modelo_normalizacion.
+- El modelo con decaimiento de pesos en el @cod:modelo_decaimiento.
 
 #figure(
   ```python
@@ -70,17 +77,12 @@ En esta sección se mostrará el código de tensorflow que se encarga de definir
         layers.Dense(512, activation='relu'),
         layers.Dropout(0.4), # Standard for dense is 0.3-0.5
 
-        layers.Dense(256, activation='relu'),
-        layers.Dropout(0.4),
-
         layers.Dense(len(genre_columns), activation='sigmoid', dtype='float32')
     ]
   )
   ```,
   caption: "Definición modelo con dropout",
-)<cod:python>
-
-=== Modelo aumentación de datos
+)<cod:modelo_dropout>
 
 #figure(
   ```python
@@ -104,15 +106,12 @@ En esta sección se mostrará el código de tensorflow que se encarga de definir
         layers.GlobalAveragePooling2D(),
 
         layers.Dense(512, activation='relu'),
-        layers.Dense(256, activation='relu'),
         layers.Dense(len(genre_columns), activation='sigmoid', dtype='float32'),
     ]
   )
   ```,
   caption: "Definición modelo con aumentación de datos",
-)<cod:python>
-
-=== Modelo normalización de lotes
+)<cod:modelo_aumentacion>
 
 #figure(
   ```python
@@ -141,18 +140,12 @@ En esta sección se mostrará el código de tensorflow que se encarga de definir
         layers.BatchNormalization(),
         layers.ReLU(),
 
-        layers.Dense(256, activation=None),
-        layers.BatchNormalization(),
-        layers.ReLU(),
-
         layers.Dense(len(genre_columns), activation='sigmoid', dtype='float32')
     ]
   )
   ```,
   caption: "Definición modelo con normalización de lotes",
-)<cod:python>
-
-=== Modelo decaimiento de pesos
+)<cod:modelo_normalizacion>
 
 #figure(
   ```python
@@ -173,7 +166,6 @@ En esta sección se mostrará el código de tensorflow que se encarga de definir
     layers.GlobalAveragePooling2D(),
 
     layers.Dense(512, activation='relu'),
-    layers.Dense(256, activation='relu'),
 
     layers.Dense(len(genre_columns), activation='sigmoid', dtype='float32')
   ])
@@ -185,44 +177,48 @@ En esta sección se mostrará el código de tensorflow que se encarga de definir
   )
   ```,
   caption: "Definición modelo decaimiento de pesos",
-)<cod:python>
-
+)<cod:modelo_decaimiento>
 
 == Resultados obtenidos
 
-Para facilitar la lectura de estos datos, hago referencia a la @sec:metricasvalidacion en la que se explican las distintas métricas usadas para la validación y evaluación de los modelos.
+Para facilitar la lectura de estos datos, hago referencia a la @sec:metricasvalidacion en la que se explican las
+distintas métricas usadas para la validación y evaluación de los modelos.
 
-También me remito a la @sec:busquedacuadricula para explicar los nombres de los modelos. Sus nombres definen la estructura de este. 
+También me remito a la @sec:busquedacuadricula para explicar los nombres de los modelos. Sus nombres definen la
+estructura de este.
 
-La siguiente tabla recopila los resultados de todos los modelos obtenidos en la búsqueda de cuadrícula realizada para hallar los hiperparámetros del modelo base.
+La siguiente tabla recopila los resultados de todos los modelos obtenidos en la búsqueda de cuadrícula realizada para
+hallar los hiperparámetros del modelo base.
 
 Leyenda:
-- C.E.    ->  Coincidencia exacta (exact match ratio)
-- P. mic. ->  Precisión (precision) *micro*
-- E. mic. ->  Exhaustividad (recall) *micro*
-- F1 mic. ->  Puntuación F1 (F1 score) *micro*
-- P. mac. ->  Precisión (precision) *macro*
-- E. mac. ->  Exhaustividad (recall) *macro*
-- F1 mac. ->  Puntuación F1 (F1 score) *macro*
-- E. B.   ->  Exactitud binaria (binary accuracy)
+- C.E. -> Coincidencia exacta (exact match ratio)
+- P. mic. -> Precisión (precision) *micro*
+- E. mic. -> Exhaustividad (recall) *micro*
+- F1 mic. -> Puntuación F1 (F1 score) *micro*
+- P. mac. -> Precisión (precision) *macro*
+- E. mac. -> Exhaustividad (recall) *macro*
+- F1 mac. -> Puntuación F1 (F1 score) *macro*
+- E. B. -> Exactitud binaria (binary accuracy)
 
 #include "../tables/tabla_resultados_metricas_cuadricula.typ"
 
-La siguiente tabla recopila las métricas obtenidas de todos los modelos finales obtenidos a lo largo del proyecto (sin contar con los entrenados en la búsqueda en cuadrícula).
+La siguiente tabla recopila las métricas obtenidas de todos los modelos finales obtenidos a lo largo del proyecto (sin
+contar con los entrenados en la búsqueda en cuadrícula).
 
 Leyenda:
-- C.E.    ->  Coincidencia exacta (exact match ratio)
-- P. mic. ->  Precisión (precision) *micro*
-- E. mic. ->  Exhaustividad (recall) *micro*
-- F1 mic. ->  Puntuación F1 (F1 score) *micro*
-- P. mac. ->  Precisión (precision) *macro*
-- E. mac. ->  Exhaustividad (recall) *macro*
-- F1 mac. ->  Puntuación F1 (F1 score) *macro*
-- E. B.   ->  Exactitud binaria (binary accuracy)
+- C.E. -> Coincidencia exacta (exact match ratio)
+- P. mic. -> Precisión (precision) *micro*
+- E. mic. -> Exhaustividad (recall) *micro*
+- F1 mic. -> Puntuación F1 (F1 score) *micro*
+- P. mac. -> Precisión (precision) *macro*
+- E. mac. -> Exhaustividad (recall) *macro*
+- F1 mac. -> Puntuación F1 (F1 score) *macro*
+- E. B. -> Exactitud binaria (binary accuracy)
 
 #include "../tables/tabla_resultados_metricas_finales.typ"
 
-La @fig:grafica_f1_macro y la @fig:grafica_f1_micro representan de forma visual las métricas puntuación f1 macro y puntuación f1 micro de todos los modelos finales.
+La @fig:grafica_f1_macro y la @fig:grafica_f1_micro representan de forma visual las métricas puntuación f1 macro y
+puntuación f1 micro de todos los modelos finales.
 
 #figure(
   image("/figures/f1_macro_model_graph.png", width: 80%),
@@ -234,8 +230,8 @@ La @fig:grafica_f1_macro y la @fig:grafica_f1_micro representan de forma visual 
   caption: "Gráfica que representa la puntuación f1 micro de los modelos",
 )<fig:grafica_f1_micro>
 
-En la @fig:grafica_modelo_base tenemos, para el modelo con el que mejores resultados hemos conseguido, la evolución de la precisión y la pérdida 
-durante el entrenamiento. 
+En la @fig:grafica_modelo_base tenemos, para el modelo con el que mejores resultados hemos conseguido, la evolución de
+la precisión y la pérdida durante el entrenamiento.
 
 #figure(
   image("/figures/grafico_modelo_base.png", width: 80%),

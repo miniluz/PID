@@ -24,7 +24,6 @@
     [conv3 filters64 dense1 neurons512], [0.1694], [0.6224], [0.2054], [0.3088], [0.6372], [0.1106], [0.1606], [0.9157],
     [conv3 filters64 dense2 neurons256], [0.1446], [0.6181], [0.1723], [0.2695], [0.4954], [0.0824], [0.1216], [-],
     [conv3 filters64 dense2 neurons512], [0.1494], [0.6162], [0.1824], [0.2815], [0.4889], [0.0893], [0.1328], [0.9141],
-    [conv4 filters64 dense2 neurons512], [0.1304], [0.6364], [0.1504], [0.2434], [0.5682], [0.0775], [0.1158], [-],
   ),
   caption: "Resultados de los modelos entrenados en la búsqueda de cuadrícula",
 )<table:resultados_metricas_cuadricula>

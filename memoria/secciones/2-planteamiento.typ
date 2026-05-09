@@ -164,7 +164,7 @@ Los hiperparámetros de la capa son:
 === Capa de pooling
 
 Una capa de _pooling_ agrupa la información espacial en regiones locales, reduciendo la dimensión (es decir, la
-resolución) de la capa. Se insertan en la red convolucional con el objetivo de ir reduciendo el tamaño de la imagen.
+resolución) de la imagen. Se insertan en la red convolucional con el objetivo de ir reduciendo el tamaño de la imagen.
 
 Una de las más comunes es la del promedio. Los hiperparámetros son el paso $S$ y el tamaño de la ventana $T$, aunque
 generalmente coinciden. Cada $S$ pixeles, toma la ventana de $T times T$ pixeles alrededor del seleccionado y calculan
@@ -293,7 +293,7 @@ Adam o Adaptative Momentum Estimation es un optimizador robusto muy usado en la 
 
 ==== AdamW
 
-Para el modelo al se va a aplicar weight decay, explicado en la @sec:wdecay, va a usarse una variante de Adam conocida como AdamW @loshchilov2017decoupled. Este algoritmo es más actual que Adam y también es bastante usado para lograr una convergencia estable y un buen rendimiento en redes complejas. La ventaja que supone frente a Adam es que, al usar decaimiento de pesos, mejora la generalización del modelo. 
+Para el modelo al que se le va a aplicar weight decay, explicado en la @sec:wdecay, va a usarse una variante de Adam conocida como AdamW @loshchilov2017decoupled. Este algoritmo es más actual que Adam y también es bastante usado para lograr una convergencia estable y un buen rendimiento en redes complejas. La ventaja que supone frente a Adam es que, al usar decaimiento de pesos, mejora la generalización del modelo. 
 
 
 == Flujo de la red

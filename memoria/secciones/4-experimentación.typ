@@ -8,10 +8,26 @@ Se ha realizado la búsqueda en cuadrícula especificada en la sección anterior
 la búsqueda de cuadrícula con 2, 3 y 4 capas convolucionales. Sin embargo, tras notar que no habría suficiente tiempo
 para completarla, se decidió sólo entrenar modelos con 2 y 3 capas convolucionales.
 
-=== Resultados
+=== Resultados modelo base
+
+Para facilitar la lectura de estos datos, hago referencia a la @sec:metricasvalidacion en la que se explican las
+distintas métricas usadas para la validación y evaluación de los modelos.
+
+También me remito a la @sec:busquedacuadricula para explicar los nombres de los modelos. Sus nombres definen la
+estructura de este.
 
 La siguiente tabla recopila los resultados de todos los modelos obtenidos en la búsqueda de cuadrícula realizada para
 hallar los hiperparámetros del modelo base.
+
+Leyenda:
+- C.E. -> Coincidencia exacta (exact match ratio)
+- P. mic. -> Precisión (precision) *micro*
+- E. mic. -> Exhaustividad (recall) *micro*
+- F1 mic. -> Puntuación F1 (F1 score) *micro*
+- P. mac. -> Precisión (precision) *macro*
+- E. mac. -> Exhaustividad (recall) *macro*
+- F1 mac. -> Puntuación F1 (F1 score) *macro*
+- E. B. -> Exactitud binaria (binary accuracy)
 
 #include "../tables/tabla_resultados_metricas_cuadricula.typ"
 
@@ -179,28 +195,10 @@ A continuación se muestra el código usado para definir los modelos con mejoras
   caption: "Definición modelo decaimiento de pesos",
 )<cod:modelo_decaimiento>
 
-== Resultados obtenidos
+=== Resultados mejoras
 
 Para facilitar la lectura de estos datos, hago referencia a la @sec:metricasvalidacion en la que se explican las
 distintas métricas usadas para la validación y evaluación de los modelos.
-
-También me remito a la @sec:busquedacuadricula para explicar los nombres de los modelos. Sus nombres definen la
-estructura de este.
-
-La siguiente tabla recopila los resultados de todos los modelos obtenidos en la búsqueda de cuadrícula realizada para
-hallar los hiperparámetros del modelo base.
-
-Leyenda:
-- C.E. -> Coincidencia exacta (exact match ratio)
-- P. mic. -> Precisión (precision) *micro*
-- E. mic. -> Exhaustividad (recall) *micro*
-- F1 mic. -> Puntuación F1 (F1 score) *micro*
-- P. mac. -> Precisión (precision) *macro*
-- E. mac. -> Exhaustividad (recall) *macro*
-- F1 mac. -> Puntuación F1 (F1 score) *macro*
-- E. B. -> Exactitud binaria (binary accuracy)
-
-#include "../tables/tabla_resultados_metricas_cuadricula.typ"
 
 La siguiente tabla recopila las métricas obtenidas de todos los modelos finales obtenidos a lo largo del proyecto (sin
 contar con los entrenados en la búsqueda en cuadrícula).

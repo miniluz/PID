@@ -9,11 +9,11 @@ DATA AUGMENTATION
 
 
 === MÉTRICAS ===
-  exact_match: 0.1452
-  precision_micro: 0.6165
-  recall_micro: 0.1795
-  f1_micro: 0.2780
-  precision_macro: 0.5483
-  recall_macro: 0.0853
-  f1_macro: 0.1258
-  binary_accuracy: 0.9207
+  exact_match: 0.1428
+  precision_micro: 0.6139
+  recall_micro: 0.1777
+  f1_micro: 0.2756
+  precision_macro: 0.5025
+  recall_macro: 0.0881
+  f1_macro: 0.1315
+  binary_accuracy: 0.9205

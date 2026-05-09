@@ -25,11 +25,17 @@
 ]
 
 #abstract[
-  El resumen debe tener como máximo 250 palabras y ser un único párrafo. Debe describir lo más fielmente posible el
-  trabajo realizado.
+  En este trabajo se investiga cómo de efectiva puede ser una red neuronal convolucional (o CNN) a la hora de
+  predecir los géneros de una película a partir de su portada. Esto se denomina un problema de clasificación multi 
+  etiqueta, ya que una pelíucla puede tener varios géneros simultáneamente. Para ello, se han entrenado distintos 
+  modelos aplicando diferentes técnicas para mejorar su eficacia. Para el entrenamiento de los modelo se ha usado 
+  una base de datos con más de 400.000 entradas. Todo esto se ha hecho apoyandose en una base teórica que se 
+  desarrolla en esta misma memoria. Al final de la memoria se encuentra unas conclusiones y análisis de los 
+  resultados. Por último, también se ha desarrollado una interfaz con la que probar de forma sencilla los modelos 
+  finales.
 
   #v(1em)
-  *Palabras clave:* PID, instrucciones, trabajo en grupo, imagen digital, CNN.
+  *Palabras clave:* Redes neuronales convolucionales (CNN), clasificación multi-etiqueta, aprendizaje profundo, pósters de películas, TensorFlow, normalización por lotes, dropout, aumentación de datos, decaimiento de pesos, búsqueda de cuadrícula, pooling, capa densa, parada temprana, entrenamiento, validación, métricas.
 ]
 
 #include "secciones/1-introducción.typ"

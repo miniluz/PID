@@ -9,11 +9,11 @@ DROPOUT
 
 
 === MÉTRICAS ===
-  exact_match: 0.1265
-  precision_micro: 0.6200
-  recall_micro: 0.1464
-  f1_micro: 0.2369
-  precision_macro: 0.4761
-  recall_macro: 0.0682
-  f1_macro: 0.1008
-  binary_accuracy: 0.9197
+  exact_match: 0.1228
+  precision_micro: 0.6314
+  recall_micro: 0.1444
+  f1_micro: 0.2351
+  precision_macro: 0.5006
+  recall_macro: 0.0686
+  f1_macro: 0.1033
+  binary_accuracy: 0.9200

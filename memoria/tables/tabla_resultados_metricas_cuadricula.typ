@@ -7,7 +7,7 @@
     columns: (4cm, auto, auto, auto, auto, auto, auto, auto, auto),
     // Alineamiento del texto. El alineamiento puede ser horizontal u hor+ver
     align: (center, left, left, left, left, left, left, left, left),
-    [Modelo], [exact match], [precision micro], [recall micro], [f1 micro], [precision macro], [recall macro], [f1 macro], [binary accuracy],
+    [Modelo], [C.E.], [P. mic.], [E. mic.], [F1 mic.], [P. mac.], [E. mac.], [F1 mac.], [E. B.],
     [conv2 filters32 dense1 neurons256], [0.0235], [0.6010], [0.0300], [0.0571], [0.2364], [0.0144], [0.0260], [0.9157],
     [conv2 filters32 dense1 neurons512], [0.0838], [0.5897], [0.1014], [0.1730], [0.3670], [0.0415], [0.0659], [0.9179],
     [conv2 filters32 dense2 neurons256], [0.0912], [0.5871], [0.1174], [0.1957], [0.4400], [0.0540], [0.0815], [0.9181],
@@ -22,8 +22,8 @@
     [conv3 filters32 dense2 neurons512], [0.1506], [0.6307], [0.1789], [0.2788], [0.5389], [0.0922], [0.1368], [0.9102],
     [conv3 filters64 dense1 neurons256], [0.1407], [0.6008], [0.1760], [0.2723], [0.4818], [0.0903], [0.1304], [0.9117],
     [conv3 filters64 dense1 neurons512], [0.1694], [0.6224], [0.2054], [0.3088], [0.6372], [0.1106], [0.1606], [0.9157],
+    [conv3 filters64 dense2 neurons256], [0.1446], [0.6181], [0.1723], [0.2695], [0.4954], [0.0824], [0.1216], [-],
     [conv3 filters64 dense2 neurons512], [0.1494], [0.6162], [0.1824], [0.2815], [0.4889], [0.0893], [0.1328], [0.9141],
-    [conv4 filters64 dense2 neurons512], [0.1304], [0.6364], [0.1504], [0.2434], [0.5682], [0.0775], [0.1158], [-],
   ),
   caption: "Resultados de los modelos entrenados en la búsqueda de cuadrícula",
 )<table:resultados_metricas_cuadricula>

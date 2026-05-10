@@ -14,3 +14,5 @@ python src/main.py # dentro del venv, no hace falta hacer uv run
 
 jupyter notebook # empezar un cuaderno de jupyter
 ```
+
+En la carpeta /src se encuentran varios archivos .ipynb con los distintos modelos y uno general.

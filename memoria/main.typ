@@ -18,7 +18,7 @@
 
 #align(center)[
   #block(text(weight: "bold", size: 1.5em)[
-    Juzgando por la porta: predicción de géneros de una película con su póster
+    Juzgando por la portada: predicción de géneros de una película con su póster
   ])
   #v(1em)
   #text(size: 1.2em)[J. Milá de la Roca, Á. Sánchez, C. Martinez]

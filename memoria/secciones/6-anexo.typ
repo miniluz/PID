@@ -40,7 +40,7 @@ Se recomienda usar una versión actualizada de Chrome o Firefox para maximizar l
 
 == GitHub
 
-El enlace al repositorio de GitHub del proyecto es #link("https://github.com/miniluz/PID"). 
+El enlace al repositorio de GitHub del proyecto es #link("https://github.com/miniluz/PID").
 
 == Autoevaluación
 
@@ -50,17 +50,17 @@ El enlace al repositorio de GitHub del proyecto es #link("https://github.com/min
   table(
     columns: (auto, auto),
     align: (right, center),
-    [Comprensión y dominio],                [0.65],
-    [Exposición didáctica],                 [0.65],
-    [Integración del equipo],               [1],
-    [Objetivos],                            [0.65],
-    [Aspectos didácticos],                  [1],
-    [Experimentación y conclusiones],       [1],
-    [Contenidos],                           [1],
-    [Divulgación de los contenidos],        [0.65],
-    [Bibliografía y recursos científicos],  [1],
+    [Comprensión y dominio], [0.65],
+    [Exposición didáctica], [0.65],
+    [Integración del equipo], [1],
+    [Objetivos], [0.65],
+    [Aspectos didácticos], [1],
+    [Experimentación y conclusiones], [1],
+    [Contenidos], [1],
+    [Divulgación de los contenidos], [0.65],
+    [Bibliografía y recursos científicos], [1],
   ),
-  caption: "Autoevaluación Ángel",
+  caption: "Autoevaluación de Ángel Sánchez",
 )<table:autoevaluacion_angel>
 
 
@@ -70,17 +70,17 @@ El enlace al repositorio de GitHub del proyecto es #link("https://github.com/min
   table(
     columns: (auto, auto),
     align: (right, center),
-    [Comprensión y dominio],                [],
-    [Exposición didáctica],                 [],
-    [Integración del equipo],               [],
-    [Objetivos],                            [],
-    [Aspectos didácticos],                  [],
-    [Experimentación y conclusiones],       [],
-    [Contenidos],                           [],
-    [Divulgación de los contenidos],        [],
-    [Bibliografía y recursos científicos],  [],
+    [Comprensión y dominio], [1],
+    [Exposición didáctica], [0.7],
+    [Integración del equipo], [1],
+    [Objetivos], [0.7],
+    [Aspectos didácticos], [0.8],
+    [Experimentación y conclusiones], [0.8],
+    [Contenidos], [1],
+    [Divulgación de los contenidos], [1],
+    [Bibliografía y recursos científicos], [1],
   ),
-  caption: "Autoevaluación Javier",
+  caption: "Autoevaluación de Javier Milá de la Roca",
 )<table:autoevaluacion_javier>
 
 *César Martínez Van Der Looven:*
@@ -89,15 +89,15 @@ El enlace al repositorio de GitHub del proyecto es #link("https://github.com/min
   table(
     columns: (auto, auto),
     align: (right, center),
-    [Comprensión y dominio],                [0.65],
-    [Exposición didáctica],                 [1],
-    [Integración del equipo],               [1],
-    [Objetivos],                            [1],
-    [Aspectos didácticos],                  [1],
-    [Experimentación y conclusiones],       [1],
-    [Contenidos],                           [1],
-    [Divulgación de los contenidos],        [0.65],
-    [Bibliografía y recursos científicos],  [1],
+    [Comprensión y dominio], [0.65],
+    [Exposición didáctica], [1],
+    [Integración del equipo], [1],
+    [Objetivos], [1],
+    [Aspectos didácticos], [1],
+    [Experimentación y conclusiones], [1],
+    [Contenidos], [1],
+    [Divulgación de los contenidos], [0.65],
+    [Bibliografía y recursos científicos], [1],
   ),
-  caption: "Autoevaluación César",
+  caption: "Autoevaluación de César Martínez",
 )<table:autoevaluacion_cesar>
